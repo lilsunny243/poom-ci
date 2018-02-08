@@ -4,6 +4,7 @@ import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
 import org.codingmatters.poom.ci.pipeline.descriptors.optional.OptionalStage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -21,6 +22,16 @@ public class PipelineScript {
         this.header(out);
         this.env(out);
         this.stage(stage, out);
+        this.stageResult(stage, out);
+    }
+
+    public void forPipeline(ByteArrayOutputStream out) throws IOException {
+        this.header(out);
+        this.env(out);
+        for (Stage stage : this.pipeline.stages()) {
+            this.stage(stage, out);
+        }
+        this.pipelineResult(out);
     }
 
     private OptionalStage theStage(String named) {
@@ -62,7 +73,6 @@ public class PipelineScript {
     private void stage(Stage stage, OutputStream out) throws IOException {
         this.stageVars(stage, out);
         this.exec(stage, out);
-        this.stageResult(stage, out);
     }
 
     private void stageVars(Stage stage, OutputStream out) throws IOException {
@@ -87,19 +97,27 @@ public class PipelineScript {
             "then\n" +
             "    echo \"stage $STAGE exec %s failure\"\n" +
             "    exit $RESULT\n" +
-            "fi\n",
+            "fi\n\n",
             exec, i
             );
 
             out.write(call.getBytes());
         }
-        out.write("\n".getBytes());
     }
 
     private void stageResult(Stage stage, OutputStream out) throws IOException {
         String result =
-                "echo \"$STAGE STAGE EXIT : $RESULT\"\n" +
-                        "exit $RESULT";
+        "echo \"$STAGE STAGE EXIT : $RESULT\"\n" +
+        "exit $RESULT";
+
+        out.write(result.getBytes());
+    }
+
+
+    private void pipelineResult(ByteArrayOutputStream out) throws IOException {
+        String result =
+        "echo \"PIPELINE EXIT : $RESULT\"\n" +
+        "exit $RESULT";
 
         out.write(result.getBytes());
     }

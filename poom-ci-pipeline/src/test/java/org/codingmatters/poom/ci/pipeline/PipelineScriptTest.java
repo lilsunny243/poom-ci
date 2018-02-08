@@ -37,6 +37,34 @@ public class PipelineScriptTest {
         }
     }
 
+    @Test
+    public void pipelineScript() throws Exception {
+        Pipeline pipeline = Pipeline.builder()
+                .stages(stage -> stage.name("first").exec("A", "B"),
+                        stage -> stage.name("second").exec("C")
+                )
+                .env(ObjectValue.builder()
+                        /*
+                        X="x-value"
+                        Y="y-value"
+                        Z="z-value"
+                         */
+                        .property("X", v -> v.stringValue("x-value"))
+                        .property("Y", v -> v.stringValue("y-value"))
+                        .property("Z", v -> v.stringValue("z-value"))
+                        .build())
+                .build();
+
+        PipelineScript script = new PipelineScript(pipeline);
+
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            script.forPipeline(out);
+            out.flush();
+            out.close();
+            assertThat(out.toString(), is(this.resourceAsString("poom-ci-build-pipeline.sh")));
+        }
+    }
+
     private String resourceAsString(String resource) throws IOException {
         try(
                 InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource) ;
