@@ -1,0 +1,12 @@
+---
+pipeline:
+  stages:
+    $list: $stage
+  env:
+    $value-object: org.codingmatters.value.objects.values.ObjectValue
+
+stage:
+  name: string
+  exec:
+    $list: string
+
