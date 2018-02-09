@@ -53,6 +53,10 @@ public class PipelineScript {
         "\n" +
         "WORKSPACE=$1\n" +
         "SRC=$(dirname $(readlink -f $0))\n" +
+        "if [[ $# -gt 0 ]] ; then\n" +
+        "    SRC=$(readlink -f $2)\n" +
+        "    echo \"running $0 on $SRC\"\n" +
+        "fi\n" +
         "\n" +
         "rm -rf $WORKSPACE/logs\n" +
         "mkdir -p $WORKSPACE/logs\n\n";
