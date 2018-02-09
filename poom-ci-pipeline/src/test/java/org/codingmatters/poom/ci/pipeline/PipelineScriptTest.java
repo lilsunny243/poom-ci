@@ -16,13 +16,17 @@ public class PipelineScriptTest {
     @Test
     public void stageScript() throws Exception {
         Pipeline pipeline = Pipeline.builder()
-                .stages(stage -> stage
-                        .name("build")
-                        .exec("$MVN clean install -DskipTests -Ddocker.resource.docker.url=http://172.17.0.1:2375")
+                .stages(
+                        stage -> stage
+                                .name("prepare")
+                                .exec("mkdir -p $WORKSPACE/.m2"),
+                        stage -> stage
+                                .name("build")
+                                .exec("$MVN clean install -DskipTests -Ddocker.resource.docker.url=http://172.17.0.1:2375")
                 )
                 .env(ObjectValue.builder()
                         .property("MVN", v -> v
-                                .stringValue("docker run -it --rm -v $SRC:/src -v $WORKSPACE/M2:/root/.m2 flexio-build-java mvn")
+                                .stringValue("docker run -it --rm -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 flexio-build-java mvn")
                         )
                         .build())
                 .build();

@@ -7,7 +7,6 @@ fi
 
 WORKSPACE=$1
 SRC=$(dirname $(readlink -f $0))
-mkdir -p $WORKSPACE/M2
 
 rm -rf $WORKSPACE/logs
 mkdir -p $WORKSPACE/logs

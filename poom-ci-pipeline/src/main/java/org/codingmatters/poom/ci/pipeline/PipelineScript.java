@@ -4,7 +4,6 @@ import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
 import org.codingmatters.poom.ci.pipeline.descriptors.optional.OptionalStage;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -25,7 +24,7 @@ public class PipelineScript {
         this.stageResult(stage, out);
     }
 
-    public void forPipeline(ByteArrayOutputStream out) throws IOException {
+    public void forPipeline(OutputStream out) throws IOException {
         this.header(out);
         this.env(out);
         for (Stage stage : this.pipeline.stages()) {
@@ -54,7 +53,6 @@ public class PipelineScript {
         "\n" +
         "WORKSPACE=$1\n" +
         "SRC=$(dirname $(readlink -f $0))\n" +
-        "mkdir -p $WORKSPACE/M2\n" +
         "\n" +
         "rm -rf $WORKSPACE/logs\n" +
         "mkdir -p $WORKSPACE/logs\n\n";
@@ -114,7 +112,7 @@ public class PipelineScript {
     }
 
 
-    private void pipelineResult(ByteArrayOutputStream out) throws IOException {
+    private void pipelineResult(OutputStream out) throws IOException {
         String result =
         "echo \"PIPELINE EXIT : $RESULT\"\n" +
         "exit $RESULT";

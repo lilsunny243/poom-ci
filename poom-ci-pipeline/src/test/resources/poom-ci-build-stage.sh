@@ -7,12 +7,11 @@ fi
 
 WORKSPACE=$1
 SRC=$(dirname $(readlink -f $0))
-mkdir -p $WORKSPACE/M2
 
 rm -rf $WORKSPACE/logs
 mkdir -p $WORKSPACE/logs
 
-MVN="docker run -it --rm -v $SRC:/src -v $WORKSPACE/M2:/root/.m2 flexio-build-java mvn"
+MVN="docker run -it --rm -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 flexio-build-java mvn"
 
 STAGE=build
 STAGE_OUT=$WORKSPACE/logs/$STAGE.stdout.log
