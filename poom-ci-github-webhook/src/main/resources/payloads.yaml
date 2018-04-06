@@ -1,0 +1,43 @@
+PushEvent:
+  ref: string
+  head: string
+  before: string
+  after: string
+  size: long
+  distinct_size: long
+  commits:
+    $list: $Commit
+  head_commit: $Commit
+  repository: $Repository
+
+Author:
+  name: string
+  email: string
+  username: string
+
+Commit:
+  id: string
+  tree_id: string
+  distinct: bool
+  message: string
+  timestamp: tz-date-time
+  url: string
+  author: $Author
+  comitter: $Author
+  added:
+    $list: string
+  removed:
+    $list: string
+  modified:
+    $list: string
+
+Repository:
+  id: long
+  name: string
+  full_name: string
+  html_url: string
+  description: string
+  git_url: string
+  ssh_url: string
+  clone_url: string
+  svn_url: string

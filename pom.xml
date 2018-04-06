@@ -20,6 +20,7 @@
 
     <modules>
         <module>poom-ci-pipeline</module>
+        <module>poom-ci-github-webhook</module>
     </modules>
 
     
