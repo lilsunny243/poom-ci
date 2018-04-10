@@ -2,9 +2,10 @@ package org.codingmatters.poom.ci.github.webhook;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.undertow.Undertow;
-import org.codingmatters.poom.ci.github.webhook.payloads.PushEvent;
-import org.codingmatters.poom.ci.github.webhook.payloads.json.PushEventReader;
+import org.codingmatters.poom.ci.triggers.GithubPushEvent;
+import org.codingmatters.poom.ci.triggers.json.GithubPushEventReader;
 import org.codingmatters.rest.api.Processor;
 import org.codingmatters.rest.api.RequestDelegate;
 import org.codingmatters.rest.api.ResponseDelegate;
@@ -18,6 +19,7 @@ import java.io.Reader;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
+import java.util.Map;
 
 public class Explore implements Processor {
 
@@ -43,6 +45,7 @@ public class Explore implements Processor {
         }
     }
 
+    private final ObjectMapper mapper = new ObjectMapper();
     private final JsonFactory jsonFactory = new JsonFactory();
 
     @Override
@@ -80,10 +83,19 @@ public class Explore implements Processor {
 
         System.out.printf("payload      : \n%s\n---------\n\n", payload);
 
+        Map payloadMap = this.mapper.readValue(payload, Map.class);
+        for (Object key : payloadMap.keySet()) {
+            System.out.printf("  %s : %s\n", key, payloadMap.get(key));
+        }
+
+
         if("push".equals(request.headers().get("X-GitHub-Event").get(0))) {
             try(JsonParser parser = this.jsonFactory.createParser(payload)) {
-                PushEvent event = new PushEventReader().read(parser);
+                GithubPushEvent event = new GithubPushEventReader().read(parser);
                 System.out.printf("event        : \n%s\n---------\n\n", event);
+
+                System.out.printf("clone url : %s\n", event.repository().clone_url());
+                System.out.printf("coordinates : refs=%s - at=%s", event.ref(), event.after());
             }
         }
 

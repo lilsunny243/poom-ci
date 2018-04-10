@@ -1,0 +1,246 @@
+#%RAML 1.0
+title: PoomCI Pipeline API
+version: v1
+baseUri: https://api.codingmatters.org/poom-ci
+mediaType: application/json
+
+/triggers:
+   /git-hub:
+      displayName: Github Triggers
+      get:
+         is: [{collectionPaging: {elementType: GithubPushEvent}}]
+      post:
+         is: [{collectionElementCreation: {elementTypeCreationData: GithubPushEvent}}]
+
+      /{trigger-id}:
+         displayName: Github Trigger
+         uriParameters:
+            trigger-id: string
+         get:
+            is: [{resourceRead: {elementType: GithubPushEvent}}]
+
+/pipelines:
+   displayName: Pipelines
+   get:
+      is: [{collectionPaging: {elementType: Pipeline}}]
+
+   /{pipeline-id}:
+      displayName: Pipeline
+      uriParameters:
+         pipeline-id: string
+      get:
+         is: [{resourceRead: {elementType: Pipeline}}]
+
+      /stages:
+         displayName: Pipeline Stages
+         get:
+            is: [{collectionPaging: {elementType: Stage}}]
+         post:
+            is: [{collectionElementCreation: {elementTypeCreationData: StageCreation}}]
+
+         /{stage-id}:
+            displayName: Pipeline Stage
+            uriParameters:
+               stage-id: string
+            get:
+               is: [{resourceRead: {elementType: Stage}}]
+            patch:
+               is: [{resourceUpdate: {elementType: Stage, elementTypeChangeData: StageStatus}}]
+
+            /logs:
+               displayName: Pipeline Stage Logs
+               get:
+                  is: [{collectionPaging: {elementType: LogLine}}]
+               patch:
+                  is: [{collectionUpdate: {elementTypeCreationData: LogLine}}]
+
+types:
+   Pipeline:
+      type: object
+      properties:
+         id: string
+         status:
+            type: object
+            properties:
+               run:
+                  enum: [RUNNING, DONE]
+               exit:
+                  enum: [SUCCESS, FAILURE]
+         trigger: PipelineTrigger
+
+   PipelineTrigger:
+      type: object
+      properties:
+         trigger-id: string
+         type:
+            enum: [GITHUB_PUSH]
+
+   GithubPushEvent:
+        (already-defined): org.codingmatters.poom.ci.triggers.GithubPushEvent
+        type: object
+
+   Stage:
+      type: object
+      properties:
+         id: string
+         name: string
+         status: StageStatus
+
+   StageCreation:
+      type: object
+      properties:
+         name: string
+
+   StageStatus:
+      type: object
+      properties:
+         run:
+            enum: [RUNNING, DONE]
+         exit:
+            enum: [SUCCESS, FAILURE]
+
+   LogLine:
+      type: object
+      properties:
+         line: integer
+         content: string
+
+   Error:
+      type: object
+      properties:
+         token: string
+         code:
+            enum: [
+               ILLEGAL_RANGE_SPEC,
+               UNEXPECTED_ERROR,
+               RESOURCE_NOT_FOUND,
+               ILLEGAL_RESOURCE_CREATION, ILLEGAL_RESOURCE_CHANGE,
+               ILLEGAL_COLLECTION_CHANGE,
+               ]
+         description: string
+
+traits:
+   collectionPaging:
+      usage: aplied to a collection GET
+      description: pageable collection of <<elementType>>. Paging is handled with the range header (according to [RFC 7233](https://tools.ietf.org/html/rfc7233)).
+      headers:
+         range:
+            type: string
+            required: false
+      responses:
+         200:
+             description: complete list of <<elementType>> or last elements of the list of <<elementType>>
+             headers:
+                 Content-Range: string
+                 Accept-Range: string
+             body: <<elementType>>[]
+         206:
+             description: partial list of <<elementType>>
+             headers:
+                 Content-Range: string
+                 Accept-Range: string
+             body: <<elementType>>[]
+         416:
+             description: the specified range is not acceptable (Error code is ILLEGAL_RANGE_SPEC).
+             headers:
+                 Content-Range: string
+                 Accept-Range: string
+             body: Error
+         500:
+             description: UNEXPECTED_ERROR.
+             body: Error
+
+   collectionElementCreation:
+      usage: applied to a collection POST
+      description: creation of an element acording to the <<elementTypeCreationData>> passed as body.
+      body: <<elementTypeCreationData>>
+      responses:
+         201:
+            description: a resoure is created given the <<elementTypeCreationData>> provided. the created resource uri is returned.
+            headers:
+              Location: string
+              X-entity-id: string
+         400:
+             description: request is not acceptable. Code ILLEGAL_RESOURCE_CREATION.
+             body: Error
+         500:
+             description: UNEXPECTED_ERROR.
+             body: Error
+
+   collectionUpdate:
+      usage: applied to a collection PATCH
+      description: creation / update of some elements in the collection acording to the <<elementTypeCreationData>> list passed as body.
+      body: <<elementTypeCreationData>>[]
+      responses:
+         201:
+            description: The collection is updated. The collection resource uri is returned.
+            headers:
+              Location: string
+              X-entity-id: string
+         400:
+             description: request is not acceptable. Code ILLEGAL_COLLECTION_CHANGE.
+             body: Error
+         500:
+             description: UNEXPECTED_ERROR.
+             body: Error
+
+   resourceRead:
+      usage: applied to a resource GET
+      description: The full <<elementType>>.
+      responses:
+         200:
+            description: a <<elementType>> is found and returned
+            headers:
+               X-entity-id: string
+            body: <<elementType>>
+         404:
+            description: no <<elementType>> found. Code RESOURCE_NOT_FOUND.
+            body: Error
+         500:
+            description: UNEXPECTED_ERROR.
+            body: Error
+
+   resourceUpdate:
+      usage: applied to a resource PATCH
+      body: <<elementTypeChangeData>>
+      description: updates the <<elementType>> given the provided <<elementTypeChangeData>>
+      responses:
+         200:
+            description: the <<elementType>> update was successful
+            body: <<elementType>>
+         400:
+            description: ressource change is not acceptable. Code ILLEGAL_RESOURCE_CHANGE.
+            body: Error
+         404:
+            description: no <<elementType>> found. Code RESOURCE_NOT_FOUND.
+            body: Error
+         500:
+            description: UNEXPECTED_ERROR.
+            body: Error
+
+   resourceReplace:
+      usage: applied to a resource PUT
+      body: <<elementType>>
+      description: updates the <<elementType>> given the provided <<elementType>>
+      responses:
+         200:
+            description: the <<elementType>> update was successful
+            body: <<elementType>>
+         400:
+            description: ressource change is not acceptable. Code ILLEGAL_RESOURCE_CHANGE.
+            body: Error
+         404:
+            description: no <<elementType>> found . Code RESOURCE_NOT_FOUND.
+            body: Error
+         500:
+            description: UNEXPECTED_ERROR.
+            body: Error
+
+
+annotationTypes:
+   value-object-hint:
+      type: string[]
+   conforms-to:
+      type: string[]
+   already-defined:
+      type: string

@@ -19,9 +19,33 @@
     <name>${project.groupId}:${project.artifactId}</name>
 
     <modules>
+        <module>poom-ci-bom</module>
+
+        <module>poom-ci-triggers</module>
         <module>poom-ci-pipeline</module>
         <module>poom-ci-github-webhook</module>
+        <module>poom-ci-pipeline-api</module>
+        <module>poom-ci-pipeline-api-spec</module>
+        <module>poom-ci-pipeline-service</module>
     </modules>
 
-    
+    <dependencies>
+        <dependency>
+            <groupId>org.codingmatters.poom</groupId>
+            <artifactId>poom-services-logging</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>poom-ci-bom</artifactId>
+                <version>${project.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 </project>

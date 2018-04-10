@@ -1,4 +1,4 @@
-PushEvent:
+GithubPushEvent:
   ref: string
   head: string
   before: string
@@ -6,24 +6,25 @@ PushEvent:
   size: long
   distinct_size: long
   commits:
-    $list: $Commit
-  head_commit: $Commit
-  repository: $Repository
+    $list: $GHCommit
+  head_commit: $GHCommit
+  repository: $GHRepository
+  received: date-time
 
-Author:
+GHAuthor:
   name: string
   email: string
   username: string
 
-Commit:
+GHCommit:
   id: string
   tree_id: string
   distinct: bool
   message: string
   timestamp: tz-date-time
   url: string
-  author: $Author
-  comitter: $Author
+  author: $GHAuthor
+  comitter: $GHAuthor
   added:
     $list: string
   removed:
@@ -31,7 +32,7 @@ Commit:
   modified:
     $list: string
 
-Repository:
+GHRepository:
   id: long
   name: string
   full_name: string
