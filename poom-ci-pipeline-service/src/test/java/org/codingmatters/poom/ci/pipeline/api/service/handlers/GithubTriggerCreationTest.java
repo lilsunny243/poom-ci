@@ -32,5 +32,6 @@ public class GithubTriggerCreationTest extends AbstractPoomCITest {
         Entity<Pipeline> pipeline = this.pipelineRepository().all(0, 1).get(0);
         assertThat(pipeline.value().trigger().type(), is(PipelineTrigger.Type.GITHUB_PUSH));
         assertThat(pipeline.value().trigger().triggerId(), is(creation.xEntityId()));
+        assertThat(pipeline.value().id(), is(pipeline.id()));
     }
 }

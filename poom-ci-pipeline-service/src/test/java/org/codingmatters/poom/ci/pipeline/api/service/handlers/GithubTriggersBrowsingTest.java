@@ -8,9 +8,9 @@ import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class GithubTriggerBrowsingTest extends AbstractPoomCITest {
+public class GithubTriggersBrowsingTest extends AbstractPoomCITest {
 
-    private GithubTriggerBrowsing handler = new GithubTriggerBrowsing(this.githubPushEventRepository());
+    private GithubTriggersBrowsing handler = new GithubTriggersBrowsing(this.githubPushEventRepository());
 
     @Test
     public void empty() {

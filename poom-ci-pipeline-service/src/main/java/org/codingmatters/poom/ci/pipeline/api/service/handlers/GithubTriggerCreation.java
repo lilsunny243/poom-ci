@@ -89,6 +89,10 @@ public class GithubTriggerCreation implements Function<GithubTriggersPostRequest
                                 .triggerId(trigger.id())
                         )
                         .build());
+
+
+                pipeline = this.pipelineRepository.update(pipeline, pipeline.value().withId(pipeline.id()));
+
                 log.audit().info("pipeline created for trigger {}", pipeline);
                 return Optional.of(pipeline);
             } catch (RepositoryException e) {

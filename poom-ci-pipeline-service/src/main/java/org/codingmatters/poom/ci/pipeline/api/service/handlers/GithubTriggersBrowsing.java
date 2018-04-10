@@ -11,12 +11,12 @@ import org.codingmatters.poom.services.support.paging.Rfc7233Pager;
 
 import java.util.function.Function;
 
-public class GithubTriggerBrowsing implements Function<GithubTriggersGetRequest, GithubTriggersGetResponse> {
-    static private CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggerBrowsing.class);
+public class GithubTriggersBrowsing implements Function<GithubTriggersGetRequest, GithubTriggersGetResponse> {
+    static private CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggersBrowsing.class);
 
     private final Repository<GithubPushEvent, String> githubPushEventRepository;
 
-    public GithubTriggerBrowsing(Repository<GithubPushEvent, String> githubPushEventRepository) {
+    public GithubTriggersBrowsing(Repository<GithubPushEvent, String> githubPushEventRepository) {
         this.githubPushEventRepository = githubPushEventRepository;
     }
 

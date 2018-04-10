@@ -12,7 +12,7 @@ import org.codingmatters.poom.servives.domain.entities.Entity;
 import java.util.function.Function;
 
 public class GithubTriggerGet implements Function<GithubTriggerGetRequest, GithubTriggerGetResponse> {
-    static private CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggerBrowsing.class);
+    static private CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggersBrowsing.class);
 
     private final Repository<GithubPushEvent, String> githubPushEventRepository;
 

@@ -17,10 +17,11 @@ public class PoomCIApi {
 
         this.handlers = new PoomCIPipelineAPIHandlers.Builder()
                 .githubTriggersPostHandler(new GithubTriggerCreation(this.githubPushEventRepository, this.pipelineRepository))
-                .githubTriggersGetHandler(new GithubTriggerBrowsing(this.githubPushEventRepository))
+                .githubTriggersGetHandler(new GithubTriggersBrowsing(this.githubPushEventRepository))
                 .githubTriggerGetHandler(new GithubTriggerGet(this.githubPushEventRepository))
 
                 .pipelinesGetHandler(new PipelinesBrowsing(this.pipelineRepository))
+                .pipelineGetHandler(new PipelineGet(this.pipelineRepository))
                 .build();
     }
 
