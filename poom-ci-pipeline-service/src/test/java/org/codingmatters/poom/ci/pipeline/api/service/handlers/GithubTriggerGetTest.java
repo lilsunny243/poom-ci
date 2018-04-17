@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThat;
 
 public class GithubTriggerGetTest extends AbstractPoomCITest {
 
-    private GithubTriggerGet handler = new GithubTriggerGet(this.githubPushEventRepository());
+    private GithubTriggerGet handler = new GithubTriggerGet(this.repository());
 
     @Test
     public void whenTriggerNotFound__then404() {
@@ -22,7 +22,7 @@ public class GithubTriggerGetTest extends AbstractPoomCITest {
 
     @Test
     public void whenEntityFound__then200WithTriggerPayload() throws Exception {
-        Entity<GithubPushEvent> trigger = this.githubPushEventRepository().create(GithubPushEvent.builder().ref("yop/yop/yop").build());
+        Entity<GithubPushEvent> trigger = this.repository().githubPushEventRepository().create(GithubPushEvent.builder().ref("yop/yop/yop").build());
 
         Status200 found = this.handler.apply(GithubTriggerGetRequest.builder().triggerId(trigger.id()).build()).opt()
                 .status200()

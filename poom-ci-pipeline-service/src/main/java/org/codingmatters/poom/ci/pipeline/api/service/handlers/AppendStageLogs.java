@@ -1,0 +1,96 @@
+package org.codingmatters.poom.ci.pipeline.api.service.handlers;
+
+import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchRequest;
+import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchResponse;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
+import org.codingmatters.poom.ci.pipeline.api.types.AppendedLogLine;
+import org.codingmatters.poom.ci.pipeline.api.types.Error;
+import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
+import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
+import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.repositories.Repository;
+import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
+import org.codingmatters.rest.api.Processor;
+
+import java.util.function.Function;
+
+public class AppendStageLogs implements Function<PipelineStageLogsPatchRequest, PipelineStageLogsPatchResponse> {
+    static private final CategorizedLogger log = CategorizedLogger.getLogger(AppendStageLogs.class);
+
+    private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
+    private final Repository<StageLog, StageLogQuery> logRepository;
+
+    public AppendStageLogs(PoomCIRepository repository) {
+        this.stageRepository = repository.stageRepository();
+        this.logRepository = repository.logRepository();
+    }
+
+    @Override
+    public PipelineStageLogsPatchResponse apply(PipelineStageLogsPatchRequest request) {
+        try {
+            PagedEntityList<PipelineStage> stageSearch = this.stageRepository.search(PipelineStageQuery.builder().withPipelineId(request.pipelineId()).withName(request.stageName()).build(), 0, 0);
+            if(stageSearch.total() == 0) {
+                return PipelineStageLogsPatchResponse.builder()
+                        .status404(status -> status.payload(error -> error
+                                .token(log.audit().tokenized().info("stage log append request on non existing stage {} for pipeline {}",
+                                        request.stageName(),
+                                        request.pipelineId()))
+                                .code(Error.Code.RESOURCE_NOT_FOUND)
+                                .description("must provide an existing pipeline stage")
+                        ))
+                        .build();
+            } else if(StageStatus.Run.DONE.equals(stageSearch.get(0).value().stage().status().run())) {
+                return PipelineStageLogsPatchResponse.builder()
+                        .status400(status -> status.payload(error -> error
+                                .token(log.audit().tokenized().info("stage log append request on DONE stage {} for pipeline {}",
+                                        request.stageName(), request.pipelineId()))
+                                .code(Error.Code.ILLEGAL_COLLECTION_CHANGE)
+                                .description("cannot add logs to a done stage")
+                        ))
+                        .build();
+            }
+
+            long logCount = this.logRepository.search(StageLogQuery.builder().build(), 0, 0).total();
+            long nextLine = logCount;
+
+            for (AppendedLogLine logLine : request.payload()) {
+                nextLine++;
+                this.logRepository.create(StageLog.builder()
+                        .log(LogLine.builder()
+                                .line(nextLine)
+                                .content(logLine.content())
+                                .build())
+                        .build());
+            }
+
+            log.audit().info("appended %s lines of log to pipeline {} stage {}",
+                    nextLine - logCount,
+                    request.pipelineId(),
+                    request.stageName()
+            );
+
+            return PipelineStageLogsPatchResponse.builder()
+                    .status201(status -> status
+                            .location(String.format("%s/pipelines/%s/stages/%s/logs",
+                                    Processor.Variables.API_PATH.token(),
+                                    request.pipelineId(),
+                                    request.stageName()
+                            ))
+                    )
+                    .build();
+
+        } catch (RepositoryException e) {
+            return PipelineStageLogsPatchResponse.builder()
+                    .status500(status -> status.payload(error -> error
+                            .token(log.tokenized().error("error accessing log repository", e))
+                            .code(Error.Code.UNEXPECTED_ERROR)
+                    ))
+                    .build();
+        }
+    }
+}

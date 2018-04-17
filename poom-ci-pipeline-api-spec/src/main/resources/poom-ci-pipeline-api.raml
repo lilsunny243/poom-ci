@@ -30,6 +30,8 @@ mediaType: application/json
          pipeline-id: string
       get:
          is: [{resourceRead: {elementType: Pipeline}}]
+      patch:
+         is: [{resourceUpdate: {elementType: Pipeline, elementTypeChangeData: PipelineTermination}}]
 
       /stages:
          displayName: Pipeline Stages
@@ -38,21 +40,34 @@ mediaType: application/json
          post:
             is: [{collectionElementCreation: {elementTypeCreationData: StageCreation}}]
 
-         /{stage-id}:
+         /{stage-name}:
             displayName: Pipeline Stage
             uriParameters:
-               stage-id: string
+               stage-name: string
             get:
                is: [{resourceRead: {elementType: Stage}}]
+               responses:
+                  200:
+                     headers:
+                        x-pipeline-id: string
             patch:
-               is: [{resourceUpdate: {elementType: Stage, elementTypeChangeData: StageStatus}}]
+               is: [{resourceUpdate: {elementType: Stage, elementTypeChangeData: StageTermination}}]
 
             /logs:
                displayName: Pipeline Stage Logs
                get:
                   is: [{collectionPaging: {elementType: LogLine}}]
+                  responses:
+                     200:
+                        headers:
+                           x-pipeline-id: string
+                           x-stage-name: string
+                     206:
+                        headers:
+                           x-pipeline-id: string
+                           x-stage-name: string
                patch:
-                  is: [{collectionUpdate: {elementTypeCreationData: LogLine}}]
+                  is: [{collectionUpdate: {elementTypeCreationData: AppendedLogLine}}]
 
 types:
    Pipeline:
@@ -66,7 +81,15 @@ types:
                   enum: [RUNNING, DONE]
                exit:
                   enum: [SUCCESS, FAILURE]
+               triggered: datetime-only
+               finished: datetime-only
          trigger: PipelineTrigger
+
+   PipelineTermination:
+      type: object
+      properties:
+         exit:
+            enum: [SUCCESS, FAILURE]
 
    PipelineTrigger:
       type: object
@@ -82,7 +105,6 @@ types:
    Stage:
       type: object
       properties:
-         id: string
          name: string
          status: StageStatus
 
@@ -99,10 +121,20 @@ types:
          exit:
             enum: [SUCCESS, FAILURE]
 
+   StageTermination:
+      properties:
+         exit:
+            enum: [SUCCESS, FAILURE]
+
    LogLine:
       type: object
       properties:
          line: integer
+         content: string
+
+   AppendedLogLine:
+      type: object
+      properties:
          content: string
 
    Error:
@@ -176,9 +208,11 @@ traits:
             description: The collection is updated. The collection resource uri is returned.
             headers:
               Location: string
-              X-entity-id: string
          400:
              description: request is not acceptable. Code ILLEGAL_COLLECTION_CHANGE.
+             body: Error
+         404:
+             description: collection not found. Code RESOURCE_NOT_FOUND.
              body: Error
          500:
              description: UNEXPECTED_ERROR.

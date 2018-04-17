@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
 import org.codingmatters.poom.ci.pipeline.api.PipelineGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
@@ -16,8 +17,8 @@ public class PipelineGet implements Function<PipelineGetRequest, PipelineGetResp
 
     private final Repository<Pipeline, String> pipelineRepository;
 
-    public PipelineGet(Repository<Pipeline, String> pipelineRepository) {
-        this.pipelineRepository = pipelineRepository;
+    public PipelineGet(PoomCIRepository repository) {
+        this.pipelineRepository = repository.pipelineRepository();
     }
 
     @Override

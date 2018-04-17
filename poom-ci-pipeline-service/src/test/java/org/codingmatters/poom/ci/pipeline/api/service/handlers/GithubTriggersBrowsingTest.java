@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 
 public class GithubTriggersBrowsingTest extends AbstractPoomCITest {
 
-    private GithubTriggersBrowsing handler = new GithubTriggersBrowsing(this.githubPushEventRepository());
+    private GithubTriggersBrowsing handler = new GithubTriggersBrowsing(this.repository());
 
     @Test
     public void empty() {
@@ -25,7 +25,7 @@ public class GithubTriggersBrowsingTest extends AbstractPoomCITest {
     @Test
     public void complete() throws Exception {
         for (int i = 0; i < 50; i++) {
-            this.githubPushEventRepository().create(GithubPushEvent.builder().ref("" + i).build());
+            this.repository().githubPushEventRepository().create(GithubPushEvent.builder().ref("" + i).build());
         }
         assertThat(this.handler.apply(GithubTriggersGetRequest.builder().build()).opt()
                 .status200()
@@ -38,7 +38,7 @@ public class GithubTriggersBrowsingTest extends AbstractPoomCITest {
     @Test
     public void partial() throws Exception {
         for (int i = 0; i < 50; i++) {
-            this.githubPushEventRepository().create(GithubPushEvent.builder().ref("" + i).build());
+            this.repository().githubPushEventRepository().create(GithubPushEvent.builder().ref("" + i).build());
         }
         assertThat(this.handler.apply(GithubTriggersGetRequest.builder().range("10-15").build()).opt()
                 .status206()

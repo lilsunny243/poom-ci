@@ -10,9 +10,9 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class PipelineGetTest extends AbstractPoomCITest{
+public class PipelineGetTest extends AbstractPoomCITest {
 
-    private PipelineGet handler = new PipelineGet(this.pipelineRepository());
+    private PipelineGet handler = new PipelineGet(this.repository());
 
     @Test
     public void whenTriggerNotFound__then404() {
@@ -23,7 +23,7 @@ public class PipelineGetTest extends AbstractPoomCITest{
 
     @Test
     public void whenEntityFound__then200WithTriggerPayload() throws Exception {
-        Entity<Pipeline> pipeline = this.pipelineRepository().create(Pipeline.builder().status(status -> status.run(Status.Run.RUNNING)).build());
+        Entity<Pipeline> pipeline = this.repository().pipelineRepository().create(Pipeline.builder().status(status -> status.run(Status.Run.RUNNING)).build());
 
         Status200 found = this.handler.apply(PipelineGetRequest.builder().pipelineId(pipeline.id()).build()).opt()
                 .status200()

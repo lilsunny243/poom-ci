@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 
 public class PipelinesBrowsingTest extends AbstractPoomCITest {
 
-    private PipelinesBrowsing handler = new PipelinesBrowsing(this.pipelineRepository());
+    private PipelinesBrowsing handler = new PipelinesBrowsing(this.repository());
 
     @Test
     public void empty() {
@@ -23,7 +23,7 @@ public class PipelinesBrowsingTest extends AbstractPoomCITest {
     @Test
     public void completeList() throws Exception{
         for (int i = 0; i < 50; i++) {
-            this.pipelineRepository().create(Pipeline.builder().build());
+            this.repository().pipelineRepository().create(Pipeline.builder().build());
         }
 
         ValueList<Pipeline> list = this.handler.apply(PipelinesGetRequest.builder().build()).opt().status200().payload()
@@ -35,7 +35,7 @@ public class PipelinesBrowsingTest extends AbstractPoomCITest {
     @Test
     public void partialList() throws Exception{
         for (int i = 0; i < 50; i++) {
-            this.pipelineRepository().create(Pipeline.builder()
+            this.repository().pipelineRepository().create(Pipeline.builder()
                     .build());
         }
 

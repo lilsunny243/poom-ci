@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
 import org.codingmatters.poom.ci.pipeline.api.PipelinesGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelinesGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
@@ -17,8 +18,8 @@ public class PipelinesBrowsing implements Function<PipelinesGetRequest, Pipeline
 
     private final Repository<Pipeline, String> repository;
 
-    public PipelinesBrowsing(Repository<Pipeline, String> repository) {
-        this.repository = repository;
+    public PipelinesBrowsing(PoomCIRepository repository) {
+        this.repository = repository.pipelineRepository();
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
 import org.codingmatters.poom.ci.pipeline.api.GithubTriggersGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.GithubTriggersGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
@@ -16,8 +17,8 @@ public class GithubTriggersBrowsing implements Function<GithubTriggersGetRequest
 
     private final Repository<GithubPushEvent, String> githubPushEventRepository;
 
-    public GithubTriggersBrowsing(Repository<GithubPushEvent, String> githubPushEventRepository) {
-        this.githubPushEventRepository = githubPushEventRepository;
+    public GithubTriggersBrowsing(PoomCIRepository repository) {
+        this.githubPushEventRepository = repository.githubPushEventRepository();
     }
 
     @Override

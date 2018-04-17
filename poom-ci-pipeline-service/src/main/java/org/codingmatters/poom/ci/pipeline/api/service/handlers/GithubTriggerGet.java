@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
 import org.codingmatters.poom.ci.pipeline.api.GithubTriggerGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.GithubTriggerGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
@@ -16,8 +17,8 @@ public class GithubTriggerGet implements Function<GithubTriggerGetRequest, Githu
 
     private final Repository<GithubPushEvent, String> githubPushEventRepository;
 
-    public GithubTriggerGet(Repository<GithubPushEvent, String> githubPushEventRepository) {
-        this.githubPushEventRepository = githubPushEventRepository;
+    public GithubTriggerGet(PoomCIRepository repository) {
+        this.githubPushEventRepository = repository.githubPushEventRepository();
     }
 
     @Override

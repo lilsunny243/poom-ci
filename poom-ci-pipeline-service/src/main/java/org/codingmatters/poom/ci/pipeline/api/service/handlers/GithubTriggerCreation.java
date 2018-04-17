@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
 import org.codingmatters.poom.ci.pipeline.api.GithubTriggersPostRequest;
 import org.codingmatters.poom.ci.pipeline.api.GithubTriggersPostResponse;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
@@ -13,6 +14,8 @@ import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.servives.domain.entities.Entity;
 import org.codingmatters.rest.api.Processor;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -22,9 +25,9 @@ public class GithubTriggerCreation implements Function<GithubTriggersPostRequest
     private final Repository<GithubPushEvent, String> githubPushEventRepository;
     private final Repository<Pipeline, String> pipelineRepository;
 
-    public GithubTriggerCreation(Repository<GithubPushEvent, String> githubPushEventRepository, Repository<Pipeline, String> pipelineRepository) {
-        this.githubPushEventRepository = githubPushEventRepository;
-        this.pipelineRepository = pipelineRepository;
+    public GithubTriggerCreation(PoomCIRepository repository) {
+        this.githubPushEventRepository = repository.githubPushEventRepository();
+        this.pipelineRepository = repository.pipelineRepository();
     }
 
     @Override
@@ -83,7 +86,11 @@ public class GithubTriggerCreation implements Function<GithubTriggersPostRequest
             Entity<Pipeline> pipeline;
             try {
                 pipeline = this.pipelineRepository.create(Pipeline.builder()
-                        .status(status -> status.run(Status.Run.RUNNING).exit(null))
+                        .status(status -> status
+                                .run(Status.Run.RUNNING)
+                                .exit(null)
+                                .triggered(LocalDateTime.now(ZoneOffset.UTC.normalized()))
+                        )
                         .trigger(trig -> trig
                                 .type(PipelineTrigger.Type.GITHUB_PUSH)
                                 .triggerId(trigger.id())
