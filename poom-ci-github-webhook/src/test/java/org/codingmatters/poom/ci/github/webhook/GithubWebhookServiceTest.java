@@ -12,8 +12,9 @@ import java.util.concurrent.Executors;
 public class GithubWebhookServiceTest {
 
     public static void main(String[] args) {
+        if(args.length < 1) throw new RuntimeException("usage: <webhook api secure token>");
         new GithubWebhookService(
-                "9a167bbea7e96c86fd87ae254f646cbea050ef63",
+                args[0],
                 new JsonFactory(),
                 new PoomCIPipelineAPIHandlersClient(new PoomCIPipelineAPIHandlers.Builder()
                         .githubTriggersPostHandler(GithubWebhookServiceTest::triggerPosted)

@@ -8,9 +8,18 @@ import org.codingmatters.poom.ci.github.webhook.api.GithubWebhookAPIHandlers;
 import org.codingmatters.poom.ci.github.webhook.api.service.GithubWebhookAPIProcessor;
 import org.codingmatters.poom.ci.github.webhook.handlers.GithubWebhook;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
+import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.rest.api.RequestDelegate;
+import org.codingmatters.rest.api.ResponseDelegate;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
 public class GithubWebhookService {
+
+    static private final CategorizedLogger log = CategorizedLogger.getLogger(GithubWebhookService.class);
 
     private final String token;
     private final PathHandler handlers;
@@ -29,12 +38,52 @@ public class GithubWebhookService {
                 "/github/webhook",
                 new CdmHttpUndertowHandler(
                         new GithubWebhookGuard(
-                                new GithubWebhookAPIProcessor(
-                                        "/github/webhook",
-                                        this.jsonFactory,
-                                        this.webhookHandlers()),
+                                new GithubEventFilter(this::notImplementedEvent)
+                                        .with("push",
+                                                new GithubWebhookAPIProcessor(
+                                                        "/github/webhook",
+                                                        this.jsonFactory,
+                                                        this.webhookHandlers())
+                                        )
+                                        .with("ping", this::pong),
                                 this.token)
                 ));
+    }
+
+    private void pong(RequestDelegate request, ResponseDelegate response) {
+        log.audit().info("got a ping, issuing a pong : {}" , this.payloadAsString(request));
+        response.status(200);
+        response.contenType("text/plain");
+        response.payload("pong", "UTF-8");
+    }
+
+    private void notImplementedEvent(RequestDelegate request, ResponseDelegate response) {
+        String logToken = log.audit().tokenized().info("event {} not processed ; {}",
+                request.headers().get(GithubEventFilter.EVENT_HEADER),
+                this.payloadAsString(request)
+                );
+
+        response.status(501);
+        response.contenType("text/plain");
+        response.payload(String.format("event not implemented, see logs (token=%s)", logToken), "UTF-8");
+    }
+
+    private String payloadAsString(RequestDelegate request) {
+        try {
+            try(Reader payload = new InputStreamReader(request.payload())) {
+                StringBuilder result = new StringBuilder();
+                char[] buffer = new char[1024];
+                for(int read = payload.read(buffer) ; read != -1 ; read = payload.read(buffer)) {
+                    result.append(buffer, 0, read);
+                }
+                return result.toString();
+            }
+        } catch (IOException e) {
+            return String.format(
+                    "failed reading payload see logs (token=%s)",
+                    log.tokenized().error("error reading request payload", e)
+            );
+        }
     }
 
     private GithubWebhookAPIHandlers webhookHandlers() {
