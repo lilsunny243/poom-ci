@@ -11,6 +11,7 @@ import org.codingmatters.poom.ci.github.webhook.handlers.GithubWebhook;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.rest.api.RequestDelegate;
 import org.codingmatters.rest.api.ResponseDelegate;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
@@ -24,8 +25,6 @@ public class GithubWebhookService {
 
     static private final CategorizedLogger log = CategorizedLogger.getLogger(GithubWebhookService.class);
 
-    static public final String SERVICE_HOST = "SERVICE_HOST";
-    static public final String SERVICE_PORT = "SERVICE_PORT";
     static public final String GITHUB_SECRET_TOKEN = "GITHUB_SECRET_TOKEN";
     static public final String PIPELINE_API_URL = "PIPELINE_API_URL";
 
@@ -39,10 +38,10 @@ public class GithubWebhookService {
     private final String host;
 
     public static void main(String[] args) {
-        String host = mandatory(SERVICE_HOST);
-        int port = Integer.parseInt(mandatory(SERVICE_PORT));
-        String token = mandatory(GITHUB_SECRET_TOKEN);
-        String pipelineUrl = mandatory(PIPELINE_API_URL);
+        String host = Env.mandatory(Env.SERVICE_HOST);
+        int port = Integer.parseInt(Env.mandatory(Env.SERVICE_PORT));
+        String token = Env.mandatory(GITHUB_SECRET_TOKEN);
+        String pipelineUrl = Env.mandatory(PIPELINE_API_URL);
 
         JsonFactory jsonFactory = new JsonFactory();
         PoomCIPipelineAPIClient pipelineClient = new PoomCIPipelineAPIRequesterClient(new OkHttpRequesterFactory(new OkHttpClient()), jsonFactory, pipelineUrl);
@@ -58,12 +57,6 @@ public class GithubWebhookService {
                 System.exit(1);
             }
         }
-    }
-
-    private static String mandatory(String envVariableName) {
-        String value = System.getenv(envVariableName);
-        if(value == null) throw new RuntimeException("must provide mandatory environment variable : " + envVariableName);
-        return value;
     }
 
     public GithubWebhookService(String host, int port, String token, JsonFactory jsonFactory, PoomCIPipelineAPIClient pipelineClient) {

@@ -17,7 +17,6 @@
         <service.class.name>org.codingmatters.poom.ci.github.webhook.GithubWebhookService</service.class.name>
     </properties>
 
-
     <dependencies>
         <dependency>
             <groupId>org.codingmatters.poom.ci</groupId>
