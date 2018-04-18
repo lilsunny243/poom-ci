@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+
+  github-webhook:
+    image: ${docker.registry}/${docker.namespace}/github-webhook:${project.version}
+
+  pipeline-service:
+    image: ${docker.registry}/${docker.namespace}/pipeline-service:${project.version}

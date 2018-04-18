@@ -18,10 +18,6 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
 
-    <properties>
-        <docker.registry>localhost:5000</docker.registry>
-    </properties>
-
     <modules>
         <module>poom-ci-bom</module>
 
