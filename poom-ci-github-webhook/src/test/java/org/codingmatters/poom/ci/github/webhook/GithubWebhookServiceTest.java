@@ -14,7 +14,7 @@ public class GithubWebhookServiceTest {
     public static void main(String[] args) {
         if(args.length < 1) throw new RuntimeException("usage: <webhook api secure token>");
         new GithubWebhookService(
-                args[0],
+                "localhost", 6543, args[0],
                 new JsonFactory(),
                 new PoomCIPipelineAPIHandlersClient(new PoomCIPipelineAPIHandlers.Builder()
                         .githubTriggersPostHandler(GithubWebhookServiceTest::triggerPosted)

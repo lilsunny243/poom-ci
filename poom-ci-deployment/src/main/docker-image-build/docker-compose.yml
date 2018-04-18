@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+
+  github-webhook:
+    build: ./github-webhook
+    image: ${docker.registry}/poom-ci/github-webhook:${project.version}
+
+  pipeline-service:
+    build: ./pipeline-service
+    image: ${docker.registry}/poom-ci/pipeline-service:${project.version}

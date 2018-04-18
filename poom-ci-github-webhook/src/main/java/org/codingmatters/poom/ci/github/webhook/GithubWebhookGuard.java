@@ -31,7 +31,7 @@ public class GithubWebhookGuard extends GuardedProcessor {
     protected boolean passed(RequestDelegate request, ResponseDelegate response) throws IOException {
         try {
             String signature = this.signature(this.readPayload(request));
-            if(! request.headers().get("X-Hub-Signature").isEmpty()) {
+            if(request.headers().get("X-Hub-Signature") != null && ! request.headers().get("X-Hub-Signature").isEmpty()) {
                 if(request.headers().get("X-Hub-Signature").get(0).equals("sha1=" + signature)) {
                     return true;
                 } else {

@@ -4,13 +4,16 @@ import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Handlers;
 import io.undertow.Undertow;
 import io.undertow.server.handlers.PathHandler;
+import okhttp3.OkHttpClient;
 import org.codingmatters.poom.ci.github.webhook.api.GithubWebhookAPIHandlers;
 import org.codingmatters.poom.ci.github.webhook.api.service.GithubWebhookAPIProcessor;
 import org.codingmatters.poom.ci.github.webhook.handlers.GithubWebhook;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
+import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.rest.api.RequestDelegate;
 import org.codingmatters.rest.api.ResponseDelegate;
+import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 
 import java.io.IOException;
@@ -21,14 +24,51 @@ public class GithubWebhookService {
 
     static private final CategorizedLogger log = CategorizedLogger.getLogger(GithubWebhookService.class);
 
+    static public final String SERVICE_HOST = "SERVICE_HOST";
+    static public final String SERVICE_PORT = "SERVICE_PORT";
+    static public final String GITHUB_SECRET_TOKEN = "GITHUB_SECRET_TOKEN";
+    static public final String PIPELINE_API_URL = "PIPELINE_API_URL";
+
     private final String token;
     private final PathHandler handlers;
     private final JsonFactory jsonFactory;
+    private final int port;
 
     private Undertow server;
     private final PoomCIPipelineAPIClient pipelineClient;
+    private final String host;
 
-    public GithubWebhookService(String token, JsonFactory jsonFactory, PoomCIPipelineAPIClient pipelineClient) {
+    public static void main(String[] args) {
+        String host = mandatory(SERVICE_HOST);
+        int port = Integer.parseInt(mandatory(SERVICE_PORT));
+        String token = mandatory(GITHUB_SECRET_TOKEN);
+        String pipelineUrl = mandatory(PIPELINE_API_URL);
+
+        JsonFactory jsonFactory = new JsonFactory();
+        PoomCIPipelineAPIClient pipelineClient = new PoomCIPipelineAPIRequesterClient(new OkHttpRequesterFactory(new OkHttpClient()), jsonFactory, pipelineUrl);
+        new GithubWebhookService(host, port, token, jsonFactory, pipelineClient).start();
+
+        log.info("started...");
+
+        while(true) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                log.info("stopping service");
+                System.exit(1);
+            }
+        }
+    }
+
+    private static String mandatory(String envVariableName) {
+        String value = System.getenv(envVariableName);
+        if(value == null) throw new RuntimeException("must provide mandatory environment variable : " + envVariableName);
+        return value;
+    }
+
+    public GithubWebhookService(String host, int port, String token, JsonFactory jsonFactory, PoomCIPipelineAPIClient pipelineClient) {
+        this.host = host;
+        this.port = port;
         this.token = token;
         this.jsonFactory = jsonFactory;
         this.pipelineClient = pipelineClient;
@@ -94,7 +134,7 @@ public class GithubWebhookService {
 
     public void start() {
         this.server = Undertow.builder()
-                .addHttpListener(6543, "localhost")
+                .addHttpListener(this.port, this.host)
                 .setHandler(this.handlers)
                 .build();
         this.server.start();

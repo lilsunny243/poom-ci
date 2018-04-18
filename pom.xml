@@ -18,6 +18,10 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
 
+    <properties>
+        <docker.registry>localhost:5000</docker.registry>
+    </properties>
+
     <modules>
         <module>poom-ci-bom</module>
 
@@ -28,6 +32,8 @@
         <module>poom-ci-pipeline-api-spec</module>
         <module>poom-ci-pipeline-service</module>
         <module>poom-ci-pipeline-api-client</module>
+
+        <module>poom-ci-deployment</module>
     </modules>
 
     <dependencies>

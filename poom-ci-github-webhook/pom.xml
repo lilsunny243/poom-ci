@@ -13,6 +13,7 @@
     <artifactId>poom-ci-github-webhook</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
 
+
     <dependencies>
         <dependency>
             <groupId>org.codingmatters.poom.ci</groupId>
@@ -53,6 +54,23 @@
             <groupId>org.codingmatters.rest</groupId>
             <artifactId>cdm-rest-tests-support</artifactId>
             <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codingmatters.poom</groupId>
+            <artifactId>poom-services-logging-json-layout</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -107,6 +125,26 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>docker-image-build</id>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <appendAssemblyId>true</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>${project.basedir}/src/main/docker/docker-image-assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>

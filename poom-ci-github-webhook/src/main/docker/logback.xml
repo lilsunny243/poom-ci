@@ -1,0 +1,21 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.codingmatters.poom.services.logging.logback.json.PoomJsonLayout">
+                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"/>
+                <appendLineSeparator>true</appendLineSeparator>
+                <prettyPrint>true</prettyPrint>
+            </layout>
+        </encoder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <logger name="org.codingmatters.poomjobs.service.handlers.RunnerPatchHandler" level="WARN"/>
+    <logger name="org.codingmatters.rest.undertow.UndertowRequestDelegate" level="INFO"/>
+    <logger name="org.xnio.nio" level="INFO"/>
+    <logger name="io.undertow.request" level="INFO" />
+    <logger name="org.mongodb.driver" level="WARN" />
+</configuration>

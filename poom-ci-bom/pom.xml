@@ -40,6 +40,11 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>poom-ci-pipeline-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>poom-ci-pipeline-api-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
