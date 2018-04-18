@@ -8,33 +8,27 @@
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
 
-    <files>
-        <file>
-            <source>src/main/docker/Dockerfile</source>
-            <outputDirectory>/</outputDirectory>
-            <filtered>true</filtered>
-        </file>
-        <file>
-            <source>src/main/docker/docker-compose.yml</source>
-            <outputDirectory>/</outputDirectory>
-            <filtered>true</filtered>
-        </file>
-        <file>
-            <source>src/main/docker/service-endpoint.sh</source>
-            <outputDirectory>/</outputDirectory>
-        </file>
-        <file>
-            <source>src/main/docker/logback.xml</source>
-            <outputDirectory>/</outputDirectory>
-            <filtered>true</filtered>
-        </file>
-    </files>
-
     <dependencySets>
         <dependencySet>
             <outputDirectory>/lib</outputDirectory>
-            <useTransitiveDependencies>true</useTransitiveDependencies>
             <useProjectArtifact>true</useProjectArtifact>
+            <useTransitiveDependencies>true</useTransitiveDependencies>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+            <scope>runtime</scope>
+            <excludes>
+                <exclude>org.codingmatters.poom:poom-services-production-support:*:docker-support</exclude>
+            </excludes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <includes>
+                <include>org.codingmatters.poom:poom-services-production-support:*:docker-support</include>
+            </includes>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <filtered>true</filtered>
+            </unpackOptions>
         </dependencySet>
     </dependencySets>
 

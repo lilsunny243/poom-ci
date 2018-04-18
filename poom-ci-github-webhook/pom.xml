@@ -13,6 +13,10 @@
     <artifactId>poom-ci-github-webhook</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
 
+    <properties>
+        <service.class.name>org.codingmatters.poom.ci.github.webhook.GithubWebhookService</service.class.name>
+    </properties>
+
 
     <dependencies>
         <dependency>
@@ -44,33 +48,10 @@
             <groupId>org.codingmatters.rest</groupId>
             <artifactId>cdm-rest-client-okhttp</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.codingmatters.rest</groupId>
             <artifactId>cdm-rest-tests-support</artifactId>
             <scope>test</scope>
-        </dependency>
-
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codingmatters.poom</groupId>
-            <artifactId>poom-services-logging-json-layout</artifactId>
-            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -121,25 +102,6 @@
                             <sources>
                                 <source>target/generated-sources</source>
                             </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>docker-image-build</id>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <appendAssemblyId>true</appendAssemblyId>
-                            <descriptors>
-                                <descriptor>${project.basedir}/src/main/docker/docker-image-assembly.xml</descriptor>
-                            </descriptors>
                         </configuration>
                     </execution>
                 </executions>
