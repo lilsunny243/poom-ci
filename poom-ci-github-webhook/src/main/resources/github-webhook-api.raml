@@ -1,0 +1,38 @@
+#%RAML 1.0
+title: Github Webhook API
+version: v1
+baseUri: https://api.codingmatters.org/poom-ci/github/webhook
+mediaType: application/json
+
+/:
+   displayName: Webhook
+   post:
+      headers:
+         X-GitHub-Delivery: string
+         X-GitHub-Event: string
+         X-Hub-Signature: string
+      body: GithubPushEvent
+      responses:
+         200:
+            body:
+               text/html: string
+         403:
+            body:
+               text/html: string
+         500:
+            body:
+               text/html: string
+
+types:
+   GithubPushEvent:
+      (already-defined): org.codingmatters.poom.ci.triggers.GithubPushEvent
+      type: object
+
+
+annotationTypes:
+   value-object-hint:
+      type: string[]
+   conforms-to:
+      type: string[]
+   already-defined:
+      type: string

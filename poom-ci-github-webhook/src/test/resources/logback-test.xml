@@ -1,0 +1,20 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %-100msg #### marker=%-8marker context: {%X{}} [%thread] at %logger#%method[%line]%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <logger name="org.codingmatters.poomjobs.service.handlers.RunnerPatchHandler" level="WARN"/>
+    <logger name="org.codingmatters.rest.undertow.UndertowRequestDelegate" level="DEBUG"/>
+    <logger name="org.xnio.nio" level="DEBUG"/>
+    <logger name="io.undertow.request" level="DEBUG" />
+    <logger name="org.mongodb.driver" level="WARN" />
+</configuration>

@@ -17,6 +17,7 @@ import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
 import org.codingmatters.rest.api.Processor;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class AppendStageLogs implements Function<PipelineStageLogsPatchRequest, PipelineStageLogsPatchResponse> {
@@ -33,46 +34,12 @@ public class AppendStageLogs implements Function<PipelineStageLogsPatchRequest, 
     @Override
     public PipelineStageLogsPatchResponse apply(PipelineStageLogsPatchRequest request) {
         try {
-            PagedEntityList<PipelineStage> stageSearch = this.stageRepository.search(PipelineStageQuery.builder().withPipelineId(request.pipelineId()).withName(request.stageName()).build(), 0, 0);
-            if(stageSearch.total() == 0) {
-                return PipelineStageLogsPatchResponse.builder()
-                        .status404(status -> status.payload(error -> error
-                                .token(log.audit().tokenized().info("stage log append request on non existing stage {} for pipeline {}",
-                                        request.stageName(),
-                                        request.pipelineId()))
-                                .code(Error.Code.RESOURCE_NOT_FOUND)
-                                .description("must provide an existing pipeline stage")
-                        ))
-                        .build();
-            } else if(StageStatus.Run.DONE.equals(stageSearch.get(0).value().stage().status().run())) {
-                return PipelineStageLogsPatchResponse.builder()
-                        .status400(status -> status.payload(error -> error
-                                .token(log.audit().tokenized().info("stage log append request on DONE stage {} for pipeline {}",
-                                        request.stageName(), request.pipelineId()))
-                                .code(Error.Code.ILLEGAL_COLLECTION_CHANGE)
-                                .description("cannot add logs to a done stage")
-                        ))
-                        .build();
+            Optional<PipelineStageLogsPatchResponse> invalid = this.validate(request);
+            if(invalid.isPresent()) {
+                return invalid.get();
             }
 
-            long logCount = this.logRepository.search(StageLogQuery.builder().build(), 0, 0).total();
-            long nextLine = logCount;
-
-            for (AppendedLogLine logLine : request.payload()) {
-                nextLine++;
-                this.logRepository.create(StageLog.builder()
-                        .log(LogLine.builder()
-                                .line(nextLine)
-                                .content(logLine.content())
-                                .build())
-                        .build());
-            }
-
-            log.audit().info("appended %s lines of log to pipeline {} stage {}",
-                    nextLine - logCount,
-                    request.pipelineId(),
-                    request.stageName()
-            );
+            this.appendLogs(request);
 
             return PipelineStageLogsPatchResponse.builder()
                     .status201(status -> status
@@ -92,5 +59,54 @@ public class AppendStageLogs implements Function<PipelineStageLogsPatchRequest, 
                     ))
                     .build();
         }
+    }
+
+    private Optional<PipelineStageLogsPatchResponse> validate(PipelineStageLogsPatchRequest request) throws RepositoryException {
+        Optional<PipelineStageLogsPatchResponse> invalid;
+        PagedEntityList<PipelineStage> stageSearch = this.stageRepository.search(PipelineStageQuery.builder().withPipelineId(request.pipelineId()).withName(request.stageName()).build(), 0, 0);
+        if(stageSearch.total() == 0) {
+            invalid = Optional.of(PipelineStageLogsPatchResponse.builder()
+                    .status404(status -> status.payload(error -> error
+                            .token(log.audit().tokenized().info("stage log append request on non existing stage {} for pipeline {}",
+                                    request.stageName(),
+                                    request.pipelineId()))
+                            .code(Error.Code.RESOURCE_NOT_FOUND)
+                            .description("must provide an existing pipeline stage")
+                    ))
+                    .build());
+        } else if(StageStatus.Run.DONE.equals(stageSearch.get(0).value().stage().status().run())) {
+            invalid = Optional.of(PipelineStageLogsPatchResponse.builder()
+                    .status400(status -> status.payload(error -> error
+                            .token(log.audit().tokenized().info("stage log append request on DONE stage {} for pipeline {}",
+                                    request.stageName(), request.pipelineId()))
+                            .code(Error.Code.ILLEGAL_COLLECTION_CHANGE)
+                            .description("cannot add logs to a done stage")
+                    ))
+                    .build());
+        } else {
+            invalid = Optional.empty();
+        }
+        return invalid;
+    }
+
+    private void appendLogs(PipelineStageLogsPatchRequest request) throws RepositoryException {
+        long logCount = this.logRepository.search(StageLogQuery.builder().build(), 0, 0).total();
+        long nextLine = logCount;
+
+        for (AppendedLogLine logLine : request.payload()) {
+            nextLine++;
+            this.logRepository.create(StageLog.builder()
+                    .log(LogLine.builder()
+                            .line(nextLine)
+                            .content(logLine.content())
+                            .build())
+                    .build());
+        }
+
+        log.audit().info("appended {} lines of log to pipeline {} stage {}",
+                nextLine - logCount,
+                request.pipelineId(),
+                request.stageName()
+        );
     }
 }

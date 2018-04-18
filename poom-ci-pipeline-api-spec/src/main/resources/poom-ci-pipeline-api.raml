@@ -5,6 +5,7 @@ baseUri: https://api.codingmatters.org/poom-ci
 mediaType: application/json
 
 /triggers:
+   displayName: Triggers
    /git-hub:
       displayName: Github Triggers
       get:
@@ -99,8 +100,8 @@ types:
             enum: [GITHUB_PUSH]
 
    GithubPushEvent:
-        (already-defined): org.codingmatters.poom.ci.triggers.GithubPushEvent
-        type: object
+      (already-defined): org.codingmatters.poom.ci.triggers.GithubPushEvent
+      type: object
 
    Stage:
       type: object
