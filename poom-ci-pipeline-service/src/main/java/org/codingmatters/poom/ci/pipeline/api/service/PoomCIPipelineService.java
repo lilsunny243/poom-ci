@@ -24,6 +24,7 @@ public class PoomCIPipelineService {
         PoomCIPipelineService service = new PoomCIPipelineService(jsonFactory, repository, port, host, jobRegistryUrl);
         service.start();
 
+        log.info("poom-ci pipeline api service running");
         while(true) {
             try {
                 Thread.sleep(1000);
@@ -31,8 +32,9 @@ public class PoomCIPipelineService {
                 break;
             }
         }
-
+        log.info("poom-ci pipeline api service stopping...");
         service.stop();
+        log.info("poom-ci pipeline api service stopped.");
     }
 
     private final JsonFactory jsonFactory;

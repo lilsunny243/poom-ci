@@ -12,6 +12,8 @@ services:
 
   pipeline-service:
     image: ${pipeline-service.image}
+    environment:
+      JOB_REGISTRY_URL: http://poomjobs-registries-service:9999/poomjobs-jobs/v1
 
   poomjobs-registries-service:
     image: ${poomjobs-registries-service.image}

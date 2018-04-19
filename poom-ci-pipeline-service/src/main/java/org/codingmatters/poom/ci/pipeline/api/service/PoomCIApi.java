@@ -62,10 +62,11 @@ public class PoomCIApi {
     private void pipelineCreated(Pipeline pipeline) {
         try {
             JobCollectionPostResponse response = this.jobRegistryAPIClient.jobCollection().post(req -> req
+                    .accountId("poom-ci")
                     .payload(jobCreation -> jobCreation
                             .category("poom-ci")
                             .name("pipeline")
-                            .arguments(pipeline.id(), pipeline.trigger().triggerId())
+                            .arguments(pipeline.id())
                     )
             );
             if(response.opt().status201().isPresent()) {
