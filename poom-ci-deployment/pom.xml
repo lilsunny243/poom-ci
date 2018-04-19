@@ -15,8 +15,11 @@
     <packaging>pom</packaging>
 
     <properties>
-        <docker.registry>localhost:5000</docker.registry>
+        <pipeline-service.image>${docker.registry}/${docker.namespace}/poom-ci-pipeline-service:${org.codingmatters.poom.ci:poom-ci-pipeline-service:jar.version}</pipeline-service.image>
+        <github-webhook.image>${docker.registry}/${docker.namespace}/poom-ci-github-webhook:${org.codingmatters.poom.ci:poom-ci-github-webhook:jar.version}</github-webhook.image>
+        <poomjobs-registries-service.image>${docker.registry}/${docker.namespace}/poomjobs-registries-service:${org.codingmatters.poom:poomjobs-registries-service:jar.version}</poomjobs-registries-service.image>
     </properties>
+
 
     <dependencies>
         <dependency>
@@ -26,6 +29,10 @@
         <dependency>
             <groupId>org.codingmatters.poom.ci</groupId>
             <artifactId>poom-ci-github-webhook</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codingmatters.poom</groupId>
+            <artifactId>poomjobs-registries-service</artifactId>
         </dependency>
     </dependencies>
 

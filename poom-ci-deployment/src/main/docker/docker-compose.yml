@@ -3,7 +3,15 @@ version: '3'
 services:
 
   github-webhook:
-    image: ${docker.registry}/${docker.namespace}/github-webhook:${project.version}
+    image: ${github-webhook.image}
+    ports:
+      - 6543:9999
+    environment:
+      GITHUB_SECRET_TOKEN: 9a167bbea7e96c86fd87ae254f646cbea050ef63
+      PIPELINE_API_URL: http://pipeline-service:9999/pipelines/v1
 
   pipeline-service:
-    image: ${docker.registry}/${docker.namespace}/pipeline-service:${project.version}
+    image: ${pipeline-service.image}
+
+  poomjobs-registries-service:
+    image: ${poomjobs-registries-service.image}

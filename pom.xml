@@ -44,7 +44,14 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>poom-ci-bom</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom</groupId>
+                <artifactId>poomjobs-bom</artifactId>
+                <version>${project.parent.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
