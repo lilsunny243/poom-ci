@@ -2,9 +2,12 @@ package org.codingmatters.poom.ci.pipeline.api.service;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Undertow;
+import okhttp3.OkHttpClient;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.client.PoomjobsJobRegistryAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
+import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 
 public class PoomCIPipelineService {
@@ -13,11 +16,12 @@ public class PoomCIPipelineService {
     public static void main(String[] args) {
         String host = Env.mandatory(Env.SERVICE_HOST);
         int port = Integer.parseInt(Env.mandatory(Env.SERVICE_PORT));
+        String jobRegistryUrl = Env.mandatory("JOB_REGISTRY_URL");
 
         JsonFactory jsonFactory = new JsonFactory();
         PoomCIRepository repository = PoomCIRepository.inMemory();
 
-        PoomCIPipelineService service = new PoomCIPipelineService(jsonFactory, repository, port, host);
+        PoomCIPipelineService service = new PoomCIPipelineService(jsonFactory, repository, port, host, jobRegistryUrl);
         service.start();
 
         while(true) {
@@ -39,12 +43,14 @@ public class PoomCIPipelineService {
     private final int port;
     private final String host;
 
-    public PoomCIPipelineService(JsonFactory jsonFactory, PoomCIRepository repository, int port, String host) {
+    public PoomCIPipelineService(JsonFactory jsonFactory, PoomCIRepository repository, int port, String host, String jobRegistryUrl) {
         this.jsonFactory = jsonFactory;
         this.repository = repository;
         this.port = port;
         this.host = host;
-        this.api = new PoomCIApi(repository, "/pipelines/v1", jsonFactory);
+        this.api = new PoomCIApi(repository, "/pipelines/v1", jsonFactory, new PoomjobsJobRegistryAPIRequesterClient(
+                new OkHttpRequesterFactory(new OkHttpClient()), this.jsonFactory, jobRegistryUrl
+        ));
     }
 
     public void start() {

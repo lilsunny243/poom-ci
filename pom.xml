@@ -28,6 +28,7 @@
         <module>poom-ci-pipeline-api-spec</module>
         <module>poom-ci-pipeline-service</module>
         <module>poom-ci-pipeline-api-client</module>
+        <module>poom-ci-pipeline-runners</module>
 
         <module>poom-ci-deployment</module>
     </modules>

@@ -24,6 +24,8 @@ mediaType: application/json
    displayName: Pipelines
    get:
       is: [{collectionPaging: {elementType: Pipeline}}]
+   post:
+      is: [{collectionElementCreation: {elementTypeCreationData: PipelineTrigger}}]
 
    /{pipeline-id}:
       displayName: Pipeline

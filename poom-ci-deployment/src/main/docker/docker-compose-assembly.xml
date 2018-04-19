@@ -13,8 +13,12 @@
             <directory>${basedir}/src/main/docker</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
-                <include>docker-compose.yml</include>
+                <include>**/*</include>
+                <include>**/.*</include>
             </includes>
+            <excludes>
+                <exclude>docker-compose-assembly.xml</exclude>
+            </excludes>
             <filtered>true</filtered>
         </fileSet>
     </fileSets>
