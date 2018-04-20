@@ -53,7 +53,7 @@ public class PipelineScript {
         "\n" +
         "WORKSPACE=$1\n" +
         "SRC=$(dirname $(readlink -f $0))\n" +
-        "if [[ $# -gt 0 ]] ; then\n" +
+        "if [[ $# -gt 1 ]] ; then\n" +
         "    SRC=$(readlink -f $2)\n" +
         "    echo \"running $0 on $SRC\"\n" +
         "fi\n" +
@@ -65,11 +65,14 @@ public class PipelineScript {
     }
 
     private void env(OutputStream out) throws IOException {
-        for (String variable : this.pipeline.env().propertyNames()) {
-            String variableLine = String.format("%s=\"%s\"\n", variable, this.pipeline.env().property(variable).single().stringValue());
-            out.write(variableLine.getBytes());
+        System.out.println(this.pipeline.env());
+        if(this.pipeline.env() != null && this.pipeline.env().propertyNames() != null) {
+            for (String variable : this.pipeline.env().propertyNames()) {
+                String variableLine = String.format("%s=\"%s\"\n", variable, this.pipeline.env().property(variable).single().stringValue());
+                out.write(variableLine.getBytes());
+            }
+            out.write("\n".getBytes());
         }
-        out.write("\n".getBytes());
     }
 
     private void stage(Stage stage, OutputStream out) throws IOException {

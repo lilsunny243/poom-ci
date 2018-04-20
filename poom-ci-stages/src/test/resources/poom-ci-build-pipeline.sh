@@ -7,7 +7,7 @@ fi
 
 WORKSPACE=$1
 SRC=$(dirname $(readlink -f $0))
-if [[ $# -gt 0 ]] ; then
+if [[ $# -gt 1 ]] ; then
     SRC=$(readlink -f $2)
     echo "running $0 on $SRC"
 fi

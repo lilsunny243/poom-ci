@@ -7,6 +7,7 @@ pipeline:
 
 stage:
   name: string
+  timeout: long
   exec:
     $list: string
 
