@@ -5,6 +5,11 @@ import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
 import java.io.IOException;
 
 public interface PipelineExecutor {
+    @FunctionalInterface
+    interface PipelineExecutorProvider {
+        PipelineExecutor forContext(PipelineContext context);
+    }
+
     void initialize() throws IOException;
     StageTermination.Exit execute(String stage, StageLogListener logListener) throws IOException;
 

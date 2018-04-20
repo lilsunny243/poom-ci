@@ -1,6 +1,7 @@
 package org.codingmatters.poom.ci.runners.pipeline;
 
 import org.codingmatters.poom.ci.pipeline.api.PipelineGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.types.PipelineTermination;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
@@ -19,11 +20,11 @@ public class PipelineJobProcessor implements JobProcessor {
     static private CategorizedLogger log = CategorizedLogger.getLogger(PipelineJobProcessor.class);
 
     private final Job job;
-    private final PipelineContextProvider pipelineContextProvider;
-    private final PipelineExecutorProvider pipelineExecutorProvider;
+    private final PipelineContext.PipelineContextProvider pipelineContextProvider;
+    private final PipelineExecutor.PipelineExecutorProvider pipelineExecutorProvider;
     private final PoomCIPipelineAPIClient pipelineAPIClient;
 
-    public PipelineJobProcessor(Job job, PipelineContextProvider pipelineContextProvider, PipelineExecutorProvider pipelineExecutorProvider, PoomCIPipelineAPIClient pipelineAPIClient) {
+    public PipelineJobProcessor(Job job, PipelineContext.PipelineContextProvider pipelineContextProvider, PipelineExecutor.PipelineExecutorProvider pipelineExecutorProvider, PoomCIPipelineAPIClient pipelineAPIClient) {
         this.job = job;
         this.pipelineContextProvider = pipelineContextProvider;
         this.pipelineExecutorProvider = pipelineExecutorProvider;
@@ -36,8 +37,8 @@ public class PipelineJobProcessor implements JobProcessor {
         PipelineExecutor executor = this.pipelineExecutorProvider.forContext(context);
 
         this.initializeExecution(context, executor);
-        this.executeStages(context, executor);
-
+        PipelineTermination.Exit status = this.executeStages(context, executor);
+        this.notifyPipelineTerminationStatus(context, status);
 
         log.audit().info("successfully executed pipeline {}", context.pipelineId());
         return this.job
@@ -91,18 +92,23 @@ public class PipelineJobProcessor implements JobProcessor {
         }
     }
 
-    private void executeStages(PipelineContext context, PipelineExecutor executor) throws JobProcessingException {
+    private PipelineTermination.Exit executeStages(PipelineContext context, PipelineExecutor executor) throws JobProcessingException {
         for (String stage : context.stages()) {
-            this.executeStage(context, executor, stage);
+            StageTermination.Exit status = this.executeStage(context, executor, stage);
+            if(status.equals(StageTermination.Exit.FAILURE)) {
+                return PipelineTermination.Exit.FAILURE;
+            }
         }
+        return PipelineTermination.Exit.SUCCESS;
     }
 
-    private void executeStage(PipelineContext context, PipelineExecutor executor, String stage) throws JobProcessingException {
+    private StageTermination.Exit executeStage(PipelineContext context, PipelineExecutor executor, String stage) throws JobProcessingException {
         log.audit().info("executing pipeline {} stage {}", context.pipelineId(), stage);
         try {
             this.notifyStageExecutionStart(context, stage);
             StageTermination.Exit status = executor.execute(stage, this.stageLogListener(context, stage));
             this.notifyStageExecutionEnd(context, stage, status);
+            return status;
         } catch (IOException e) {
             String errorToken = log.tokenized().error(String.format(
                     "error executing pipeline %s stage %s",
@@ -110,6 +116,10 @@ public class PipelineJobProcessor implements JobProcessor {
                     e);
             throw new JobProcessingException("error executing pipeline stage, see logs with error-token=" + errorToken);
         }
+    }
+
+    private PipelineExecutor.StageLogListener stageLogListener(PipelineContext context, String stage) {
+        return new DirectStageLogger(context.pipelineId(), stage, this.pipelineAPIClient);
     }
 
     private void notifyStageExecutionStart(PipelineContext context, String stage) throws JobProcessingException {
@@ -142,7 +152,18 @@ public class PipelineJobProcessor implements JobProcessor {
         }
     }
 
-    private PipelineExecutor.StageLogListener stageLogListener(PipelineContext context, String stage) {
-        return new DirectStageLogger(context.pipelineId(), stage, this.pipelineAPIClient);
+    private void notifyPipelineTerminationStatus(PipelineContext context, PipelineTermination.Exit status) throws JobProcessingException {
+        try {
+            this.pipelineAPIClient.pipelines().pipeline().patch(req -> req
+                    .pipelineId(context.pipelineId())
+                    .payload(term -> term.exit(status))
+            );
+        } catch (IOException e) {
+            String errorToken = log.tokenized().error(String.format(
+                    "error notifying pipeline %s termination status %s",
+                    context.pipelineId(), status),
+                    e);
+            throw new JobProcessingException("error executing pipeline, see logs with error-token=" + errorToken);
+        }
     }
 }

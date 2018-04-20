@@ -1,6 +1,7 @@
 package org.codingmatters.poom.ci.runners.pipeline;
 
 import org.codingmatters.poom.ci.pipeline.api.*;
+import org.codingmatters.poom.ci.pipeline.api.types.PipelineTermination;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
@@ -32,6 +33,7 @@ public class PipelineJobProcessorTest {
                     .pipelineStagesPostHandler(this::stagePost)
                     .pipelineStagePatchHandler(this::stagePatch)
                     .pipelineStageLogsPatchHandler(this::logsPatch)
+                    .pipelinePatchHandler(this::pipelinePatch)
                     .build(),
             Executors.newFixedThreadPool(4)
     );
@@ -46,6 +48,14 @@ public class PipelineJobProcessorTest {
                                 .trigger(trigger -> trigger.triggerId("trigger-id").type(PipelineTrigger.Type.GITHUB_PUSH))
                         )
                 )
+                .build();
+    }
+
+    private final List<PipelinePatchRequest> pipelinePatchCalls = Collections.synchronizedList(new LinkedList<>());
+    private PipelinePatchResponse pipelinePatch(PipelinePatchRequest request) {
+        pipelinePatchCalls.add(request);
+        return PipelinePatchResponse.builder()
+                .status200(status -> status.payload(pipe -> pipe.status(st -> st.run(org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status.Run.DONE))))
                 .build();
     }
 
@@ -76,7 +86,7 @@ public class PipelineJobProcessorTest {
     }
 
     private final List<PipelineTrigger> contextProviderCalls = Collections.synchronizedList(new LinkedList<>());
-    private PipelineContextProvider testContextProvider = (pipelineId, trigger) -> {
+    private PipelineContext.PipelineContextProvider testContextProvider = (pipelineId, trigger) -> {
         contextProviderCalls.add(trigger);
         return new PipelineContext(pipelineId, Pipeline.builder()
                 .stages(
@@ -107,7 +117,7 @@ public class PipelineJobProcessorTest {
     }
 
     @Test
-    public void nominal() throws Exception {
+    public void logic() throws Exception {
         Job job = Job.builder()
                 .category("poom-ci").name("pipeline").arguments("pipeline-id")
                 .status(status -> status.run(Status.Run.RUNNING))
@@ -130,6 +140,9 @@ public class PipelineJobProcessorTest {
         assertThat(this.stagePatchCalls.get(0).stageName(), is("stage1"));
         assertThat(this.stagePatchCalls.get(1).stageName(), is("stage2"));
 
+        assertThat(this.pipelinePatchCalls, hasSize(1));
+        assertThat(this.pipelinePatchCalls.get(0).pipelineId(), is("pipeline-id"));
+        assertThat(this.pipelinePatchCalls.get(0).payload(), is(PipelineTermination.builder().exit(PipelineTermination.Exit.SUCCESS).build()));
 
         assertThat(this.logsPatchCalls, hasSize(6));
 
