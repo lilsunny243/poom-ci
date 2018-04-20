@@ -117,7 +117,7 @@ public class PipelineJobProcessorTest {
     }
 
     @Test
-    public void logic() throws Exception {
+    public void nominalLogic() throws Exception {
         Job job = Job.builder()
                 .category("poom-ci").name("pipeline").arguments("pipeline-id")
                 .status(status -> status.run(Status.Run.RUNNING))

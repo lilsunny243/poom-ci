@@ -36,11 +36,19 @@ public class PipelineJobProcessor implements JobProcessor {
         PipelineContext context = this.initializeContext();
         PipelineExecutor executor = this.pipelineExecutorProvider.forContext(context);
 
-        this.initializeExecution(context, executor);
-        PipelineTermination.Exit status = this.executeStages(context, executor);
+        PipelineTermination.Exit status;
+        try {
+            this.initializeExecution(context, executor);
+            status = this.executeStages(context, executor);
+        } catch (JobProcessingException e) {
+            log.audit().info("failed executing pipeline {}", context.pipelineId());
+            this.notifyPipelineTerminationStatus(context, PipelineTermination.Exit.FAILURE);
+            throw e;
+        }
+
+        log.audit().info("successfully executed pipeline {} with exit status {}", context.pipelineId(), status);
         this.notifyPipelineTerminationStatus(context, status);
 
-        log.audit().info("successfully executed pipeline {}", context.pipelineId());
         return this.job
                 .withStatus(Status.builder().run(Status.Run.DONE).exit(Status.Exit.SUCCESS).build())
                 .withProcessing(this.job.processing().withFinished(LocalDateTime.now(ZoneOffset.UTC.normalized())));
