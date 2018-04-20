@@ -20,13 +20,13 @@ import org.codingmatters.rest.api.Processor;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class AppendStageLogs implements Function<PipelineStageLogsPatchRequest, PipelineStageLogsPatchResponse> {
-    static private final CategorizedLogger log = CategorizedLogger.getLogger(AppendStageLogs.class);
+public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, PipelineStageLogsPatchResponse> {
+    static private final CategorizedLogger log = CategorizedLogger.getLogger(StageLogsAppend.class);
 
     private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
     private final Repository<StageLog, StageLogQuery> logRepository;
 
-    public AppendStageLogs(PoomCIRepository repository) {
+    public StageLogsAppend(PoomCIRepository repository) {
         this.stageRepository = repository.stageRepository();
         this.logRepository = repository.logRepository();
     }
@@ -90,16 +90,24 @@ public class AppendStageLogs implements Function<PipelineStageLogsPatchRequest, 
     }
 
     private void appendLogs(PipelineStageLogsPatchRequest request) throws RepositoryException {
-        long logCount = this.logRepository.search(StageLogQuery.builder().build(), 0, 0).total();
+        long logCount = this.logRepository.search(StageLogQuery.builder()
+                .withPipelineId(request.pipelineId())
+                .withStageName(request.stageName())
+                .build(), 0, 0).total();
         long nextLine = logCount;
 
         for (AppendedLogLine logLine : request.payload()) {
             nextLine++;
+
+            log.debug("append log: ");
+            LogLine logEntry = LogLine.builder()
+                    .line(nextLine)
+                    .content(logLine.content())
+                    .build();
             this.logRepository.create(StageLog.builder()
-                    .log(LogLine.builder()
-                            .line(nextLine)
-                            .content(logLine.content())
-                            .build())
+                    .log(logEntry)
+                    .pipelineId(request.pipelineId())
+                    .stageName(request.stageName())
                     .build());
         }
 

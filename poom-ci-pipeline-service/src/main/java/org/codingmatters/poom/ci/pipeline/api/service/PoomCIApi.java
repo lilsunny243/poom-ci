@@ -51,7 +51,7 @@ public class PoomCIApi {
                 .pipelineStagePatchHandler(new StageUpdate(this.repository))
 
                 .pipelineStageLogsGetHandler(new StageLogsBrowsing(this.repository))
-                .pipelineStageLogsPatchHandler(new AppendStageLogs(this.repository))
+                .pipelineStageLogsPatchHandler(new StageLogsAppend(this.repository))
 
                 .build();
 

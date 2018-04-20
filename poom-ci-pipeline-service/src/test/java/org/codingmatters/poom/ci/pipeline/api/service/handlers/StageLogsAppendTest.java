@@ -16,9 +16,9 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class AppendStageLogsTest extends AbstractPoomCITest {
+public class StageLogsAppendTest extends AbstractPoomCITest {
 
-    private AppendStageLogs handler = new AppendStageLogs(this.repository());
+    private StageLogsAppend handler = new StageLogsAppend(this.repository());
 
 
     @Before
@@ -63,6 +63,8 @@ public class AppendStageLogsTest extends AbstractPoomCITest {
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
         assertThat(this.repository().logRepository().all(0, 0).total(), is(logCount + 1));
+        assertThat(lastLog.pipelineId(), is("a-pipeline"));
+        assertThat(lastLog.stageName(), is("a-running-stage"));
         assertThat(lastLog.log(), is(LogLine.builder().line(501L).content("added").build()));
     }
 
