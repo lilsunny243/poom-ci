@@ -15,6 +15,11 @@
         <dependencies>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>poom-ci-stages</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>poom-ci-pipeline</artifactId>
                 <version>${project.version}</version>
             </dependency>

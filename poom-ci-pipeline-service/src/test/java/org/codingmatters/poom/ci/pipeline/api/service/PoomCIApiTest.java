@@ -43,7 +43,7 @@ public class PoomCIApiTest extends AbstractPoomCITest {
 
         assertThat(lastJobPost.get().accountId(), is("poom-ci"));
         assertThat(lastJobPost.get().payload().category(), is("poom-ci"));
-        assertThat(lastJobPost.get().payload().name(), is("pipeline"));
+        assertThat(lastJobPost.get().payload().name(), is("github-pipeline"));
         assertThat(lastJobPost.get().payload().arguments().toArray(), is(arrayContaining(pipelineId)));
     }
 

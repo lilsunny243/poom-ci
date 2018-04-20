@@ -65,7 +65,7 @@ public class PoomCIApi {
                     .accountId("poom-ci")
                     .payload(jobCreation -> jobCreation
                             .category("poom-ci")
-                            .name("pipeline")
+                            .name("github-pipeline")
                             .arguments(pipeline.id())
                     )
             );

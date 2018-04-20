@@ -22,13 +22,13 @@
         <module>poom-ci-bom</module>
 
         <module>poom-ci-triggers</module>
-        <module>poom-ci-pipeline</module>
+        <module>poom-ci-stages</module>
         <module>poom-ci-github-webhook</module>
         <module>poom-ci-pipeline-api</module>
         <module>poom-ci-pipeline-api-spec</module>
         <module>poom-ci-pipeline-service</module>
         <module>poom-ci-pipeline-api-client</module>
-        <module>poom-ci-pipeline-runners</module>
+        <module>poom-ci-runners</module>
 
         <module>poom-ci-deployment</module>
     </modules>
