@@ -8,6 +8,7 @@ import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.json.PipelineReader;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
+import org.codingmatters.poom.ci.runners.utils.ProcessInvoker;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 
@@ -50,18 +51,24 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
         }
     }
 
-    private void checkoutTo(GithubPushEvent event, File workspace) throws IOException {
+    private void checkoutTo(GithubPushEvent event, File workspace) throws ProcessingException {
+        ProcessInvoker invoker = new ProcessInvoker();
         ProcessBuilder processBuilder = new ProcessBuilder()
                 .directory(workspace)
                 ;
 
         int status = 0;
         try {
-            status = processBuilder.command("git", "init").start().waitFor();
-            status = processBuilder.command("git", "fetch", "-u", event.repository().clone_url(), event.ref()).start().waitFor();
-            status = processBuilder.command("git", "checkout", event.after()).start().waitFor();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            status = invoker.exec(processBuilder.command("git", "init"), line -> log.info(line), line -> log.error(line));
+            if(status != 0) throw new ProcessingException("git init exited with a none 0 status");
+
+            status = invoker.exec(processBuilder.command("git", "fetch", "-u", event.repository().clone_url(), event.ref()), line -> log.info(line), line -> log.error(line));
+            if(status != 0) throw new ProcessingException("git fetch exited with a none 0 status");
+
+            status = invoker.exec(processBuilder.command("git", "checkout", event.after()), line -> log.info(line), line -> log.error(line));
+            if(status != 0) throw new ProcessingException("git checkout exited with a none 0 status");
+        } catch (InterruptedException | IOException e) {
+            throw new ProcessingException("exception raised whlie checking out workspace", e);
         }
     }
 
