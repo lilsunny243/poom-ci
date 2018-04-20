@@ -12,6 +12,7 @@ import org.codingmatters.poomjobs.api.types.Job;
 import org.codingmatters.poomjobs.api.types.job.Status;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -93,7 +94,7 @@ public class PipelineJobProcessorTest {
                         stage -> stage.name("stage1"),
                         stage -> stage.name("stage2")
                 )
-                .build());
+                .build(), new File("./"));
     };
 
     private final AtomicInteger execInitCount = new AtomicInteger(0);
