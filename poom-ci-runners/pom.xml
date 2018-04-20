@@ -30,5 +30,9 @@
             <groupId>org.codingmatters.poom.ci</groupId>
             <artifactId>poom-ci-stages</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.codingmatters.rest</groupId>
+            <artifactId>cdm-rest-client-okhttp</artifactId>
+        </dependency>
     </dependencies>
 </project>

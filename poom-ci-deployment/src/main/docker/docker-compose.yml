@@ -14,7 +14,11 @@ services:
     image: ${pipeline-service.image}
     environment:
       JOB_REGISTRY_URL: http://poomjobs-registries-service:9999/poomjobs-jobs/v1
+    ports:
+      - 6545:9999
 
   poomjobs-registries-service:
     image: ${poomjobs-registries-service.image}
+    ports:
+      - 6544:9999
 

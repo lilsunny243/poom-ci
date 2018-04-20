@@ -12,8 +12,13 @@ import org.codingmatters.poomjobs.api.types.Job;
 
 public class PoomCIJobProcessorFactory implements JobProcessor.Factory {
 
-    private PoomCIPipelineAPIClient pipelineClient;
-    private YAMLFactory yamlFactory;
+    private final PoomCIPipelineAPIClient pipelineClient;
+    private final YAMLFactory yamlFactory;
+
+    public PoomCIJobProcessorFactory(PoomCIPipelineAPIClient pipelineClient, YAMLFactory yamlFactory) {
+        this.pipelineClient = pipelineClient;
+        this.yamlFactory = yamlFactory;
+    }
 
     @Override
     public JobProcessor createFor(Job job) {
