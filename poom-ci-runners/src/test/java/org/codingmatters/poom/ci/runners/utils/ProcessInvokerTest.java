@@ -1,5 +1,6 @@
 package org.codingmatters.poom.ci.runners.utils;
 
+import org.codingmatters.poom.services.support.process.ProcessInvoker;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

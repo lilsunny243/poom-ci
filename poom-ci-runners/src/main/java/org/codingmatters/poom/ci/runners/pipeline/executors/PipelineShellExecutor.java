@@ -2,12 +2,15 @@ package org.codingmatters.poom.ci.runners.pipeline.executors;
 
 import org.codingmatters.poom.ci.pipeline.PipelineScript;
 import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
+import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineExecutor;
-import org.codingmatters.poom.ci.runners.utils.ProcessInvoker;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.services.support.process.ProcessInvoker;
 
 import java.io.*;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 public class PipelineShellExecutor implements PipelineExecutor {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(PipelineShellExecutor.class);
@@ -32,14 +35,13 @@ public class PipelineShellExecutor implements PipelineExecutor {
         stageScript.setExecutable(true);
         this.logStageScript(stage, stageScript);
 
-
         ProcessBuilder processBuilder = new ProcessBuilder(
                 stageScript.getAbsolutePath(),
                 this.context.workspace().getParentFile().getAbsolutePath(),
                 this.context.workspace().getAbsolutePath()
         ).directory(this.context.workspace());
         try {
-            int status = new ProcessInvoker().exec(
+            int status = this.creatInvokerForStage(stage).exec(
                     processBuilder,
                     line -> logListener.logLine(line),
                     line -> logListener.logLine(line)
@@ -53,6 +55,11 @@ public class PipelineShellExecutor implements PipelineExecutor {
             log.error("error processing stage script", e);
             return StageTermination.Exit.FAILURE;
         }
+    }
+
+    private ProcessInvoker creatInvokerForStage(String stageName) {
+        Stage stage = this.context.pipeline().stages().stream().filter(st -> st.name().equals(stageName)).findFirst().get();
+        return new ProcessInvoker(Optional.ofNullable(stage.timeout()).orElse(5L), TimeUnit.MINUTES);
     }
 
     private void logStageScript(String stage, File stageScript) {

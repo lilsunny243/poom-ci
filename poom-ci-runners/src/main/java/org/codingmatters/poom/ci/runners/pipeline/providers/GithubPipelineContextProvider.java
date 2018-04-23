@@ -8,9 +8,9 @@ import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.json.PipelineReader;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
-import org.codingmatters.poom.ci.runners.utils.ProcessInvoker;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.services.support.process.ProcessInvoker;
 
 import java.io.File;
 import java.io.IOException;
