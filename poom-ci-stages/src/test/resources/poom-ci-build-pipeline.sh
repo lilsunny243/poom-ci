@@ -20,10 +20,8 @@ Y="y-value"
 Z="z-value"
 
 STAGE=first
-STAGE_OUT=$WORKSPACE/logs/$STAGE.stdout.log
-STAGE_ERR=$WORKSPACE/logs/$STAGE.stderr.log
 
-A > >(tee -a $STAGE_OUT) 2> >(tee -a $STAGE_ERR >&2)
+A
 RESULT=$?
 if [ "$RESULT" -ne 0 ]
 then
@@ -31,7 +29,7 @@ then
     exit $RESULT
 fi
 
-B > >(tee -a $STAGE_OUT) 2> >(tee -a $STAGE_ERR >&2)
+B
 RESULT=$?
 if [ "$RESULT" -ne 0 ]
 then
@@ -40,10 +38,8 @@ then
 fi
 
 STAGE=second
-STAGE_OUT=$WORKSPACE/logs/$STAGE.stdout.log
-STAGE_ERR=$WORKSPACE/logs/$STAGE.stderr.log
 
-C > >(tee -a $STAGE_OUT) 2> >(tee -a $STAGE_ERR >&2)
+C
 RESULT=$?
 if [ "$RESULT" -ne 0 ]
 then

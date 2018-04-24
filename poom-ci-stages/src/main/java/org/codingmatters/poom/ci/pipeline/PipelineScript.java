@@ -82,9 +82,9 @@ public class PipelineScript {
 
     private void stageVars(Stage stage, OutputStream out) throws IOException {
         String vars = String.format(
-                "STAGE=%s\n" +
-                "STAGE_OUT=$WORKSPACE/logs/$STAGE.stdout.log\n" +
-                "STAGE_ERR=$WORKSPACE/logs/$STAGE.stderr.log\n\n",
+                "STAGE=%s\n" + "\n",
+//                "STAGE_OUT=$WORKSPACE/logs/$STAGE.stdout.log\n" +
+//                "STAGE_ERR=$WORKSPACE/logs/$STAGE.stderr.log\n\n",
                 stage.name()
         );
 
@@ -96,7 +96,8 @@ public class PipelineScript {
         for (String exec : stage.exec()) {
             i++;
             String call = String.format(
-            "%s > >(tee -a $STAGE_OUT) 2> >(tee -a $STAGE_ERR >&2)\n" +
+//            "%s > >(tee -a $STAGE_OUT) 2> >(tee -a $STAGE_ERR >&2)\n" +
+            "%s\n" +
             "RESULT=$?\n" +
             "if [ \"$RESULT\" -ne 0 ]\n" +
             "then\n" +

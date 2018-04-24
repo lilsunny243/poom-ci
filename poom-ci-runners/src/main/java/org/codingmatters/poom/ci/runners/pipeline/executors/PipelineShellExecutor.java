@@ -41,7 +41,7 @@ public class PipelineShellExecutor implements PipelineExecutor {
                 this.context.workspace().getAbsolutePath()
         ).directory(this.context.workspace());
         try {
-            int status = this.creatInvokerForStage(stage).exec(
+            int status = this.createInvokerForStage(stage).exec(
                     processBuilder,
                     line -> lineLogger(logListener, line),
                     line -> lineLogger(logListener, line)
@@ -62,7 +62,7 @@ public class PipelineShellExecutor implements PipelineExecutor {
         logListener.logLine(line);
     }
 
-    private ProcessInvoker creatInvokerForStage(String stageName) {
+    private ProcessInvoker createInvokerForStage(String stageName) {
         Stage stage = this.context.pipeline().stages().stream().filter(st -> st.name().equals(stageName)).findFirst().get();
         return new ProcessInvoker(Optional.ofNullable(stage.timeout()).orElse(5L), TimeUnit.MINUTES);
     }
@@ -85,14 +85,6 @@ public class PipelineShellExecutor implements PipelineExecutor {
         }
 
         return result.toString();
-    }
-
-    private void stageError(String line) {
-        log.error(line);
-    }
-
-    private void stageOutput(String line) {
-        log.info(line);
     }
 
     private File createStageScript(String stage) throws IOException {

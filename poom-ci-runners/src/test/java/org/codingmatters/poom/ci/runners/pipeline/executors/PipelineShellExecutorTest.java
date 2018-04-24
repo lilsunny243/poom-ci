@@ -73,13 +73,14 @@ public class PipelineShellExecutorTest {
     @Test
     public void stage1() throws Exception {
         new PipelineShellExecutor(this.context).execute("stage1", log -> logs.add(log));
-        assertThat(logs, Matchers.hasSize(6));
+        Thread.sleep(500L);
+        assertThat(logs, Matchers.hasSize(5));
     }
 
     @Test
     public void stage2() throws Exception {
         new PipelineShellExecutor(this.context).execute("stage2", log -> logs.add(log));
-        assertThat(logs, Matchers.hasSize(7));
+        assertThat(logs, Matchers.hasSize(8));
     }
 
     private InputStream inputStream(String resource) {

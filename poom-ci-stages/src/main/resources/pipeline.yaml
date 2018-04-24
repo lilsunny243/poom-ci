@@ -2,8 +2,14 @@
 pipeline:
   stages:
     $list: $stage
+
+  onError:
+    $list: $stage
+
   env:
     $value-object: org.codingmatters.value.objects.values.ObjectValue
+
+
 
 stage:
   name: string
