@@ -42,7 +42,7 @@ public class PipelineShellExecutorTest {
 
 
     private GithubTriggerGetResponse triggerGet(GithubTriggerGetRequest request) {
-        try(JsonParser parser = this.jsonFactory.createParser(this.inputStream("github-push-develop.json"))) {
+        try(JsonParser parser = this.jsonFactory.createParser(this.inputStream("github-push-master.json"))) {
             GithubPushEvent event = new GithubPushEventReader().read(parser);
             return GithubTriggerGetResponse.builder()
                     .status200(status -> status.xEntityId(request.triggerId()).payload(event))
