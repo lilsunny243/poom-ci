@@ -18,6 +18,7 @@
         <pipeline-service.image>${docker.registry}/${docker.namespace}/poom-ci-pipeline-service:${org.codingmatters.poom.ci:poom-ci-pipeline-service:jar.version}</pipeline-service.image>
         <github-webhook.image>${docker.registry}/${docker.namespace}/poom-ci-github-webhook:${org.codingmatters.poom.ci:poom-ci-github-webhook:jar.version}</github-webhook.image>
         <poomjobs-registries-service.image>${docker.registry}/${docker.namespace}/poomjobs-registries-service:${org.codingmatters.poom:poomjobs-registries-service:jar.version}</poomjobs-registries-service.image>
+        <archiva.version>2.2.3</archiva.version>
     </properties>
 
 

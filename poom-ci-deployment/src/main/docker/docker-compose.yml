@@ -22,3 +22,20 @@ services:
     ports:
       - 6544:9999
 
+  maven-repository:
+    image: ${docker.registry}/${docker.namespace}/archiva:${archiva.version}
+    ports:
+      - 8080:8080
+    volumes:
+      - archiva-conf:/var/archiva/conf
+      - archiva-data:/var/archiva/data
+      - archiva-logs:/var/archiva/logs
+      - archiva-repositories:/var/archiva/repositories
+
+volumes:
+  archiva-conf:
+  archiva-data:
+  archiva-logs:
+  archiva-repositories:
+
+

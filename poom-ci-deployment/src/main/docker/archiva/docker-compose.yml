@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+
+  archiva:
+    build: .
+    image: ${docker.registry}/${docker.namespace}/archiva:${archiva.version}
