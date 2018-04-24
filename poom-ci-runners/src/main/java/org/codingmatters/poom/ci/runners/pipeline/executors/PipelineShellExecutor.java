@@ -43,8 +43,8 @@ public class PipelineShellExecutor implements PipelineExecutor {
         try {
             int status = this.creatInvokerForStage(stage).exec(
                     processBuilder,
-                    line -> logListener.logLine(line),
-                    line -> logListener.logLine(line)
+                    line -> lineLogger(logListener, line),
+                    line -> lineLogger(logListener, line)
             );
             if(status == 0) {
                 return StageTermination.Exit.SUCCESS;
@@ -55,6 +55,11 @@ public class PipelineShellExecutor implements PipelineExecutor {
             log.error("error processing stage script", e);
             return StageTermination.Exit.FAILURE;
         }
+    }
+
+    private void lineLogger(StageLogListener logListener, String line) {
+        log.info(line);
+        logListener.logLine(line);
     }
 
     private ProcessInvoker creatInvokerForStage(String stageName) {
