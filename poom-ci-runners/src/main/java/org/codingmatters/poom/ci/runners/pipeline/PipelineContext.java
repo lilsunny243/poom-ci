@@ -52,7 +52,8 @@ public class PipelineContext {
     }
 
     private StageHolder[] stageHolders(ValueList<Stage> stages, StageHolder.Type type) {
-        return stages.stream()
+        return stages == null ? new StageHolder[0] :
+                stages.stream()
                 .map(stage -> StageHolder.builder()
                         .stage(stage)
                         .type(type)
