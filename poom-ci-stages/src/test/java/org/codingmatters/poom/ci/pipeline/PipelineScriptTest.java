@@ -1,6 +1,7 @@
 package org.codingmatters.poom.ci.pipeline;
 
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
+import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
 import org.codingmatters.value.objects.values.ObjectValue;
 import org.junit.Test;
 
@@ -34,7 +35,7 @@ public class PipelineScriptTest {
         PipelineScript script = new PipelineScript(pipeline);
 
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            script.forStage("build", out);
+            script.forStage(pipeline.holder(StageHolder.Type.MAIN, pipeline.stage("build")), out);
             out.flush();
             out.close();
             assertThat(out.toString(), is(this.resourceAsString("poom-ci-build-stage.sh")));

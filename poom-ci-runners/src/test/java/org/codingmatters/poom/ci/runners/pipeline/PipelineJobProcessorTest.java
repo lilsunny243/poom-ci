@@ -5,6 +5,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.*;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIHandlersClient;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
+import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
 import org.codingmatters.poomjobs.api.types.Job;
 import org.codingmatters.poomjobs.api.types.job.Status;
 import org.junit.Test;
@@ -104,10 +105,10 @@ public class PipelineJobProcessorTest {
             }
 
             @Override
-            public StageTermination.Exit execute(String stage, StageLogListener logListener) throws IOException {
-                executedStages.add(stage);
+            public StageTermination.Exit execute(StageHolder stage, StageLogListener logListener) throws IOException {
+                executedStages.add(stage.stage().name());
                 for (int i = 0; i < 3; i++) {
-                    logListener.logLine(stage + " log " + (i+1));
+                    logListener.logLine(stage.stage().name() + " log " + (i+1));
                 }
                 return StageTermination.Exit.SUCCESS;
             }

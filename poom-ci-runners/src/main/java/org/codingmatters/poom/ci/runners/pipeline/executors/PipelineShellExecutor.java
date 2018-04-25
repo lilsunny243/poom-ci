@@ -3,6 +3,8 @@ package org.codingmatters.poom.ci.runners.pipeline.executors;
 import org.codingmatters.poom.ci.pipeline.PipelineScript;
 import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
 import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
+import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
+import org.codingmatters.poom.ci.pipeline.descriptors.ValueList;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineExecutor;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -28,7 +30,7 @@ public class PipelineShellExecutor implements PipelineExecutor {
     }
 
     @Override
-    public StageTermination.Exit execute(String stage, StageLogListener logListener) throws IOException {
+    public StageTermination.Exit execute(StageHolder stage, StageLogListener logListener) throws IOException {
         this.ensureStageExists(stage);
 
         File stageScript = this.createStageScript(stage);
@@ -62,14 +64,13 @@ public class PipelineShellExecutor implements PipelineExecutor {
         logListener.logLine(line);
     }
 
-    private ProcessInvoker createInvokerForStage(String stageName) {
-        Stage stage = this.context.pipeline().stages().stream().filter(st -> st.name().equals(stageName)).findFirst().get();
-        return new ProcessInvoker(Optional.ofNullable(stage.timeout()).orElse(5L), TimeUnit.MINUTES);
+    private ProcessInvoker createInvokerForStage(StageHolder stage) {
+        return new ProcessInvoker(Optional.ofNullable(stage.stage().timeout()).orElse(5L), TimeUnit.MINUTES);
     }
 
-    private void logStageScript(String stage, File stageScript) {
-        log.info("will execute stage {} script from file {} with content : \n{}",
-                stage, stageScript, this.content(stageScript)
+    private void logStageScript(StageHolder stage, File stageScript) {
+        log.info("will execute stage {} / {} script from file {} with content : \n{}",
+                stage.type().name().toLowerCase(), stage.stage().name(), stageScript, this.content(stageScript)
                 );
     }
 
@@ -87,8 +88,8 @@ public class PipelineShellExecutor implements PipelineExecutor {
         return result.toString();
     }
 
-    private File createStageScript(String stage) throws IOException {
-        File stageScript = File.createTempFile(this.context.pipelineId() + "-stage-" + stage, ".sh");
+    private File createStageScript(StageHolder stage) throws IOException {
+        File stageScript = File.createTempFile(this.context.pipelineId() + "-" + stage.type().name().toLowerCase() + "-stage-" + stage.stage().name(), ".sh");
         stageScript.deleteOnExit();
         try(OutputStream out = new FileOutputStream(stageScript)) {
             this.pipelineScript.forStage(stage, out);
@@ -96,9 +97,18 @@ public class PipelineShellExecutor implements PipelineExecutor {
         return stageScript;
     }
 
-    private void ensureStageExists(String stage) throws IOException {
-        this.context.pipeline().stages().stream()
-                .filter(stg -> stg.name().equals(stage)).findFirst()
-                .orElseThrow(() -> new IOException("no stage " + stage));
+    private void ensureStageExists(StageHolder stage) throws IOException {
+        stage.opt().stage().orElseThrow(() -> new IOException("malformed stage : " + stage));
+    }
+
+    private ValueList<Stage> stagesForType(StageHolder.Type type) {
+        switch (type) {
+            case MAIN:
+                return this.context.pipeline().stages();
+            case SUCCESS:
+                return this.context.pipeline().onSuccess();
+            default:
+                return this.context.pipeline().onError();
+        }
     }
 }

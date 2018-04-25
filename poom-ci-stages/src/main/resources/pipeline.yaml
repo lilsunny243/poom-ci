@@ -1,5 +1,6 @@
 ---
 pipeline:
+  $conforms-to: [org.codingmatters.poom.ci.pipeline.StageProvider]
   stages:
     $list: $stage
 

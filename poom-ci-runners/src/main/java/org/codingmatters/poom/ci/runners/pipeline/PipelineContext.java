@@ -51,6 +51,10 @@ public class PipelineContext {
         return this.stageHolders(this.pipeline.onSuccess(), StageHolder.Type.SUCCESS);
     }
 
+    public StageHolder holder(StageHolder.Type type, String stage) {
+        return this.pipeline().holder(StageHolder.Type.MAIN, this.pipeline().stage("stage1"));
+    }
+
     private StageHolder[] stageHolders(ValueList<Stage> stages, StageHolder.Type type) {
         return stages == null ? new StageHolder[0] :
                 stages.stream()

@@ -72,14 +72,16 @@ public class PipelineShellExecutorTest {
 
     @Test
     public void stage1() throws Exception {
-        new PipelineShellExecutor(this.context).execute("stage1", log -> logs.add(log));
+        new PipelineShellExecutor(this.context).execute(
+                this.context.pipeline().stageHolder("stage1"),
+                log -> logs.add(log));
         Thread.sleep(500L);
         assertThat(logs, Matchers.hasSize(5));
     }
 
     @Test
     public void stage2() throws Exception {
-        new PipelineShellExecutor(this.context).execute("stage2", log -> logs.add(log));
+        new PipelineShellExecutor(this.context).execute(this.context.pipeline().stageHolder("stage2"), log -> logs.add(log));
         assertThat(logs, Matchers.hasSize(8));
     }
 

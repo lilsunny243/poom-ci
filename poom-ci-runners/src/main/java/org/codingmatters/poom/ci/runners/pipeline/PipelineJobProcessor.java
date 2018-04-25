@@ -122,7 +122,7 @@ public class PipelineJobProcessor implements JobProcessor {
         log.audit().info("executing pipeline {} stage {}", context.pipelineId(), stage);
         try {
             this.notifyStageExecutionStart(context, stage);
-            StageTermination.Exit status = executor.execute(stage.stage().name(), this.stageLogListener(context, stage));
+            StageTermination.Exit status = executor.execute(stage, this.stageLogListener(context, stage));
             this.notifyStageExecutionEnd(context, stage, status);
             return status;
         } catch (IOException e) {

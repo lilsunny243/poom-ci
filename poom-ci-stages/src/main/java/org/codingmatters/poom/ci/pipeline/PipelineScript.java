@@ -2,7 +2,7 @@ package org.codingmatters.poom.ci.pipeline;
 
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
-import org.codingmatters.poom.ci.pipeline.descriptors.optional.OptionalStage;
+import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,9 +15,8 @@ public class PipelineScript {
         this.pipeline = pipeline;
     }
 
-    public void forStage(String stageName, OutputStream out) throws IOException {
-        Stage stage = this.theStage(stageName).orElseThrow(() -> new IOException("no such stage " + stageName));
-
+    public void forStage(StageHolder stg, OutputStream out) throws IOException {
+        Stage stage = stg.stage();
         this.header(out);
         this.env(out);
         this.stage(stage, out);
@@ -31,15 +30,6 @@ public class PipelineScript {
             this.stage(stage, out);
         }
         this.pipelineResult(out);
-    }
-
-    private OptionalStage theStage(String named) {
-        for (Stage stage : this.pipeline.stages()) {
-            if(named.equals(stage.name())) {
-                return stage.opt();
-            }
-        }
-        return OptionalStage.of(null);
     }
 
     private void header(OutputStream out) throws IOException {
