@@ -6,6 +6,7 @@ pipelineStage:
 pipelineStageQuery:
   withPipelineId: string
   withName: string
+  withType: string
   withRunningStatus:
     $enum: RUNNING, DONE
 

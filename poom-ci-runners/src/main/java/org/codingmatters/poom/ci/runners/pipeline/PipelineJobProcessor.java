@@ -5,6 +5,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.PipelineTermination;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
+import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
 import org.codingmatters.poom.ci.runners.pipeline.loggers.DirectStageLogger;
 import org.codingmatters.poom.runner.JobProcessor;
 import org.codingmatters.poom.runner.exception.JobProcessingException;
@@ -101,7 +102,7 @@ public class PipelineJobProcessor implements JobProcessor {
     }
 
     private PipelineTermination.Exit executeStages(PipelineContext context, PipelineExecutor executor) throws JobProcessingException {
-        for (String stage : context.stages()) {
+        for (StageHolder stage : context.stages()) {
             StageTermination.Exit status = this.executeStage(context, executor, stage);
             if(status.equals(StageTermination.Exit.FAILURE)) {
                 return PipelineTermination.Exit.FAILURE;
@@ -110,11 +111,11 @@ public class PipelineJobProcessor implements JobProcessor {
         return PipelineTermination.Exit.SUCCESS;
     }
 
-    private StageTermination.Exit executeStage(PipelineContext context, PipelineExecutor executor, String stage) throws JobProcessingException {
+    private StageTermination.Exit executeStage(PipelineContext context, PipelineExecutor executor, StageHolder stage) throws JobProcessingException {
         log.audit().info("executing pipeline {} stage {}", context.pipelineId(), stage);
         try {
             this.notifyStageExecutionStart(context, stage);
-            StageTermination.Exit status = executor.execute(stage, this.stageLogListener(context, stage));
+            StageTermination.Exit status = executor.execute(stage.stage().name(), this.stageLogListener(context, stage));
             this.notifyStageExecutionEnd(context, stage, status);
             return status;
         } catch (IOException e) {
@@ -126,15 +127,18 @@ public class PipelineJobProcessor implements JobProcessor {
         }
     }
 
-    private PipelineExecutor.StageLogListener stageLogListener(PipelineContext context, String stage) {
+    private PipelineExecutor.StageLogListener stageLogListener(PipelineContext context, StageHolder stage) {
         return new DirectStageLogger(context.pipelineId(), stage, this.pipelineAPIClient);
     }
 
-    private void notifyStageExecutionStart(PipelineContext context, String stage) throws JobProcessingException {
+    private void notifyStageExecutionStart(PipelineContext context, StageHolder stage) throws JobProcessingException {
         try {
             this.pipelineAPIClient.pipelines().pipeline().pipelineStages().post(req -> req
                     .pipelineId(context.pipelineId())
-                    .payload(creation -> creation.name(stage))
+                    .stageType(stage.type().name())
+                    .payload(creation -> creation
+                            .name(stage.stage().name())
+                    )
             );
         } catch (IOException e) {
             String errorToken = log.tokenized().error(String.format(
@@ -145,10 +149,12 @@ public class PipelineJobProcessor implements JobProcessor {
         }
     }
 
-    private void notifyStageExecutionEnd(PipelineContext context, String stage, StageTermination.Exit status) throws JobProcessingException {
+    private void notifyStageExecutionEnd(PipelineContext context, StageHolder stage, StageTermination.Exit status) throws JobProcessingException {
         try {
             this.pipelineAPIClient.pipelines().pipeline().pipelineStages().pipelineStage().patch(req -> req
-                    .pipelineId(context.pipelineId()).stageName(stage)
+                    .pipelineId(context.pipelineId())
+                    .stageType(stage.type().name())
+                    .stageName(stage.stage().name())
                     .payload(term -> term.exit(status))
             );
         } catch (IOException e) {

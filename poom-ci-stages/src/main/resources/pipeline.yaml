@@ -3,6 +3,8 @@ pipeline:
   stages:
     $list: $stage
 
+  onSuccess:
+    $list: $stage
   onError:
     $list: $stage
 
@@ -17,3 +19,7 @@ stage:
   exec:
     $list: string
 
+stageHolder:
+  stage: $stage
+  type:
+    $enum: MAIN, ERROR, SUCCESS

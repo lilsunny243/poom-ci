@@ -6,9 +6,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepositor
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
-import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
-import org.codingmatters.poom.ci.pipeline.api.types.StageCreation;
-import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
+import org.codingmatters.poom.ci.pipeline.api.types.*;
 import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
 import org.codingmatters.poom.services.domain.repositories.Repository;
@@ -16,8 +14,10 @@ import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.servives.domain.entities.Entity;
 import org.codingmatters.rest.api.Processor;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class StageCreate implements Function<PipelineStagesPostRequest, PipelineStagesPostResponse> {
     static private CategorizedLogger log = CategorizedLogger.getLogger(StageCreate.class);
@@ -43,7 +43,9 @@ public class StageCreate implements Function<PipelineStagesPostRequest, Pipeline
                     .pipelineId(request.pipelineId())
                     .stage(stage -> stage
                             .name(creation.name())
-                            .status(status -> status.run(StageStatus.Run.RUNNING)))
+                            .status(status -> status.run(StageStatus.Run.RUNNING))
+                            .stageType(Stage.StageType.valueOf(request.stageType().toUpperCase()))
+                    )
                     .build());
 
             log.audit().info("running stage {} created for running pipeline {}", created.value().stage().name(), request.pipelineId());
@@ -68,6 +70,26 @@ public class StageCreate implements Function<PipelineStagesPostRequest, Pipeline
     }
 
     private Optional<PipelineStagesPostResponse> validate(PipelineStagesPostRequest request) throws RepositoryException {
+        if(! request.opt().stageType().isPresent()) {
+            return Optional.of(PipelineStagesPostResponse.builder()
+                    .status400(status -> status.payload(error -> error
+                            .code(Error.Code.ILLEGAL_RESOURCE_CREATION)
+                            .description("cannot create stage without specifying a stage type within " + Stage.StageType.values())
+                            .token(log.audit().tokenized().info("no stage type specified"))
+                    ))
+                    .build());
+        }
+
+        if( !Arrays.stream(Stage.StageType.values()).map(stageType -> stageType.name().toUpperCase()).collect(Collectors.toSet()).contains(request.stageType().toUpperCase())) {
+            return Optional.of(PipelineStagesPostResponse.builder()
+                    .status400(status -> status.payload(error -> error
+                            .code(Error.Code.ILLEGAL_RESOURCE_CREATION)
+                            .token(log.audit().tokenized().info("the stage type {} doesn't exist", request.stageType()))
+                            .description("cannot create stage without specifying a stage type within " + Stage.StageType.values())
+                    ))
+                    .build());
+        }
+
         Entity<Pipeline> pipeline = this.pipelineRepository.retrieve(request.pipelineId());
         if(pipeline == null) {
             return Optional.of(PipelineStagesPostResponse.builder()
@@ -104,7 +126,6 @@ public class StageCreate implements Function<PipelineStagesPostRequest, Pipeline
         }
 
         if(this.aStageIsAlreadyRunning(request)) {
-
             return Optional.of(PipelineStagesPostResponse.builder()
                     .status400(status -> status.payload(error -> error
                             .code(Error.Code.ILLEGAL_RESOURCE_CREATION)
@@ -129,6 +150,7 @@ public class StageCreate implements Function<PipelineStagesPostRequest, Pipeline
     private boolean stageAlreadyExists(PipelineStagesPostRequest request) throws RepositoryException {
         return this.stageRepository.search(PipelineStageQuery.builder()
                 .withPipelineId(request.pipelineId())
+                .withType(request.stageType().toUpperCase())
                 .withName(request.payload().name())
                 .build(), 0, 0).total() > 0;
     }

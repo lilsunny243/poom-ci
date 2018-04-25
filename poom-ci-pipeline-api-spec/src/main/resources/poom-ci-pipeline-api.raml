@@ -36,41 +36,43 @@ mediaType: application/json
       patch:
          is: [{resourceUpdate: {elementType: Pipeline, elementTypeChangeData: PipelineTermination}}]
 
-      /stages:
+      /stages/{stage-type}/:
          displayName: Pipeline Stages
+         uriParameters:
+            stage-type: string
          get:
             is: [{collectionPaging: {elementType: Stage}}]
          post:
             is: [{collectionElementCreation: {elementTypeCreationData: StageCreation}}]
 
          /{stage-name}:
-            displayName: Pipeline Stage
-            uriParameters:
-               stage-name: string
-            get:
-               is: [{resourceRead: {elementType: Stage}}]
-               responses:
-                  200:
-                     headers:
-                        x-pipeline-id: string
-            patch:
-               is: [{resourceUpdate: {elementType: Stage, elementTypeChangeData: StageTermination}}]
-
-            /logs:
-               displayName: Pipeline Stage Logs
+               displayName: Pipeline Stage
+               uriParameters:
+                  stage-name: string
                get:
-                  is: [{collectionPaging: {elementType: LogLine}}]
+                  is: [{resourceRead: {elementType: Stage}}]
                   responses:
                      200:
                         headers:
                            x-pipeline-id: string
-                           x-stage-name: string
-                     206:
-                        headers:
-                           x-pipeline-id: string
-                           x-stage-name: string
                patch:
-                  is: [{collectionUpdate: {elementTypeCreationData: AppendedLogLine}}]
+                  is: [{resourceUpdate: {elementType: Stage, elementTypeChangeData: StageTermination}}]
+
+               /logs:
+                  displayName: Pipeline Stage Logs
+                  get:
+                     is: [{collectionPaging: {elementType: LogLine}}]
+                     responses:
+                        200:
+                           headers:
+                              x-pipeline-id: string
+                              x-stage-name: string
+                        206:
+                           headers:
+                              x-pipeline-id: string
+                              x-stage-name: string
+                  patch:
+                     is: [{collectionUpdate: {elementTypeCreationData: AppendedLogLine}}]
 
 types:
    Pipeline:
@@ -110,6 +112,8 @@ types:
       properties:
          name: string
          status: StageStatus
+         stageType:
+            enum: [MAIN, ERROR, SUCCESS]
 
    StageCreation:
       type: object

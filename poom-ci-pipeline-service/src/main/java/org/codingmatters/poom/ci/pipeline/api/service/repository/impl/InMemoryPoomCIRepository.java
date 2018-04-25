@@ -42,6 +42,12 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
             if(query.opt().withName().isPresent()) {
                 filtered = filtered.filter(entity -> query.withName().equals(entity.value().stage().name()));
             }
+            if(query.opt().withType().isPresent()) {
+                filtered = filtered.filter(entity ->
+                        entity.value().opt().stage().stageType().isPresent() &&
+                                entity.value().stage().stageType().name().toUpperCase().equals(query.withType().toUpperCase()));
+            }
+
             if(query.opt().withRunningStatus().isPresent()) {
                 StageStatus.Run runStatus = StageStatus.Run.valueOf(query.withRunningStatus().toString());
                 filtered = filtered.filter(entity -> runStatus.equals(entity.value().stage().status().run()));

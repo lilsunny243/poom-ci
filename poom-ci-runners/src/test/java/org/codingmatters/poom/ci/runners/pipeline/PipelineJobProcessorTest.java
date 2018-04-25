@@ -1,10 +1,7 @@
 package org.codingmatters.poom.ci.runners.pipeline;
 
 import org.codingmatters.poom.ci.pipeline.api.*;
-import org.codingmatters.poom.ci.pipeline.api.types.PipelineTermination;
-import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
-import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
-import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
+import org.codingmatters.poom.ci.pipeline.api.types.*;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIHandlersClient;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
@@ -135,11 +132,15 @@ public class PipelineJobProcessorTest {
 
         assertThat(this.stagePostCalls, hasSize(2));
         assertThat(this.stagePostCalls.get(0).payload().name(), is("stage1"));
+        assertThat(this.stagePostCalls.get(0).stageType(), is(Stage.StageType.MAIN.name()));
         assertThat(this.stagePostCalls.get(1).payload().name(), is("stage2"));
+        assertThat(this.stagePostCalls.get(1).stageType(), is(Stage.StageType.MAIN.name()));
 
         assertThat(this.stagePatchCalls, hasSize(2));
         assertThat(this.stagePatchCalls.get(0).stageName(), is("stage1"));
+        assertThat(this.stagePostCalls.get(0).stageType(), is(Stage.StageType.MAIN.name()));
         assertThat(this.stagePatchCalls.get(1).stageName(), is("stage2"));
+        assertThat(this.stagePostCalls.get(1).stageType(), is(Stage.StageType.MAIN.name()));
 
         assertThat(this.pipelinePatchCalls, hasSize(1));
         assertThat(this.pipelinePatchCalls.get(0).pipelineId(), is("pipeline-id"));
@@ -148,17 +149,23 @@ public class PipelineJobProcessorTest {
         assertThat(this.logsPatchCalls, hasSize(6));
 
         assertThat(this.logsPatchCalls.get(0).stageName(), is("stage1"));
+        assertThat(this.logsPatchCalls.get(0).stageType(), is(Stage.StageType.MAIN.name()));
         assertThat(this.logsPatchCalls.get(0).payload().get(0).content(), is("stage1 log 1"));
         assertThat(this.logsPatchCalls.get(1).stageName(), is("stage1"));
+        assertThat(this.logsPatchCalls.get(1).stageType(), is(Stage.StageType.MAIN.name()));
         assertThat(this.logsPatchCalls.get(1).payload().get(0).content(), is("stage1 log 2"));
         assertThat(this.logsPatchCalls.get(2).stageName(), is("stage1"));
+        assertThat(this.logsPatchCalls.get(2).stageType(), is(Stage.StageType.MAIN.name()));
         assertThat(this.logsPatchCalls.get(2).payload().get(0).content(), is("stage1 log 3"));
 
         assertThat(this.logsPatchCalls.get(3).stageName(), is("stage2"));
+        assertThat(this.logsPatchCalls.get(3).stageType(), is(Stage.StageType.MAIN.name()));
         assertThat(this.logsPatchCalls.get(3).payload().get(0).content(), is("stage2 log 1"));
         assertThat(this.logsPatchCalls.get(4).stageName(), is("stage2"));
+        assertThat(this.logsPatchCalls.get(4).stageType(), is(Stage.StageType.MAIN.name()));
         assertThat(this.logsPatchCalls.get(4).payload().get(0).content(), is("stage2 log 2"));
-        assertThat(this.logsPatchCalls.get(4).stageName(), is("stage2"));
+        assertThat(this.logsPatchCalls.get(5).stageName(), is("stage2"));
+        assertThat(this.logsPatchCalls.get(5).stageType(), is(Stage.StageType.MAIN.name()));
         assertThat(this.logsPatchCalls.get(5).payload().get(0).content(), is("stage2 log 3"));
 
         assertThat(job.status().run(), is(Status.Run.DONE));

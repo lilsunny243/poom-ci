@@ -2,6 +2,9 @@ package org.codingmatters.poom.ci.runners.pipeline;
 
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
+import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
+import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
+import org.codingmatters.poom.ci.pipeline.descriptors.ValueList;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,9 +39,24 @@ public class PipelineContext {
         return this.workspace;
     }
 
-    public String[] stages() {
-        return this.pipeline().stages().stream()
-                .map(stage -> stage.name())
-                .toArray(i -> new String[i]);
+    public StageHolder[] stages() {
+        return this.stageHolders(this.pipeline.stages(), StageHolder.Type.MAIN);
+    }
+
+    public StageHolder[] onErrorStages() {
+        return this.stageHolders(this.pipeline.onError(), StageHolder.Type.ERROR);
+    }
+
+    public StageHolder[] onSuccessStages() {
+        return this.stageHolders(this.pipeline.onSuccess(), StageHolder.Type.SUCCESS);
+    }
+
+    private StageHolder[] stageHolders(ValueList<Stage> stages, StageHolder.Type type) {
+        return stages.stream()
+                .map(stage -> StageHolder.builder()
+                        .stage(stage)
+                        .type(type)
+                        .build())
+                .toArray(i -> new StageHolder[i]);
     }
 }
