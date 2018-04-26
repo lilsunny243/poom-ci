@@ -2,7 +2,7 @@ FROM openjdk:8-alpine
 
 ## from https://github.com/carlossg/docker-maven/blob/798decbb2f987a14f345c017f8fa3725c2467758/jdk-8-alpine/Dockerfile
 
-RUN apk add --no-cache curl tar bash
+RUN apk add --no-cache curl tar bash fontconfig
 
 ARG MAVEN_VERSION=${ci-mvn-tools.maven.version}
 ARG USER_HOME_DIR="/root"
