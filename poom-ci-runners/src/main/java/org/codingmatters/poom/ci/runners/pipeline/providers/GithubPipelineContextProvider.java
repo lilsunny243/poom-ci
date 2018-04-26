@@ -34,11 +34,12 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
             GithubPushEvent event = this.retrieveEvent(trigger);
 
             File workspace = this.createWorkspace(pipelineId);
-            this.checkoutTo(event, workspace);
+            File sources = this.createSources(pipelineId);
+            this.checkoutTo(event, sources);
 
-            Pipeline pipeline = this.readPipeline(workspace);
+            Pipeline pipeline = this.readPipeline(sources);
 
-            return new PipelineContext(pipelineId, pipeline, workspace);
+            return new PipelineContext(pipelineId, pipeline, workspace, sources);
         } catch (ProcessingException e) {
             throw new IOException("failed creating pipeline context", e);
         }
@@ -73,13 +74,21 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
     }
 
     private File createWorkspace(String pipelineId) throws ProcessingException {
+        return this.createPipelineDir(pipelineId, "workspace");
+    }
+
+    private File createSources(String pipelineId) throws ProcessingException {
+        return this.createPipelineDir(pipelineId, "sources");
+    }
+
+    private File createPipelineDir(String pipelineId, String type) throws ProcessingException {
         File workdir = new File(System.getProperty(PROVIDER_WORKDIR_PROP, System.getProperty("java.io.tmpdir")));
         workdir.mkdirs();
 
         File result;
         int suffix = 0;
         do {
-            result = new File(workdir, String.format("%s-%03d", pipelineId, suffix));
+            result = new File(workdir, String.format("%s-%s-%03d", pipelineId, type, suffix));
             suffix++;
         } while (result.exists());
 

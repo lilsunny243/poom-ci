@@ -39,8 +39,8 @@ public class PipelineShellExecutor implements PipelineExecutor {
 
         ProcessBuilder processBuilder = new ProcessBuilder(
                 stageScript.getAbsolutePath(),
-                this.context.workspace().getParentFile().getAbsolutePath(),
-                this.context.workspace().getAbsolutePath()
+                this.context.workspace().getAbsolutePath(),
+                this.context.sources().getAbsolutePath()
         ).directory(this.context.workspace());
         try {
             int status = this.createInvokerForStage(stage).exec(

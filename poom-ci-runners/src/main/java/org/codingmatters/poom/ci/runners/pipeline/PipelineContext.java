@@ -19,12 +19,14 @@ public class PipelineContext {
     private final String pipelineId;
     private final Pipeline pipeline;
     private final File workspace;
+    private final File sources;
 
 
-    public PipelineContext(String pipelineId, Pipeline pipeline, File workspace) {
+    public PipelineContext(String pipelineId, Pipeline pipeline, File workspace, File sources) {
         this.pipelineId = pipelineId;
         this.pipeline = pipeline;
         this.workspace = workspace;
+        this.sources = sources;
     }
 
     public String pipelineId() {
@@ -37,6 +39,10 @@ public class PipelineContext {
 
     public File workspace() {
         return this.workspace;
+    }
+
+    public File sources() {
+        return sources;
     }
 
     public StageHolder[] stages() {

@@ -69,10 +69,13 @@ public class GithubPipelineContextProviderTest {
 
         assertTrue(context.workspace().exists());
         assertTrue(context.workspace().isDirectory());
-        assertTrue(new File(context.workspace(), ".git").exists());
-        assertTrue(new File(context.workspace(), "poom-ci-pipeline.yaml").exists());
-        assertTrue(new File(context.workspace(), "you-are-on-develop").exists());
-        assertFalse(new File(context.workspace(), "develop-has-changed").exists());
+
+        assertTrue(context.sources().exists());
+        assertTrue(context.sources().isDirectory());
+        assertTrue(new File(context.sources(), ".git").exists());
+        assertTrue(new File(context.sources(), "poom-ci-pipeline.yaml").exists());
+        assertTrue(new File(context.sources(), "you-are-on-develop").exists());
+        assertFalse(new File(context.sources(), "develop-has-changed").exists());
 
         System.out.println(context.workspace().getAbsolutePath());
     }
