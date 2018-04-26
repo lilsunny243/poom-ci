@@ -42,6 +42,12 @@ public class PipelineShellExecutor implements PipelineExecutor {
                 this.context.workspace().getAbsolutePath(),
                 this.context.sources().getAbsolutePath()
         ).directory(this.context.workspace());
+
+        processBuilder.environment().put("PIPELINE_ID", this.context.pipelineId());
+        processBuilder.environment().put("REPOSITORY", this.context.repository());
+        processBuilder.environment().put("BRANCH", this.context.branch());
+        processBuilder.environment().put("CHANGESET", this.context.changeset());
+
         try {
             int status = this.createInvokerForStage(stage).exec(
                     processBuilder,

@@ -92,7 +92,7 @@ public class PipelineJobProcessorTest {
                         stage -> stage.name("stage1"),
                         stage -> stage.name("stage2")
                 )
-                .build(), new File("./"), new File("./"));
+                .build(), new File("./"), new File("./"), "repo", "master", "1234567890");
     };
 
     private final AtomicInteger execInitCount = new AtomicInteger(0);

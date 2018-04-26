@@ -11,6 +11,8 @@ import java.io.IOException;
 
 public class PipelineContext {
 
+
+
     @FunctionalInterface
     public interface PipelineContextProvider {
         PipelineContext pipelineContext(String pipelineId, PipelineTrigger trigger) throws IOException;
@@ -20,17 +22,35 @@ public class PipelineContext {
     private final Pipeline pipeline;
     private final File workspace;
     private final File sources;
+    private final String repository;
+    private final String branch;
+    private final String changeset;
 
 
-    public PipelineContext(String pipelineId, Pipeline pipeline, File workspace, File sources) {
+    public PipelineContext(String pipelineId, Pipeline pipeline, File workspace, File sources, String repository, String branch, String changeset) {
         this.pipelineId = pipelineId;
         this.pipeline = pipeline;
         this.workspace = workspace;
         this.sources = sources;
+        this.repository = repository;
+        this.branch = branch;
+        this.changeset = changeset;
+    }
+
+    public String repository() {
+        return this.repository;
     }
 
     public String pipelineId() {
         return pipelineId;
+    }
+
+    public String changeset() {
+        return changeset;
+    }
+
+    public String branch() {
+        return branch;
     }
 
     public Pipeline pipeline() {

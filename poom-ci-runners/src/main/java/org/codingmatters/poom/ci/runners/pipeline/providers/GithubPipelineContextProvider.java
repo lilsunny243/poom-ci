@@ -39,10 +39,22 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
 
             Pipeline pipeline = this.readPipeline(sources);
 
-            return new PipelineContext(pipelineId, pipeline, workspace, sources);
+            return new PipelineContext(
+                    pipelineId,
+                    pipeline,
+                    workspace,
+                    sources,
+                    event.repository().full_name(),
+                    this.branchFromRef(event),
+                    event.after());
         } catch (ProcessingException e) {
             throw new IOException("failed creating pipeline context", e);
         }
+    }
+
+    private String branchFromRef(GithubPushEvent event) {
+        String[] splitted = event.ref().split("\\/");
+        return splitted[splitted.length - 1];
     }
 
     private Pipeline readPipeline(File workspace) throws IOException {
@@ -63,7 +75,7 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
             status = invoker.exec(processBuilder.command("git", "init"), line -> log.info(line), line -> log.error(line));
             if(status != 0) throw new ProcessingException("git init exited with a none 0 status");
 
-            status = invoker.exec(processBuilder.command("git", "fetch", "-u", event.repository().clone_url(), event.ref()), line -> log.info(line), line -> log.error(line));
+            status = invoker.exec(processBuilder.command("git", "fetch", "-u", event.repository().clone_url(), branchFromRef(event)), line -> log.info(line), line -> log.error(line));
             if(status != 0) throw new ProcessingException("git fetch exited with a none 0 status");
 
             status = invoker.exec(processBuilder.command("git", "checkout", event.after()), line -> log.info(line), line -> log.error(line));
