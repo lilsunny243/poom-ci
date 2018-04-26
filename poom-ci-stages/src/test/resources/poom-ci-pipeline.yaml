@@ -5,5 +5,5 @@ stages:
       - $MVN clean install -DskipTests -Ddocker.resource.docker.url=http://172.17.0.1:2375
 
 env:
-  MVN: docker run -it --rm -v $SRC:/src -v $WORKSPACE/M2:/root/.m2 flexio-build-java mvn
+  - MVN: docker run -it --rm -v $SRC:/src -v $WORKSPACE/M2:/root/.m2 flexio-build-java mvn
 

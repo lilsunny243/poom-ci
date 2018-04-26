@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
 import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
+import org.codingmatters.value.objects.values.ObjectValue;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -56,13 +57,24 @@ public class PipelineScript {
 
     private void env(OutputStream out) throws IOException {
         System.out.println(this.pipeline.env());
-        if(this.pipeline.env() != null && this.pipeline.env().propertyNames() != null) {
-            for (String variable : this.pipeline.env().propertyNames()) {
-                String variableLine = String.format("%s=\"%s\"\n", variable, this.pipeline.env().property(variable).single().stringValue());
-                out.write(variableLine.getBytes());
+        if(this.pipeline.opt().env().isPresent())
+        for (ObjectValue envValues : this.pipeline.env()) {
+            if(envValues != null) {
+                for (String variable : envValues.propertyNames()) {
+                    String variableLine = String.format("%s=\"%s\"\n", variable, envValues.property(variable).single().stringValue());
+                    out.write(variableLine.getBytes());
+                }
             }
             out.write("\n".getBytes());
         }
+
+//        if(this.pipeline.env() != null && this.pipeline.env().propertyNames() != null) {
+//            for (String variable : this.pipeline.env().propertyNames()) {
+//                String variableLine = String.format("%s=\"%s\"\n", variable, this.pipeline.env().property(variable).single().stringValue());
+//                out.write(variableLine.getBytes());
+//            }
+//            out.write("\n".getBytes());
+//        }
     }
 
     private void stage(Stage stage, OutputStream out) throws IOException {
