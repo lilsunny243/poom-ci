@@ -13,7 +13,8 @@ pipeline:
     $list:
       $value-object: org.codingmatters.value.objects.values.ObjectValue
 
-
+  secrets:
+    $list: $secret
 
 stage:
   name: string
@@ -25,3 +26,9 @@ stageHolder:
   stage: $stage
   type:
     $enum: MAIN, ERROR, SUCCESS
+
+secret:
+  name: string
+  content: string
+  type:
+    $enum: var, file
