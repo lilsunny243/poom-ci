@@ -8,9 +8,7 @@ import org.codingmatters.poom.ci.ciphering.descriptors.json.CipheredDataReader;
 import org.codingmatters.poom.ci.pipeline.PipelineScript;
 import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
 import org.codingmatters.poom.ci.pipeline.descriptors.Secret;
-import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
 import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
-import org.codingmatters.poom.ci.pipeline.descriptors.ValueList;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineExecutor;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -20,6 +18,8 @@ import javax.crypto.NoSuchPaddingException;
 import java.io.*;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +31,7 @@ public class PipelineShellExecutor implements PipelineExecutor {
     private final KeyStore keystore;
     private final char[] keypass;
     private final JsonFactory jsonFactory;
+    private final Map<String, String> secretVars = new HashMap<>();
 
     public PipelineShellExecutor(PipelineContext context, KeyStore keystore, char[] keypass, JsonFactory jsonFactory) {
         this.context = context;
@@ -44,46 +45,16 @@ public class PipelineShellExecutor implements PipelineExecutor {
     public void initialize() throws IOException {
         if(this.context.pipeline().secrets() != null) {
             for (Secret secret : this.context.pipeline().secrets()) {
+                byte[] data = this.readSecretData(secret);
                 if(secret.as().equals(Secret.As.file)) {
                     // pipeline.secrets of type file unciphered to $WORKSPACE/secrets/{secret.name}
-                    byte[] data = this.readSecretData(secret);
                     this.writeSecretToFile(secret, data);
                 } else {
-                    throw new RuntimeException("not yet implemented : secret as " + secret.as());
+                    this.secretVars.put(secret.name(), new String(data));
                 }
             }
         }
 
-    }
-
-    private byte[] readSecretData(Secret secret) throws IOException {
-        try {
-            return new DataUncipherer(this.keystore, this.keypass).uncipher(this.readCipheredDataFile(secret));
-        } catch (CertificateException | IOException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException | InvalidKeyException | NoSuchPaddingException | InvalidAlgorithmParameterException e) {
-            throw new IOException("error reading / unciphering secret data", e);
-        }
-    }
-
-    private CipheredData readCipheredDataFile(Secret secret) throws IOException {
-        String secretPath = secret.content().replaceAll("\\$SRC", this.context.sources().getAbsolutePath())
-                .replaceAll("\\$\\{SRC\\}", this.context.sources().getAbsolutePath());
-
-        try(JsonParser jsonParser = this.jsonFactory.createParser(secretPath)) {
-            return new CipheredDataReader().read(jsonParser);
-        } catch (IOException e) {
-            throw new IOException("failed reading secret file : " + secretPath, e);
-        }
-    }
-
-    private void writeSecretToFile(Secret secret, byte[] data) throws IOException {
-        File secretFile = new File(new File(this.context.workspace(), "secrets"), secret.name());
-        secretFile.getParentFile().mkdirs();
-        try(OutputStream out = new FileOutputStream(secretFile)) {
-            out.write(data);
-            out.flush();
-        } catch (IOException e) {
-            throw new IOException("failed writing secret file to " + secretFile.getAbsolutePath(), e);
-        }
     }
 
     @Override
@@ -104,6 +75,10 @@ public class PipelineShellExecutor implements PipelineExecutor {
         processBuilder.environment().put("REPOSITORY", this.context.repository());
         processBuilder.environment().put("BRANCH", this.context.branch());
         processBuilder.environment().put("CHANGESET", this.context.changeset());
+
+        if(! this.secretVars.isEmpty()) {
+            processBuilder.environment().putAll(this.secretVars);
+        }
 
         try {
             int status = this.createInvokerForStage(stage).exec(
@@ -164,14 +139,33 @@ public class PipelineShellExecutor implements PipelineExecutor {
         stage.opt().stage().orElseThrow(() -> new IOException("malformed stage : " + stage));
     }
 
-    private ValueList<Stage> stagesForType(StageHolder.Type type) {
-        switch (type) {
-            case MAIN:
-                return this.context.pipeline().stages();
-            case SUCCESS:
-                return this.context.pipeline().onSuccess();
-            default:
-                return this.context.pipeline().onError();
+    private byte[] readSecretData(Secret secret) throws IOException {
+        try {
+            return new DataUncipherer(this.keystore, this.keypass).uncipher(this.readCipheredDataFile(secret));
+        } catch (CertificateException | IOException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException | InvalidKeyException | NoSuchPaddingException | InvalidAlgorithmParameterException e) {
+            throw new IOException("error reading / unciphering secret data", e);
+        }
+    }
+
+    private CipheredData readCipheredDataFile(Secret secret) throws IOException {
+        String secretPath = secret.content().replaceAll("\\$SRC", this.context.sources().getAbsolutePath())
+                .replaceAll("\\$\\{SRC\\}", this.context.sources().getAbsolutePath());
+
+        try(JsonParser jsonParser = this.jsonFactory.createParser(new File(secretPath))) {
+            return new CipheredDataReader().read(jsonParser);
+        } catch (IOException e) {
+            throw new IOException("failed reading secret file : " + secretPath, e);
+        }
+    }
+
+    private void writeSecretToFile(Secret secret, byte[] data) throws IOException {
+        File secretFile = new File(new File(this.context.workspace(), "secrets"), secret.name());
+        secretFile.getParentFile().mkdirs();
+        try(OutputStream out = new FileOutputStream(secretFile)) {
+            out.write(data);
+            out.flush();
+        } catch (IOException e) {
+            throw new IOException("failed writing secret file to " + secretFile.getAbsolutePath(), e);
         }
     }
 }
