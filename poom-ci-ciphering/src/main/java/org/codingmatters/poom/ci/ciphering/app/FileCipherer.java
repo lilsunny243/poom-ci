@@ -19,7 +19,7 @@ import java.security.cert.X509Certificate;
 public class FileCipherer {
     public static void main(String[] args) {
         if(args.length < 2) {
-            System.err.println("usage : <certificate file path> <data file path> {encrypted file path}");
+            throw new RuntimeException("usage : <certificate file path> <data file path> {encrypted file path}");
         }
 
         File certificateFile = new File(args[0]);
