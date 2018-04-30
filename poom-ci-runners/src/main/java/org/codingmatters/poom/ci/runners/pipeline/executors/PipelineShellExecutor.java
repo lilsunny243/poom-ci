@@ -1,7 +1,13 @@
 package org.codingmatters.poom.ci.runners.pipeline.executors;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import org.codingmatters.poom.ci.ciphering.DataUncipherer;
+import org.codingmatters.poom.ci.ciphering.descriptors.CipheredData;
+import org.codingmatters.poom.ci.ciphering.descriptors.json.CipheredDataReader;
 import org.codingmatters.poom.ci.pipeline.PipelineScript;
 import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
+import org.codingmatters.poom.ci.pipeline.descriptors.Secret;
 import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
 import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
 import org.codingmatters.poom.ci.pipeline.descriptors.ValueList;
@@ -10,7 +16,10 @@ import org.codingmatters.poom.ci.runners.pipeline.PipelineExecutor;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.process.ProcessInvoker;
 
+import javax.crypto.NoSuchPaddingException;
 import java.io.*;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -19,14 +28,62 @@ public class PipelineShellExecutor implements PipelineExecutor {
 
     private final PipelineContext context;
     private final PipelineScript pipelineScript;
+    private final KeyStore keystore;
+    private final char[] keypass;
+    private final JsonFactory jsonFactory;
 
-    public PipelineShellExecutor(PipelineContext context) {
+    public PipelineShellExecutor(PipelineContext context, KeyStore keystore, char[] keypass, JsonFactory jsonFactory) {
         this.context = context;
+        this.keystore = keystore;
+        this.keypass = keypass;
+        this.jsonFactory = jsonFactory;
         this.pipelineScript = new PipelineScript(this.context.pipeline());
     }
 
     @Override
     public void initialize() throws IOException {
+        if(this.context.pipeline().secrets() != null) {
+            for (Secret secret : this.context.pipeline().secrets()) {
+                if(secret.as().equals(Secret.As.file)) {
+                    // pipeline.secrets of type file unciphered to $WORKSPACE/secrets/{secret.name}
+                    byte[] data = this.readSecretData(secret);
+                    this.writeSecretToFile(secret, data);
+                } else {
+                    throw new RuntimeException("not yet implemented : secret as " + secret.as());
+                }
+            }
+        }
+
+    }
+
+    private byte[] readSecretData(Secret secret) throws IOException {
+        try {
+            return new DataUncipherer(this.keystore, this.keypass).uncipher(this.readCipheredDataFile(secret));
+        } catch (CertificateException | IOException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException | InvalidKeyException | NoSuchPaddingException | InvalidAlgorithmParameterException e) {
+            throw new IOException("error reading / unciphering secret data", e);
+        }
+    }
+
+    private CipheredData readCipheredDataFile(Secret secret) throws IOException {
+        String secretPath = secret.content().replaceAll("\\$SRC", this.context.sources().getAbsolutePath())
+                .replaceAll("\\$\\{SRC\\}", this.context.sources().getAbsolutePath());
+
+        try(JsonParser jsonParser = this.jsonFactory.createParser(secretPath)) {
+            return new CipheredDataReader().read(jsonParser);
+        } catch (IOException e) {
+            throw new IOException("failed reading secret file : " + secretPath, e);
+        }
+    }
+
+    private void writeSecretToFile(Secret secret, byte[] data) throws IOException {
+        File secretFile = new File(new File(this.context.workspace(), "secrets"), secret.name());
+        secretFile.getParentFile().mkdirs();
+        try(OutputStream out = new FileOutputStream(secretFile)) {
+            out.write(data);
+            out.flush();
+        } catch (IOException e) {
+            throw new IOException("failed writing secret file to " + secretFile.getAbsolutePath(), e);
+        }
     }
 
     @Override

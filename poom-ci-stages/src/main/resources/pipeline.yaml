@@ -30,5 +30,5 @@ stageHolder:
 secret:
   name: string
   content: string
-  type:
+  as:
     $enum: var, file

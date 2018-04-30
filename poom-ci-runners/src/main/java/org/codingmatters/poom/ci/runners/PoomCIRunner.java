@@ -17,6 +17,12 @@ import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.rest.api.client.RequesterFactory;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.concurrent.Executors;
 
 public class PoomCIRunner {
@@ -24,13 +30,24 @@ public class PoomCIRunner {
 
 
     public static void main(String[] args) {
+        KeyStore keystore = null;
+        try {
+            keystore = KeyStore.getInstance("pkcs12");
+            keystore.load(new FileInputStream(Env.mandatory("KS")), Env.mandatory("KS_PASS").toCharArray());
+        } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
+            log.error("error reading keystore poom-ci-runner", e);
+            System.exit(1);
+        }
+
         RunnerConfiguration configuration = new PoomCIRunner(
                 Env.mandatory("JOB_REGISTRY_URL"),
                 Env.mandatory("RUNNER_REGISTRY_URL"),
                 Env.mandatory("PIPELINE_URL"),
                 Env.mandatory(Env.SERVICE_HOST),
                 Integer.parseInt(Env.mandatory(Env.SERVICE_PORT)),
-                2).buildConfiguration();
+                2,
+                keystore, Env.mandatory("KS_KEY_PASS").toCharArray()
+        ).buildConfiguration();
 
         GenericRunner runner = new GenericRunner(configuration);
         try {
@@ -57,14 +74,18 @@ public class PoomCIRunner {
     private final String host;
     private final Integer port;
     private final int workerPoolSize;
+    private final KeyStore keystore;
+    private final char[] keypass;
 
-    public PoomCIRunner(String jobRegistryUrl, String runnerRegistryUrl, String pipelineUrl, String host, Integer port, int workerPoolSize) {
+    public PoomCIRunner(String jobRegistryUrl, String runnerRegistryUrl, String pipelineUrl, String host, Integer port, int workerPoolSize, KeyStore keystore, char[] keypass) {
         this.jobRegistryUrl = jobRegistryUrl;
         this.runnerRegistryUrl = runnerRegistryUrl;
         this.pipelineUrl = pipelineUrl;
         this.host = host;
         this.port = port;
         this.workerPoolSize = workerPoolSize;
+        this.keystore = keystore;
+        this.keypass = keypass;
     }
 
     private RunnerConfiguration buildConfiguration() {
@@ -98,7 +119,12 @@ public class PoomCIRunner {
                 .callbackBaseUrl(String.format("http://%s:%s", this.host, this.port))
                 .ttl(2 * 60 * 1000L)
 
-                .processorFactory(new PoomCIJobProcessorFactory(pipelineAPIClient, yamlFactory))
+                .processorFactory(new PoomCIJobProcessorFactory(
+                        pipelineAPIClient,
+                        yamlFactory,
+                        this.keystore,
+                        this.keypass,
+                        jsonFactory))
 
                 .jobCategory("poom-ci")
                 .jobName("github-pipeline")
