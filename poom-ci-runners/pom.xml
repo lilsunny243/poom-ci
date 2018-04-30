@@ -38,6 +38,28 @@
             <groupId>org.codingmatters.poom.ci</groupId>
             <artifactId>poom-ci-ciphering</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codingmatters.poom</groupId>
+            <artifactId>poom-services-logging-json-layout</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
