@@ -10,6 +10,7 @@ import org.codingmatters.poom.ci.pipeline.descriptors.json.PipelineReader;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.poom.services.support.process.ProcessInvoker;
 
 import java.io.File;
@@ -75,7 +76,12 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
             status = invoker.exec(processBuilder.command("git", "init"), line -> log.info(line), line -> log.error(line));
             if(status != 0) throw new ProcessingException("git init exited with a none 0 status");
 
-            status = invoker.exec(processBuilder.command("git", "fetch", "-u", event.repository().clone_url(), branchFromRef(event)), line -> log.info(line), line -> log.error(line));
+            String url = event.repository().clone_url();
+            if(Env.optional("GH_PIPE_USE_SSH").equals("true")) {
+                url = event.repository().ssh_url();
+            }
+
+            status = invoker.exec(processBuilder.command("git", "fetch", "-u", url, branchFromRef(event)), line -> log.info(line), line -> log.error(line));
             if(status != 0) throw new ProcessingException("git fetch exited with a none 0 status");
 
             status = invoker.exec(processBuilder.command("git", "checkout", event.after()), line -> log.info(line), line -> log.error(line));
