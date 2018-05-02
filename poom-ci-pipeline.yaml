@@ -1,0 +1,43 @@
+---
+stages:
+  - name: prepare-env
+    exec:
+      - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
+      - docker pull $CI_TOOLS_IMAGE
+      - mkdir -p $WORKSPACE/.m2
+
+  - name: build
+    timeout: 15
+    exec:
+      - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
+      - $MVN clean install
+
+  - name: deploy
+    timeout: 15
+    exec:
+      - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
+      - $MVN deploy -DskipTests
+
+onSuccess:
+  - name: notify-flexio
+    exec:
+      - $NOTIFY --data-urlencode "status=0" --data-urlencode "current-stage="
+
+
+onError:
+  - name: notify-flexio
+    exec:
+      - $NOTIFY --data-urlencode "status=1" --data-urlencode "current-stage="
+
+
+
+env:
+  - SETTING_FILE: /home/nel/Documents/POOM-CI/settings-oss.xml
+  - CI_TOOLS_IMAGE: registry.containers.ovh.net/poom-ci/ci-tools:0.0.1-SNAPSHOT
+  - MVN: docker run --rm -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 -v $WORKSPACE/secrets/settings.xml:/root/.m2/settings.xml $CI_TOOLS_IMAGE mvn -B
+  - NOTIFY: curl -G "https://my.flexio.io/channelApi/flexHttpInOut/59d3a0105d443519843d0496/5adf40aededdbb452368cfca" --data-urlencode "repository=$REPOSITORY" --data-urlencode "branch=$BRANCH" --data-urlencode "pipeline-id=$PIPELINE_ID"
+
+secrets:
+  - name: settings.xml
+    content: $SRC/.poom-ci-pipeline/settings-oss.xml.enc
+    as: file
