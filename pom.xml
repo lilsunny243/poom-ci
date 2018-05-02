@@ -15,7 +15,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>PoomCI</name>
+    <name>Poom CI</name>
     <description>Continuous Integration Using poom jobs</description>
     <url>https://github.com/flexiooss/poom-ci</url>
 

@@ -8,7 +8,6 @@
         <groupId>org.codingmatters.poom</groupId>
         <artifactId>poom-services</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../../</relativePath>
     </parent>
 
     <groupId>org.codingmatters.poom.ci</groupId>
