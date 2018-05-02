@@ -8,7 +8,6 @@
         <groupId>org.codingmatters.poom</groupId>
         <artifactId>poom-services-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../poom-services-parent</relativePath>
     </parent>
 
     <groupId>org.codingmatters.poom.ci</groupId>
@@ -16,7 +15,58 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>${project.groupId}:${project.artifactId}</name>
+    <name>PoomCI</name>
+    <description>Continuous Integration Using poom jobs</description>
+    <url>https://github.com/flexiooss/poom-ci</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Nel Taurisson</name>
+            <email>nel@flexio.fr</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:flexiooss/poom-ci</connection>
+        <developerConnection>scm:git:git@github.com:flexiooss/poom-ci.git</developerConnection>
+        <url>git@github.com:flexiooss/poom-ci.git</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>oss-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases><enabled>false</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>oss-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases><enabled>false</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
 
     <modules>
         <module>poom-ci-bom</module>
