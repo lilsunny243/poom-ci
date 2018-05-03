@@ -34,7 +34,7 @@ onError:
 env:
   - SETTING_FILE: /home/nel/Documents/POOM-CI/settings-oss.xml
   - CI_TOOLS_IMAGE: registry.containers.ovh.net/poom-ci/ci-tools:0.0.1-SNAPSHOT
-  - MVN: docker run --rm -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 -v $WORKSPACE/secrets/settings.xml:/root/.m2/settings.xml $CI_TOOLS_IMAGE mvn -B
+  - MVN: docker run --rm -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 -v $WORKSPACE/secrets/settings.xml:/root/.m2/settings.xml $CI_TOOLS_IMAGE mvn -B -Ddocker.registry=registry.containers.ovh.net
   - NOTIFY: curl -G "https://my.flexio.io/channelApi/flexHttpInOut/59d3a0105d443519843d0496/5adf40aededdbb452368cfca" --data-urlencode "repository=$REPOSITORY" --data-urlencode "branch=$BRANCH" --data-urlencode "pipeline-id=$PIPELINE_ID"
 
 secrets:
