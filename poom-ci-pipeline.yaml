@@ -22,8 +22,8 @@ stages:
   - name: build-an-deploy-docker-images
     timeout: 16
     exec:
-      - docker-compose-build.sh $SRC build
-      - docker-compose-build.sh $SRC push
+      - $WORKSPACE/flexio-ci-scripts/docker-compose-build.sh $SRC build
+      - $WORKSPACE/flexio-ci-scripts/docker-compose-build.sh $SRC push
 
 onSuccess:
   - name: notify-flexio
