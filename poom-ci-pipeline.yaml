@@ -20,7 +20,7 @@ stages:
       - $MVN deploy -DskipTests
 
   - name: build-an-deploy-docker-images
-    timeout: 15
+    timeout: 16
     exec:
       - docker-compose-build.sh $SRC build
       - docker-compose-build.sh $SRC push
