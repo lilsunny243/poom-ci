@@ -19,6 +19,12 @@ stages:
       - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
       - $MVN deploy -DskipTests
 
+  - name: build an deploy docker images
+    timeout: 15
+    exec:
+      - docker-compose-build.sh $SRC build
+      - docker-compose-build.sh $SRC push
+
 onSuccess:
   - name: notify-flexio
     exec:
