@@ -4,4 +4,4 @@ services:
 
   archiva:
     build: .
-    image: ${docker.registry}/${docker.namespace}/archiva:${archiva.version}
+    image: ${codingmatters.docker.namespace}/archiva:${archiva.version}

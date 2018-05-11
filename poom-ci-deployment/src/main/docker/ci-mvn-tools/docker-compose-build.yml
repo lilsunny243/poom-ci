@@ -4,4 +4,4 @@ services:
 
   ci-mvn-tools:
     build: .
-    image: ${docker.registry}/${docker.namespace}/ci-tools:${project.version}
+    image: ${codingmatters.docker.namespace}/ci-tools:${project.version}
