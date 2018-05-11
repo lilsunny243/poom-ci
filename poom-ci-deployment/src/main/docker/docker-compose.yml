@@ -3,7 +3,7 @@ version: '3'
 services:
 
   github-webhook:
-    image: ${github-webhook.image}
+    image: ${codingmatters.docker.namespace}/poom-ci-github-webhook:${org.codingmatters.poom.ci:poom-ci-github-webhook:jar.version}
     ports:
       - 6543:9999
     environment:
@@ -11,19 +11,19 @@ services:
       PIPELINE_API_URL: http://pipeline-service:9999/pipelines/v1
 
   pipeline-service:
-    image: ${pipeline-service.image}
+    image: ${codingmatters.docker.namespace}/poom-ci-pipeline-service:${org.codingmatters.poom.ci:poom-ci-pipeline-service:jar.version}
     environment:
       JOB_REGISTRY_URL: http://poomjobs-registries-service:9999/poomjobs-jobs/v1
     ports:
       - 6545:9999
 
   poomjobs-registries-service:
-    image: ${poomjobs-registries-service.image}
+    image: ${codingmatters.docker.namespace}/poomjobs-registries-service:${org.codingmatters.poom:poomjobs-registries-service:jar.version}
     ports:
       - 6544:9999
 
   maven-repository:
-    image: ${docker.registry}/${docker.namespace}/archiva:${archiva.version}
+    image: ${codingmatters.docker.namespace}/archiva:${archiva.version}
     ports:
       - 8080:8080
     volumes:
