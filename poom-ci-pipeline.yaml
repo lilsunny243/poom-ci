@@ -22,6 +22,7 @@ stages:
   - name: build-an-deploy-docker-images
     timeout: 16
     exec:
+      - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
       - $DOCKER_BUILD $SRC build
       - $DOCKER_BUILD $SRC push
 
@@ -43,7 +44,7 @@ env:
   - FLEXIO_SCRIPTS: git@github.com:Flexio-corp/flexio-ci-scripts.git
   - FLEXIO_SCRIPTS_BRANCH: master
   - CI_TOOLS_IMAGE: registry.containers.ovh.net/poom-ci/ci-tools:0.0.1-SNAPSHOT
-  - MVN_OPTS: -B -Dcodingmatters.docker.namespace=registry.containers.ovh.net/poom-ci
+  - MVN_OPTS: -B -Dcodingmatters.docker.namespace=codingmatters
   - MVN: docker run --rm -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 -v $WORKSPACE/secrets/settings.xml:/root/.m2/settings.xml $CI_TOOLS_IMAGE mvn $MVN_OPTS
   - NOTIFY: curl -G "https://my.flexio.io/channelApi/flexHttpInOut/59d3a0105d443519843d0496/5adf40aededdbb452368cfca" --data-urlencode "repository=$REPOSITORY" --data-urlencode "branch=$BRANCH" --data-urlencode "pipeline-id=$PIPELINE_ID"
   - DOCKER_BUILD: $WORKSPACE/flexio-ci-scripts/bin/docker-compose-build.sh
