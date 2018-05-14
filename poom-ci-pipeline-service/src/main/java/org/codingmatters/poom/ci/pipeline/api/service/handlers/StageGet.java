@@ -80,6 +80,7 @@ public class StageGet implements Function<PipelineStageGetRequest, PipelineStage
         return PipelineStageQuery.builder()
                 .withPipelineId(request.pipelineId())
                 .withName(request.stageName())
+                .withType(request.stageType())
                 .build();
     }
 }

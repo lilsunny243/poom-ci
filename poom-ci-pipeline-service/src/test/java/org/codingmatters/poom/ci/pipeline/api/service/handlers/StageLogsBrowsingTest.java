@@ -6,6 +6,7 @@ import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogsgetresponse.Statu
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogsgetresponse.Status206;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
+import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,6 +24,7 @@ public class StageLogsBrowsingTest extends AbstractPoomCITest {
             this.repository().logRepository().create(StageLog.builder()
                     .pipelineId("a-pipeline")
                     .stageName("a-stage")
+                    .stageType(Stage.StageType.MAIN)
                     .log(LogLine.builder()
                             .line(i + 1).content("content of log line " + i)
                             .build())
@@ -31,9 +33,30 @@ public class StageLogsBrowsingTest extends AbstractPoomCITest {
     }
 
     @Test
-    public void invalid() throws Exception {
+    public void whenNoStageType__thenInvalidQuery() {
         this.handler.apply(PipelineStageLogsGetRequest.builder()
                 .pipelineId("a-pipeline").stageName("a-stage")
+                .range("10-5")
+                .build())
+                .opt().status400()
+                .orElseThrow(() -> new AssertionError("should have a 400"));
+    }
+
+    @Test
+    public void whenInvalidStageType__thenInvalidQuery() {
+        this.handler.apply(PipelineStageLogsGetRequest.builder()
+                .pipelineId("a-pipeline").stageName("a-stage")
+                .range("10-5")
+                .stageType("no-a-stage-type")
+                .build())
+                .opt().status400()
+                .orElseThrow(() -> new AssertionError("should have a 400"));
+    }
+
+    @Test
+    public void invalid() throws Exception {
+        this.handler.apply(PipelineStageLogsGetRequest.builder()
+                .pipelineId("a-pipeline").stageName("a-stage").stageType("main")
                 .range("10-5")
                 .build())
                 .opt().status416()
@@ -43,7 +66,7 @@ public class StageLogsBrowsingTest extends AbstractPoomCITest {
     @Test
     public void empty() throws Exception {
         ValueList<LogLine> list = this.handler.apply(PipelineStageLogsGetRequest.builder()
-                .pipelineId("another-pipeline").stageName("another-stage")
+                .pipelineId("another-pipeline").stageName("another-stage").stageType("main")
                 .build())
                 .opt().status200().payload()
                 .orElseThrow(() -> new AssertionError("should have a 200"));
@@ -54,7 +77,7 @@ public class StageLogsBrowsingTest extends AbstractPoomCITest {
     @Test
     public void partial() throws Exception {
         Status206 response = this.handler.apply(PipelineStageLogsGetRequest.builder()
-                .pipelineId("a-pipeline").stageName("a-stage")
+                .pipelineId("a-pipeline").stageName("a-stage").stageType("main")
                 .range("400-449")
                 .build())
                 .opt().status206()
@@ -70,7 +93,7 @@ public class StageLogsBrowsingTest extends AbstractPoomCITest {
     @Test
     public void complete() throws Exception {
         Status200 response = this.handler.apply(PipelineStageLogsGetRequest.builder()
-                .pipelineId("a-pipeline").stageName("a-stage")
+                .pipelineId("a-pipeline").stageName("a-stage").stageType("main")
                 .range("450-550")
                 .build())
                 .opt().status200()

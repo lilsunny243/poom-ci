@@ -153,7 +153,7 @@ types:
                ILLEGAL_RANGE_SPEC,
                UNEXPECTED_ERROR,
                RESOURCE_NOT_FOUND,
-               ILLEGAL_RESOURCE_CREATION, ILLEGAL_RESOURCE_CHANGE,
+               ILLEGAL_RESOURCE_CREATION, ILLEGAL_RESOURCE_CHANGE, ILLEGAL_REQUEST,
                ILLEGAL_COLLECTION_CHANGE,
                ]
          description: string
@@ -184,6 +184,9 @@ traits:
              headers:
                  Content-Range: string
                  Accept-Range: string
+             body: Error
+         400:
+             description: the request is nit acceptable (Error code is ILLEGAL_REQUEST).
              body: Error
          500:
              description: UNEXPECTED_ERROR.

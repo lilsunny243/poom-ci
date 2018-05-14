@@ -13,9 +13,13 @@ pipelineStageQuery:
 stageLog:
   pipelineId: string
   stageName: string
+  stageType:
+    $enum:
+      $type: org.codingmatters.poom.ci.pipeline.api.types.Stage$StageType
   log:
     $value-object: org.codingmatters.poom.ci.pipeline.api.types.LogLine
 
 stageLogQuery:
   withPipelineId: string
   withStageName: string
+  withStageType: string

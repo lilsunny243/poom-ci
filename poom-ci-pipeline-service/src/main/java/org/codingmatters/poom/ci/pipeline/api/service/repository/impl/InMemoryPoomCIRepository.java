@@ -65,6 +65,12 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
             if(query.opt().withStageName().isPresent()) {
                 filtered = filtered.filter(entity -> query.withStageName().equals(entity.value().stageName()));
             }
+            if(query.opt().withStageType().isPresent()) {
+                filtered = filtered.filter(entity ->
+                        entity.value().opt().stageType().isPresent() &&
+                                entity.value().stageType().name().toUpperCase().equals(query.withStageType().toUpperCase())
+                );
+            }
             return this.paged(filtered, startIndex, endIndex);
         }
     };

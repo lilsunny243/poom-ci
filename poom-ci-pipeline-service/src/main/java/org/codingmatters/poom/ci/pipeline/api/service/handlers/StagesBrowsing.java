@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
 import org.codingmatters.poom.ci.pipeline.api.PipelineStagesGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStagesGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.service.helpers.StageHelper;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
@@ -34,11 +35,21 @@ public class StagesBrowsing implements Function<PipelineStagesGetRequest, Pipeli
                 .maxPageSize(500)
                 .pager(this.stageRepository);
 
+        if(! StageHelper.isStageTypeValid(request.stageType())) {
+            return PipelineStagesGetResponse.builder()
+                        .status416(status -> status.payload(error -> error
+                                .token(log.audit().tokenized().info("stages requested without an invalid stage type : {}", request.stageType()))
+                                .code(Error.Code.ILLEGAL_RANGE_SPEC)
+                                .description("stages requested without an invalid stage type (see logs).")
+                        ))
+                        .build();
+        }
+
         try {
             Rfc7233Pager.Page<PipelineStage> page = pager.page(PipelineStageQuery.builder()
                     .withPipelineId(request.pipelineId())
+                    .withType(request.stageType())
                     .build());
-
             if(! page.isValid()) {
                 return PipelineStagesGetResponse.builder()
                         .status416(status -> status.payload(error -> error

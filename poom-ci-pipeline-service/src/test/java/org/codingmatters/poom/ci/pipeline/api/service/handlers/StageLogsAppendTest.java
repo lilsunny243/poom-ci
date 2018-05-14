@@ -7,6 +7,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.types.AppendedLogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
+import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +28,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .pipelineId("a-pipeline")
                 .stage(stage -> stage
                         .name("a-running-stage")
+                        .stageType(Stage.StageType.MAIN)
                         .status(status -> status.run(StageStatus.Run.RUNNING))
                 )
                 .build());
@@ -34,6 +36,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .pipelineId("a-pipeline")
                 .stage(stage -> stage
                         .name("a-done-stage")
+                        .stageType(Stage.StageType.MAIN)
                         .status(status -> status.run(StageStatus.Run.DONE))
                 )
                 .build());
@@ -42,6 +45,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
             this.repository().logRepository().create(StageLog.builder()
                     .pipelineId("a-pipeline")
                     .stageName("a-running-stage")
+                    .stageType(Stage.StageType.MAIN)
                     .log(LogLine.builder()
                             .line(i).content("content of log line " + i)
                             .build())
@@ -50,11 +54,35 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
     }
 
     @Test
+    public void whenNoStageType__thenRequestIsInvalid() {
+        this.handler.apply(PipelineStageLogsPatchRequest.builder()
+                .pipelineId("a-pipeline")
+                .stageName("a-running-stage")
+                .payload(AppendedLogLine.builder().content("added").build())
+                .build())
+                .opt().status400()
+                .orElseThrow(() -> new AssertionError("should have a 400"));
+    }
+
+    @Test
+    public void whenInvalidStageType__thenRequestIsInvalid() {
+        this.handler.apply(PipelineStageLogsPatchRequest.builder()
+                .pipelineId("a-pipeline")
+                .stageName("a-running-stage")
+                .stageType("no-quite-a-stage-type")
+                .payload(AppendedLogLine.builder().content("added").build())
+                .build())
+                .opt().status400()
+                .orElseThrow(() -> new AssertionError("should have a 400"));
+    }
+
+    @Test
     public void givenStageExists__whenAppendingOneLog__thenLineIsStoredAndAssignedLastIndex() throws Exception {
         long logCount = this.repository().logRepository().all(0, 0).total();
         Status201 response = this.handler.apply(PipelineStageLogsPatchRequest.builder()
                 .pipelineId("a-pipeline")
                 .stageName("a-running-stage")
+                .stageType("main")
                 .payload(AppendedLogLine.builder().content("added").build())
                 .build())
                 .opt().status201()
@@ -65,6 +93,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
         assertThat(this.repository().logRepository().all(0, 0).total(), is(logCount + 1));
         assertThat(lastLog.pipelineId(), is("a-pipeline"));
         assertThat(lastLog.stageName(), is("a-running-stage"));
+        assertThat(lastLog.stageType(), is(Stage.StageType.MAIN));
         assertThat(lastLog.log(), is(LogLine.builder().line(501L).content("added").build()));
     }
 
@@ -79,6 +108,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
         Status201 response = this.handler.apply(PipelineStageLogsPatchRequest.builder()
                 .pipelineId("a-pipeline")
                 .stageName("a-running-stage")
+                .stageType("main")
                 .payload(listBuilder.build())
                 .build())
                 .opt().status201()
@@ -101,6 +131,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
         this.handler.apply(PipelineStageLogsPatchRequest.builder()
                 .pipelineId("a-pipeline")
                 .stageName("no-such-stage")
+                .stageType("main")
                 .payload(AppendedLogLine.builder().content("added").build())
                 .build())
                 .opt().status404()
@@ -112,6 +143,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
         this.handler.apply(PipelineStageLogsPatchRequest.builder()
                 .pipelineId("a-pipeline")
                 .stageName("a-done-stage")
+                .stageType("main")
                 .payload(AppendedLogLine.builder().content("added").build())
                 .build())
                 .opt().status400()

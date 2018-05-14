@@ -66,6 +66,23 @@
             <plugin>
                 <groupId>org.codingmatters.value.objects</groupId>
                 <artifactId>cdm-value-objects-maven-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>poom-ci-pipeline-api-spec</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>poom-ci-pipeline-api</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>poom-ci-triggers</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>stored-resources-spec</id>

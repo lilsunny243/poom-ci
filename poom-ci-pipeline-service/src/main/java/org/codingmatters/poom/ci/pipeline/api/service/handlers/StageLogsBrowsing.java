@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.service.helpers.StageHelper;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
@@ -32,7 +33,16 @@ public class StageLogsBrowsing implements Function<PipelineStageLogsGetRequest, 
                 .unit("LogLine")
                 .maxPageSize(100)
                 .pager(this.logRepository);
-
+        if(! StageHelper.isStageTypeValid(request.stageType())) {
+            return PipelineStageLogsGetResponse.builder()
+                    .status400(status -> status.payload(error -> error
+                            .token(log.audit().tokenized().info("requested logs for pipeline {} stage {} with invalid stage type : %s",
+                                    request.pipelineId(), request.stageName(), request.stageType()))
+                            .code(Error.Code.ILLEGAL_REQUEST)
+                            .description("invalid range type")
+                    ))
+                    .build();
+        }
         try {
             Rfc7233Pager.Page<StageLog> page = pager.page(StageLogQuery.builder()
                     .withPipelineId(request.pipelineId())

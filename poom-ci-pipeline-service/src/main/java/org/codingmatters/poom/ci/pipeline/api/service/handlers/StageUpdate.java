@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStagePatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStagePatchResponse;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagepatchresponse.Status200;
+import org.codingmatters.poom.ci.pipeline.api.service.helpers.StageHelper;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
@@ -27,11 +28,23 @@ public class StageUpdate implements Function<PipelineStagePatchRequest, Pipeline
 
     @Override
     public PipelineStagePatchResponse apply(PipelineStagePatchRequest request) {
-
+        if(!StageHelper.isStageTypeValid(request.stageType())) {
+            return PipelineStagePatchResponse.builder()
+                    .status400(status -> status.payload(error -> error
+                            .token(log.audit().tokenized().info("request for updating status with an invalid stage type {}",
+                                    request.stageType())
+                            )
+                            .code(Error.Code.RESOURCE_NOT_FOUND)
+                            .description("stage type not found")
+                    ))
+                    .build();
+        }
         try {
             PagedEntityList<PipelineStage> found = this.stageRepository.search(PipelineStageQuery.builder()
-                    .withPipelineId(request.pipelineId())
-                    .withName(request.stageName()).build(),
+                            .withPipelineId(request.pipelineId())
+                            .withName(request.stageName())
+                            .withType(request.stageType())
+                            .build(),
                     0,
                     0);
 

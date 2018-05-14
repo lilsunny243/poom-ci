@@ -4,6 +4,7 @@ import org.codingmatters.poom.ci.pipeline.api.PipelineStagePatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagepatchresponse.Status200;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
+import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
 import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
@@ -33,17 +34,51 @@ public class StageUpdateTest extends AbstractPoomCITest {
                 .pipelineId(this.runningPipelineId)
                 .stage(stage -> stage
                         .name("a-stage")
+                        .stageType(Stage.StageType.ERROR)
+                        .status(status -> status.run(StageStatus.Run.RUNNING))
+                )
+                .build());
+        this.existingStage = this.repository().stageRepository().create(PipelineStage.builder()
+                .pipelineId(this.runningPipelineId)
+                .stage(stage -> stage
+                        .name("a-stage")
+                        .stageType(Stage.StageType.MAIN)
                         .status(status -> status.run(StageStatus.Run.RUNNING))
                 )
                 .build());
     }
 
+    @Test
+    public void whenNoStageType__thenRequestIsInvalid() {
+        this.handler.apply(PipelineStagePatchRequest.builder()
+                .pipelineId(this.runningPipelineId)
+                .stageName(this.existingStage.value().stage().name())
+                .payload(status -> status
+                        .exit(StageTermination.Exit.SUCCESS))
+                .build())
+                .opt().status400()
+                .orElseThrow(() -> new AssertionError("should have a 400"));
+    }
+
+    @Test
+    public void whenInvalidStageType__thenRequestIsInvalid() {
+        this.handler.apply(PipelineStagePatchRequest.builder()
+                .pipelineId(this.runningPipelineId)
+                .stageName(this.existingStage.value().stage().name())
+                .stageType("no such stage type")
+                .payload(status -> status
+                        .exit(StageTermination.Exit.SUCCESS))
+                .build())
+                .opt().status400()
+                .orElseThrow(() -> new AssertionError("should have a 400"));
+    }
 
     @Test
     public void givenStageExists__whenStatusChangeIsPatched__thenEntityIsModifiedAndRetrurn() throws Exception {
         Status200 response = this.handler.apply(PipelineStagePatchRequest.builder()
                 .pipelineId(this.runningPipelineId)
                 .stageName(this.existingStage.value().stage().name())
+                .stageType("main")
                 .payload(status -> status
                         .exit(StageTermination.Exit.SUCCESS))
                 .build())
@@ -72,6 +107,7 @@ public class StageUpdateTest extends AbstractPoomCITest {
         this.handler.apply(PipelineStagePatchRequest.builder()
                 .pipelineId(this.runningPipelineId)
                 .stageName("no-such-stage")
+                .stageType("main")
                 .payload(status -> status
                         .exit(StageTermination.Exit.SUCCESS))
                 .build())
@@ -84,6 +120,7 @@ public class StageUpdateTest extends AbstractPoomCITest {
         this.handler.apply(PipelineStagePatchRequest.builder()
                 .pipelineId("no-such-pipeline")
                 .stageName(this.existingStage.value().stage().name())
+                .stageType("main")
                 .payload(status -> status
                         .exit(StageTermination.Exit.SUCCESS))
                 .build())
@@ -101,6 +138,7 @@ public class StageUpdateTest extends AbstractPoomCITest {
         this.handler.apply(PipelineStagePatchRequest.builder()
                 .pipelineId(this.runningPipelineId)
                 .stageName(this.existingStage.value().stage().name())
+                .stageType("main")
                 .payload(status -> status
                         .exit(StageTermination.Exit.SUCCESS))
                 .build())
