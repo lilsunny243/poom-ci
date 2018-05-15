@@ -33,20 +33,20 @@ public class PoomCIRunner {
         KeyStore keystore = null;
         try {
             keystore = KeyStore.getInstance("pkcs12");
-            keystore.load(new FileInputStream(Env.mandatory("KS")), Env.mandatory("KS_PASS").toCharArray());
+            keystore.load(new FileInputStream(Env.mandatory("KS").asString()), Env.mandatory("KS_PASS").asString().toCharArray());
         } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
             log.error("error reading keystore poom-ci-runner", e);
             System.exit(1);
         }
 
         RunnerConfiguration configuration = new PoomCIRunner(
-                Env.mandatory("JOB_REGISTRY_URL"),
-                Env.mandatory("RUNNER_REGISTRY_URL"),
-                Env.mandatory("PIPELINE_URL"),
-                Env.mandatory(Env.SERVICE_HOST),
-                Integer.parseInt(Env.mandatory(Env.SERVICE_PORT)),
+                Env.mandatory("JOB_REGISTRY_URL").asString(),
+                Env.mandatory("RUNNER_REGISTRY_URL").asString(),
+                Env.mandatory("PIPELINE_URL").asString(),
+                Env.mandatory(Env.SERVICE_HOST).asString(),
+                Env.mandatory(Env.SERVICE_PORT).asInteger(),
                 2,
-                keystore, Env.mandatory("KS_KEY_PASS").toCharArray()
+                keystore, Env.mandatory("KS_KEY_PASS").asString().toCharArray()
         ).buildConfiguration();
 
         GenericRunner runner = new GenericRunner(configuration);

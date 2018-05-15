@@ -14,9 +14,9 @@ public class PoomCIPipelineService {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(PoomCIPipelineService.class);
 
     public static void main(String[] args) {
-        String host = Env.mandatory(Env.SERVICE_HOST);
-        int port = Integer.parseInt(Env.mandatory(Env.SERVICE_PORT));
-        String jobRegistryUrl = Env.mandatory("JOB_REGISTRY_URL");
+        String host = Env.mandatory(Env.SERVICE_HOST).asString();
+        int port = Env.mandatory(Env.SERVICE_PORT).asInteger();
+        String jobRegistryUrl = Env.mandatory("JOB_REGISTRY_URL").asString();
 
         JsonFactory jsonFactory = new JsonFactory();
         PoomCIRepository repository = PoomCIRepository.inMemory();

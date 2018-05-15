@@ -38,10 +38,10 @@ public class GithubWebhookService {
     private final String host;
 
     public static void main(String[] args) {
-        String host = Env.mandatory(Env.SERVICE_HOST);
-        int port = Integer.parseInt(Env.mandatory(Env.SERVICE_PORT));
-        String token = Env.mandatory(GITHUB_SECRET_TOKEN);
-        String pipelineUrl = Env.mandatory(PIPELINE_API_URL);
+        String host = Env.mandatory(Env.SERVICE_HOST).asString();
+        int port = Env.mandatory(Env.SERVICE_PORT).asInteger();
+        String token = Env.mandatory(GITHUB_SECRET_TOKEN).asString();
+        String pipelineUrl = Env.mandatory(PIPELINE_API_URL).asString();
 
         JsonFactory jsonFactory = new JsonFactory();
         PoomCIPipelineAPIClient pipelineClient = new PoomCIPipelineAPIRequesterClient(new OkHttpRequesterFactory(new OkHttpClient()), jsonFactory, pipelineUrl);
