@@ -80,7 +80,7 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
             if(status != 0) throw new ProcessingException("git init exited with a none 0 status");
 
             String url = event.repository().clone_url();
-            if(Env.optional("GH_PIPE_USE_SSH").equals("true")) {
+            if(Env.optional("GH_PIPE_USE_SSH").orElse(new Env.Var("false")).asString().equals("true")) {
                 url = event.repository().ssh_url();
             }
 
