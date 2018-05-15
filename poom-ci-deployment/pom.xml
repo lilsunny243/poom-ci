@@ -36,30 +36,4 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>docker-compose</id>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <attach>false</attach>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <finalName>docker-compose</finalName>
-                            <descriptors>
-                                <descriptor>${basedir}/src/main/docker/docker-compose-assembly.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-    </build>
-
 </project>
