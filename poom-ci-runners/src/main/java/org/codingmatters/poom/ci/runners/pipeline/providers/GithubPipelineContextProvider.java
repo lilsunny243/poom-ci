@@ -8,6 +8,7 @@ import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.json.PipelineReader;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
+import org.codingmatters.poom.ci.runners.pipeline.providers.gh.Ref;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
@@ -54,8 +55,10 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
     }
 
     private String branchFromRef(GithubPushEvent event) {
-        String[] splitted = event.ref().split("\\/");
-        return splitted[splitted.length - 1];
+//        String[] splitted = event.ref().split("\\/");
+//        return splitted[splitted.length - 1];
+
+        return new Ref(event.ref()).branch();
     }
 
     private Pipeline readPipeline(File workspace) throws IOException {
