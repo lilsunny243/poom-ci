@@ -15,10 +15,12 @@ public class OnlyWhenProcessor {
     }
 
     public boolean isExecutable(Stage stage) throws OnlyWhenParsingException {
-        for (String expressionText : stage.onlyWen()) {
-            OnlyWenExpressionParser.ExpressionContext expression = this.parseExpression(expressionText);
-            Boolean result = new OnlyWhenExpressionEvaluator(this.variableProvider).visitExpression(expression);
-            if(result == null || ! result) return false;
+        if(stage.onlyWen() != null) {
+            for (String expressionText : stage.onlyWen()) {
+                OnlyWenExpressionParser.ExpressionContext expression = this.parseExpression(expressionText);
+                Boolean result = new OnlyWhenExpressionEvaluator(this.variableProvider).visitExpression(expression);
+                if (result == null || !result) return false;
+            }
         }
         return true;
     }
