@@ -21,7 +21,7 @@ public class OnlyWhenProcessorTest {
     private OnlyWhenProcessor processor = new OnlyWhenProcessor(this.variableProvider);
 
     @Test
-    public void branch() throws Exception {
+    public void branchIs() throws Exception {
         this.branch = "develop";
         assertThat(processor.isExecutable(Stage.builder().onlyWen("branch is develop").build()), is(true));
 
@@ -33,6 +33,19 @@ public class OnlyWhenProcessorTest {
 
         this.branch = "feature/deployment-#1";
         assertThat(processor.isExecutable(Stage.builder().onlyWen("branch is feature/deployment-#1").build()), is(true));
+    }
+
+    @Test
+    public void branchIn() throws Exception{
+        this.branch = "develop";
+        assertThat(processor.isExecutable(Stage.builder().onlyWen("branch in (master, develop)").build()), is(true));
+
+        this.branch = "master";
+        assertThat(processor.isExecutable(Stage.builder().onlyWen("branch in (master, develop)").build()), is(true));
+
+        this.branch = "feature/deployment-#1";
+        assertThat(processor.isExecutable(Stage.builder().onlyWen("branch in (master, develop)").build()), is(false));
+
     }
 
     @Test(expected = OnlyWhenParsingException.class)

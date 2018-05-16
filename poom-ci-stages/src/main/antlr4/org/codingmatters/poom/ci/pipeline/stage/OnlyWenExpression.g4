@@ -5,6 +5,11 @@ grammar OnlyWenExpression;
 BRANCH: 'branch' ;
 
 IS : 'is' ;
+IN : 'in' ;
+
+OPAR : '(' ;
+CPAR : ')' ;
+COMMA : ',' ;
 
 // DECIMAL, IDENTIFIER, COMMENTS, WS are set using regular expressions
 QUOTED_STRING: '\'' ('\\'. | '\'\'' | ~('\'' | '\\'))* '\'';
@@ -29,8 +34,16 @@ variable
 operand
     : STRING
     | QUOTED_STRING
+    | OPAR operand_list CPAR
     ;
+
+operand_list
+    : operand COMMA operand_list
+    | operand
+    ;
+
 
 operator
     : IS
+    | IN
     ;

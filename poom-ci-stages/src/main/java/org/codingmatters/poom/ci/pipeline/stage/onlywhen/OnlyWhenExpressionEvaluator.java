@@ -3,12 +3,14 @@ package org.codingmatters.poom.ci.pipeline.stage.onlywhen;
 import org.codingmatters.poom.ci.pipeline.stage.OnlyWenExpressionBaseVisitor;
 import org.codingmatters.poom.ci.pipeline.stage.OnlyWenExpressionParser;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class OnlyWhenExpressionEvaluator extends OnlyWenExpressionBaseVisitor<Boolean>  {
 
     private String variableValue = null;
-    private String operandValue = null;
+    private List<String> operandValue = new LinkedList<>();
     private Supplier<Boolean> operation = () -> false;
 
     private final OnlyWhenVariableProvider variableProvider;
@@ -26,7 +28,9 @@ public class OnlyWhenExpressionEvaluator extends OnlyWenExpressionBaseVisitor<Bo
     @Override
     public Boolean visitOperator(OnlyWenExpressionParser.OperatorContext ctx) {
         if(ctx.IS() != null) {
-            this.operation = () -> this.variableValue.equals(this.operandValue);
+            this.operation = () -> this.variableValue.equals(this.operandValue.get(0));
+        } else if(ctx.IN() != null) {
+            this.operation = () -> this.operandValue.contains(this.variableValue);
         }
         return super.visitOperator(ctx);
     }
@@ -43,10 +47,10 @@ public class OnlyWhenExpressionEvaluator extends OnlyWenExpressionBaseVisitor<Bo
     @Override
     public Boolean visitOperand(OnlyWenExpressionParser.OperandContext ctx) {
         if(ctx.STRING() != null) {
-            this.operandValue = ctx.STRING().getText();
+            this.operandValue.add(ctx.STRING().getText());
         } else if(ctx.QUOTED_STRING() != null) {
             String text = ctx.QUOTED_STRING().getText();
-            this.operandValue = text.substring(1, text.length() - 1);
+            this.operandValue.add(text.substring(1, text.length() - 1));
         }
         return super.visitOperand(ctx);
     }
