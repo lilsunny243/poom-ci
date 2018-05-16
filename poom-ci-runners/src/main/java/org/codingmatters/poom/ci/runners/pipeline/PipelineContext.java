@@ -5,13 +5,12 @@ import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
 import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
 import org.codingmatters.poom.ci.pipeline.descriptors.ValueList;
+import org.codingmatters.poom.ci.pipeline.stage.onlywhen.OnlyWhenVariableProvider;
 
 import java.io.File;
 import java.io.IOException;
 
 public class PipelineContext {
-
-
 
     @FunctionalInterface
     public interface PipelineContextProvider {
@@ -26,6 +25,12 @@ public class PipelineContext {
     private final String branch;
     private final String changeset;
 
+    private final OnlyWhenVariableProvider variableProvider = new OnlyWhenVariableProvider() {
+        @Override
+        public String branch() {
+            return branch;
+        }
+    };
 
     public PipelineContext(String pipelineId, Pipeline pipeline, File workspace, File sources, String repository, String branch, String changeset) {
         this.pipelineId = pipelineId;
@@ -89,5 +94,9 @@ public class PipelineContext {
                         .type(type)
                         .build())
                 .toArray(i -> new StageHolder[i]);
+    }
+
+    public OnlyWhenVariableProvider variableProvider() {
+        return this.variableProvider;
     }
 }

@@ -19,6 +19,8 @@ pipeline:
 stage:
   name: string
   timeout: long
+  onlyWen:
+    $list: string
   exec:
     $list: string
 

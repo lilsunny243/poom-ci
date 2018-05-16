@@ -9,6 +9,8 @@ import org.codingmatters.poom.ci.pipeline.PipelineScript;
 import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
 import org.codingmatters.poom.ci.pipeline.descriptors.Secret;
 import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
+import org.codingmatters.poom.ci.pipeline.stage.OnlyWhenParsingException;
+import org.codingmatters.poom.ci.pipeline.stage.OnlyWhenProcessor;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineExecutor;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -55,6 +57,17 @@ public class PipelineShellExecutor implements PipelineExecutor {
             }
         }
 
+    }
+
+    @Override
+    public boolean isExecutable(StageHolder stage) throws InvalidStageRestrictionException {
+        try {
+            return new OnlyWhenProcessor(this.context.variableProvider()).isExecutable(stage.stage());
+        } catch (OnlyWhenParsingException e) {
+            throw new InvalidStageRestrictionException(
+                    String.format("error evaluating stage %s (%s) onlyWhen expressions", stage.stage().name(), stage.type()),
+                    e);
+        }
     }
 
     @Override

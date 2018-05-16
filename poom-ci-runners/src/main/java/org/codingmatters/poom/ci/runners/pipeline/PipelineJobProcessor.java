@@ -109,8 +109,17 @@ public class PipelineJobProcessor implements JobProcessor {
     private PipelineTermination.Exit executeStages(PipelineContext context, StageHolder[] stages, PipelineExecutor executor) throws JobProcessingException {
         if(stages != null) {
             for (StageHolder stage : stages) {
-                StageTermination.Exit status = this.executeStage(context, executor, stage);
-                if (status.equals(StageTermination.Exit.FAILURE)) {
+                try {
+                    if(executor.isExecutable(stage)) {
+                        StageTermination.Exit status = this.executeStage(context, executor, stage);
+                        if (status.equals(StageTermination.Exit.FAILURE)) {
+                            return PipelineTermination.Exit.FAILURE;
+                        }
+                    } else {
+                        log.info("stage {} ({}) is not executable : {}", stage.stage().name(), stage.type(), stage.stage().onlyWen());
+                    }
+                } catch (PipelineExecutor.InvalidStageRestrictionException e) {
+                    log.error(String.format("stage %s (%s) is not valid : %s", stage.stage().name(), stage.type(), stage.stage().onlyWen()), e);
                     return PipelineTermination.Exit.FAILURE;
                 }
             }

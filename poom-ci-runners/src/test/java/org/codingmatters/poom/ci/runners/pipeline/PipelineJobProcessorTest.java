@@ -105,6 +105,11 @@ public class PipelineJobProcessorTest {
             }
 
             @Override
+            public boolean isExecutable(StageHolder stage) throws InvalidStageRestrictionException {
+                return true;
+            }
+
+            @Override
             public StageTermination.Exit execute(StageHolder stage, StageLogListener logListener) throws IOException {
                 executedStages.add(stage.stage().name());
                 for (int i = 0; i < 3; i++) {
