@@ -83,7 +83,7 @@ public class PipelineContext {
     }
 
     public StageHolder[] cleanupStages() {
-        return this.stageHolders(this.pipeline.onSuccess(), StageHolder.Type.CLEANUP);
+        return this.stageHolders(this.pipeline.cleanup(), StageHolder.Type.CLEANUP);
     }
 
     public StageHolder holder(StageHolder.Type type, String stage) {
