@@ -9,6 +9,9 @@ pipeline:
   onError:
     $list: $stage
 
+  cleanup:
+    $list: $stage
+
   env:
     $list:
       $value-object: org.codingmatters.value.objects.values.ObjectValue
@@ -27,7 +30,7 @@ stage:
 stageHolder:
   stage: $stage
   type:
-    $enum: MAIN, ERROR, SUCCESS
+    $enum: MAIN, ERROR, SUCCESS, CLEANUP
 
 secret:
   name: string

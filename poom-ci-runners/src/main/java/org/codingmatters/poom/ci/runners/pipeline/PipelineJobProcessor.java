@@ -39,12 +39,16 @@ public class PipelineJobProcessor implements JobProcessor {
 
         PipelineTermination.Exit status;
         try {
-            this.initializeExecution(context, executor);
-            status = this.executeStages(context, context.stages(), executor);
-            if(status.equals(PipelineTermination.Exit.SUCCESS)) {
-                status = this.executeStages(context, context.onSuccessStages(), executor);
-            } else {
-                status = this.executeStages(context, context.onErrorStages(), executor);
+            try {
+                this.initializeExecution(context, executor);
+                status = this.executeStages(context, context.stages(), executor);
+                if (status.equals(PipelineTermination.Exit.SUCCESS)) {
+                    status = this.executeStages(context, context.onSuccessStages(), executor);
+                } else {
+                    status = this.executeStages(context, context.onErrorStages(), executor);
+                }
+            } finally {
+                this.executeStages(context, context.cleanupStages(), executor);
             }
         } catch (JobProcessingException e) {
             log.audit().info("failed executing pipeline {}", context.pipelineId());

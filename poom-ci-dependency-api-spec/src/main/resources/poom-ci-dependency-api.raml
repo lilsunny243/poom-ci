@@ -1,0 +1,44 @@
+#%RAML 1.0
+title: PoomCI Dependency API
+version: v1
+baseUri: https://api.codingmatters.org/poom-ci
+mediaType: application/json
+
+/repositories:
+   displayName: Repositories
+
+   /{repository-id}:
+      displayName: Repository
+      uriParameters:
+         repository-id: string
+
+      /modules:
+         displayName: RepositoryModules
+
+      /dependencies:
+         displayName: RepositoryDependencies
+
+      /downstream:
+         displayName: RepositoryDownstreamRepositories
+
+/modules/{module-spec}/{module-version}:
+   displayName: Module
+
+   /downstream:
+      displayName: ModuleDownstreamRepositories
+
+
+
+types:
+   Repository:
+      type: object
+      properties:
+         id: string
+         name: string
+         checkoutSpec: string
+   Module:
+      type: object
+      properties:
+         spec: string
+         version: string
+

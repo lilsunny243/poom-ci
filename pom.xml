@@ -81,7 +81,11 @@
         <module>poom-ci-runners</module>
         <module>poom-ci-ciphering</module>
 
+        <module>poom-ci-dependency-api-spec</module>
+
         <module>poom-ci-deployment</module>
+
+        <module>poom-ci-utilities</module>
     </modules>
 
     <dependencies>
