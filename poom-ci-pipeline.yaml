@@ -14,7 +14,7 @@ stages:
       - $MVN clean install
 
   - name: deploy
-    timeout: 15
+    timeout: 14
     exec:
       - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
       - $MVN deploy -DskipTests
