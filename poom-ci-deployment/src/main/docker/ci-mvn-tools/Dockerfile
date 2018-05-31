@@ -87,7 +87,7 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
 
 RUN npm i -g raml2html
 
-RUN apk add --no-cache imagemagick
+RUN apk add --no-cache imagemagick graphviz
 
 RUN mkdir -p /m2
 RUN mkdir -p /src
