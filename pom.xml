@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
 
     <name>Poor Man's CI</name>
-    <description>Continuous Integration Using poomjobs</description>
+    <description>Continuous Integration Using Poomjobs</description>
     <url>https://github.com/flexiooss/poom-ci</url>
 
     <licenses>
