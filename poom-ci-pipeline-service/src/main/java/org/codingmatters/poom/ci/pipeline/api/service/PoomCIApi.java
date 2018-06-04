@@ -92,4 +92,7 @@ public class PoomCIApi {
         return this.processor;
     }
 
+    public String path() {
+        return apiPath;
+    }
 }

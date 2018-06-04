@@ -82,8 +82,12 @@
         <module>poom-ci-ciphering</module>
 
         <module>poom-ci-dependency-api-spec</module>
+        <module>poom-ci-dependency-api</module>
+        <module>poom-ci-dependency-service</module>
+        <module>poom-ci-dependency-graph</module>
 
         <module>poom-ci-deployment</module>
+        <module>poom-ci-service-bundle</module>
 
         <module>poom-ci-utilities</module>
     </modules>
@@ -116,6 +120,11 @@
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-runtime</artifactId>
                 <version>4.7.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tinkerpop</groupId>
+                <artifactId>tinkergraph-gremlin</artifactId>
+                <version>3.3.3</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

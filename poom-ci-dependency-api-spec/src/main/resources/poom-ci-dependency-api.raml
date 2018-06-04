@@ -7,25 +7,95 @@ mediaType: application/json
 /repositories:
    displayName: Repositories
 
+
    /{repository-id}:
       displayName: Repository
       uriParameters:
          repository-id: string
 
-      /modules:
-         displayName: RepositoryModules
+      get:
+         responses:
+            200:
+               body: Repository
+            400:
+               body: Error
+            404:
+               body: Error
+            500:
+               body: Error
 
-      /dependencies:
+      put:
+         body: Repository
+         responses:
+            200:
+               body: Repository
+            400:
+               body: Error
+            500:
+               body: Error
+
+      /produces:
+         displayName: RepositoryModules
+         post:
+            body: Module[]
+            responses:
+               201:
+                  headers:
+                     Location: string
+               400:
+                  body: Error
+               404:
+                  body: Error
+               500:
+                  body: Error
+         get:
+            responses:
+               200:
+                  body: Module[]
+               400:
+                  body: Error
+               404:
+                  body: Error
+               500:
+                  body: Error
+
+      /depends-on:
          displayName: RepositoryDependencies
+         post:
+            body: Module[]
+            responses:
+               201:
+                  headers:
+                     Location: string
+               400:
+                  body: Error
+               404:
+                  body: Error
+               500:
+                  body: Error
+         get:
+            responses:
+               200:
+                  body: Module[]
+               400:
+                  body: Error
+               404:
+                  body: Error
+               500:
+                  body: Error
 
       /downstream:
          displayName: RepositoryDownstreamRepositories
-
-/modules/{module-spec}/{module-version}:
-   displayName: Module
-
-   /downstream:
-      displayName: ModuleDownstreamRepositories
+         get:
+            responses:
+               200:
+                  body: Repository[]
+               400:
+                  body: Error
+               404:
+                  body: Error
+               500:
+                  body: Error
 
 
 
@@ -42,3 +112,16 @@ types:
          spec: string
          version: string
 
+   Error:
+      type: object
+      properties:
+         token: string
+         code:
+            enum: [
+               ILLEGAL_RANGE_SPEC,
+               UNEXPECTED_ERROR,
+               RESOURCE_NOT_FOUND,
+               ILLEGAL_RESOURCE_CREATION, ILLEGAL_RESOURCE_CHANGE, ILLEGAL_REQUEST,
+               ILLEGAL_COLLECTION_CHANGE,
+               ]
+         description: string
