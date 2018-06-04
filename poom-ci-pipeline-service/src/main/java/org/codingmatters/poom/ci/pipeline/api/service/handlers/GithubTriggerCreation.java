@@ -18,21 +18,21 @@ import java.util.function.Function;
 public class GithubTriggerCreation implements Function<GithubTriggersPostRequest, GithubTriggersPostResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggerCreation.class);
 
-    private final Repository<GithubPushEvent, String> githubPushEventRepository;
-    private final Consumer<PipelineTrigger> triggerCreatedListener;
+    private final Repository<GithubPushEvent, String> repository;
+    private final Consumer<PipelineTrigger> triggerCreated;
 
-    public GithubTriggerCreation(PoomCIRepository repository, Consumer<PipelineTrigger> triggerCreatedListener) {
-        this.githubPushEventRepository = repository.githubPushEventRepository();
-        this.triggerCreatedListener = triggerCreatedListener;
+    public GithubTriggerCreation(PoomCIRepository repository, Consumer<PipelineTrigger> triggerCreated) {
+        this.repository = repository.githubPushEventRepository();
+        this.triggerCreated = triggerCreated;
     }
 
     @Override
     public GithubTriggersPostResponse apply(GithubTriggersPostRequest request) {
         try {
-            Entity<GithubPushEvent> trigger = this.githubPushEventRepository.create(request.payload());
+            Entity<GithubPushEvent> trigger = this.repository.create(request.payload());
             log.audit().info("trigger created for github push event {}", trigger);
 
-            this.triggerCreatedListener.accept(PipelineTrigger.builder()
+            this.triggerCreated.accept(PipelineTrigger.builder()
                     .type(PipelineTrigger.Type.GITHUB_PUSH)
                     .triggerId(trigger.id())
                     .build());

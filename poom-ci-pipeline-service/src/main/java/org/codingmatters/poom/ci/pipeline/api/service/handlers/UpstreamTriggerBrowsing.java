@@ -1,10 +1,10 @@
 package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
-import org.codingmatters.poom.ci.pipeline.api.GithubTriggersGetRequest;
-import org.codingmatters.poom.ci.pipeline.api.GithubTriggersGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggersGetRequest;
+import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggersGetResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
-import org.codingmatters.poom.ci.triggers.GithubPushEvent;
+import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -12,26 +12,26 @@ import org.codingmatters.poom.services.support.paging.Rfc7233Pager;
 
 import java.util.function.Function;
 
-public class GithubTriggersBrowsing implements Function<GithubTriggersGetRequest, GithubTriggersGetResponse> {
-    static private CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggersBrowsing.class);
+public class UpstreamTriggerBrowsing implements Function<UpstreamBuildTriggersGetRequest, UpstreamBuildTriggersGetResponse> {
+    static private CategorizedLogger log = CategorizedLogger.getLogger(UpstreamTriggerBrowsing.class);
 
-    private final Repository<GithubPushEvent, String> repository;
+    private final Repository<UpstreamBuild, String> repository;
 
-    public GithubTriggersBrowsing(PoomCIRepository repository) {
-        this.repository = repository.githubPushEventRepository();
+    public UpstreamTriggerBrowsing(PoomCIRepository repository) {
+        this.repository = repository.upstreamBuildRepository();
     }
 
     @Override
-    public GithubTriggersGetResponse apply(GithubTriggersGetRequest request) {
-        Rfc7233Pager<GithubPushEvent, String> pager = Rfc7233Pager
+    public UpstreamBuildTriggersGetResponse apply(UpstreamBuildTriggersGetRequest request) {
+        Rfc7233Pager<UpstreamBuild, String> pager = Rfc7233Pager
                 .forRequestedRange(request.range())
-                .unit("GithubPushEvent")
+                .unit("UpstreamBuild")
                 .maxPageSize(100)
                 .pager(this.repository);
 
 
         try {
-            Rfc7233Pager.Page<GithubPushEvent> page = pager.page();
+            Rfc7233Pager.Page<UpstreamBuild> page = pager.page();
             if(! page.isValid()) {
                 return this.invalidRange(request, page);
             } else {
@@ -42,9 +42,9 @@ public class GithubTriggersBrowsing implements Function<GithubTriggersGetRequest
         }
     }
 
-    private GithubTriggersGetResponse listResponse(Rfc7233Pager.Page<GithubPushEvent> page) {
+    private UpstreamBuildTriggersGetResponse listResponse(Rfc7233Pager.Page<UpstreamBuild> page) {
         if(page.isPartial()) {
-            return GithubTriggersGetResponse.builder()
+            return UpstreamBuildTriggersGetResponse.builder()
                     .status206(status -> status
                             .payload(page.list().valueList())
                             .acceptRange(page.acceptRange())
@@ -52,7 +52,7 @@ public class GithubTriggersBrowsing implements Function<GithubTriggersGetRequest
                     )
                     .build();
         } else {
-            return GithubTriggersGetResponse.builder()
+            return UpstreamBuildTriggersGetResponse.builder()
                     .status200(status -> status
                             .payload(page.list().valueList())
                             .acceptRange(page.acceptRange())
@@ -62,8 +62,8 @@ public class GithubTriggersBrowsing implements Function<GithubTriggersGetRequest
         }
     }
 
-    private GithubTriggersGetResponse invalidRange(GithubTriggersGetRequest request, Rfc7233Pager.Page<GithubPushEvent> page) {
-        return GithubTriggersGetResponse.builder()
+    private UpstreamBuildTriggersGetResponse invalidRange(UpstreamBuildTriggersGetRequest request, Rfc7233Pager.Page<UpstreamBuild> page) {
+        return UpstreamBuildTriggersGetResponse.builder()
                 .status416(status -> status.payload(error -> error
                         .token(log.audit().tokenized().error("range is invalid : {} - {}", request.range(), page.validationMessage()))
                         .code(Error.Code.ILLEGAL_RANGE_SPEC)
@@ -72,8 +72,8 @@ public class GithubTriggersBrowsing implements Function<GithubTriggersGetRequest
                 .build();
     }
 
-    private GithubTriggersGetResponse repositoryException(RepositoryException e) {
-        return GithubTriggersGetResponse.builder()
+    private UpstreamBuildTriggersGetResponse repositoryException(RepositoryException e) {
+        return UpstreamBuildTriggersGetResponse.builder()
                 .status500(status -> status.payload(error -> error
                         .token(log.tokenized().error("repository error while browsing github btriggers", e))
                         .code(Error.Code.UNEXPECTED_ERROR)

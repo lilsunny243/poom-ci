@@ -20,6 +20,20 @@ mediaType: application/json
          get:
             is: [{resourceRead: {elementType: GithubPushEvent}}]
 
+   /upstream-build:
+      displayName: Upstream Build Triggers
+      get:
+         is: [{collectionPaging: {elementType: UpstreamBuild}}]
+      post:
+         is: [{collectionElementCreation: {elementTypeCreationData: UpstreamBuild}}]
+
+      /{trigger-id}:
+         displayName: Upstream Build Trigger
+         uriParameters:
+            trigger-id: string
+         get:
+            is: [{resourceRead: {elementType: UpstreamBuild}}]
+
 /pipelines:
    displayName: Pipelines
    get:
@@ -101,10 +115,14 @@ types:
       properties:
          trigger-id: string
          type:
-            enum: [GITHUB_PUSH]
+            enum: [GITHUB_PUSH, UPSTREAM_BUILD]
 
    GithubPushEvent:
       (already-defined): org.codingmatters.poom.ci.triggers.GithubPushEvent
+      type: object
+
+   UpstreamBuild:
+      (already-defined): org.codingmatters.poom.ci.triggers.UpstreamBuild
       type: object
 
    Stage:

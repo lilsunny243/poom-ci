@@ -38,6 +38,10 @@ public class PoomCIApi {
                 .githubTriggersGetHandler(new GithubTriggersBrowsing(this.repository))
                 .githubTriggerGetHandler(new GithubTriggerGet(this.repository))
 
+                .upstreamBuildTriggersPostHandler(new UpstreamTriggerCreation(this.repository, this::triggerCreated))
+                .upstreamBuildTriggersGetHandler(new UpstreamTriggerBrowsing(this.repository))
+                .upstreamBuildTriggerGetHandler(new UpstreamTriggerGet(this.repository))
+
                 .pipelinesGetHandler(new PipelinesBrowsing(this.repository))
                 .pipelinesPostHandler(new PipelineCreate(this.repository, this::pipelineCreated))
 
@@ -61,11 +65,12 @@ public class PoomCIApi {
 
     private void pipelineCreated(Pipeline pipeline) {
         try {
+            String name = pipeline.trigger().type().name().toLowerCase().replaceAll("_", "-") + "-pipeline";
             JobCollectionPostResponse response = this.jobRegistryAPIClient.jobCollection().post(req -> req
                     .accountId("poom-ci")
                     .payload(jobCreation -> jobCreation
                             .category("poom-ci")
-                            .name("github-pipeline")
+                            .name(name)
                             .arguments(pipeline.id())
                     )
             );

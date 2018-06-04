@@ -8,6 +8,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
+import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepository;
@@ -28,6 +29,13 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
     private InMemoryRepository<GithubPushEvent, String> githubPushEventRepository = new InMemoryRepository<GithubPushEvent, String>() {
         @Override
         public PagedEntityList<GithubPushEvent> search(String query, long startIndex, long endIndex) throws RepositoryException {
+            return null;
+        }
+    };
+
+    private Repository<UpstreamBuild, String> upstreamBuildRepository = new InMemoryRepository<UpstreamBuild, String>() {
+        @Override
+        public PagedEntityList<UpstreamBuild> search(String query, long startIndex, long endIndex) throws RepositoryException {
             return null;
         }
     };
@@ -75,6 +83,7 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
         }
     };
 
+
     @Override
     public Repository<Pipeline, String> pipelineRepository() {
         return pipelineRepository;
@@ -93,5 +102,10 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
     @Override
     public Repository<StageLog, StageLogQuery> logRepository() {
         return this.logRepository;
+    }
+
+    @Override
+    public Repository<UpstreamBuild, String> upstreamBuildRepository() {
+        return this.upstreamBuildRepository;
     }
 }

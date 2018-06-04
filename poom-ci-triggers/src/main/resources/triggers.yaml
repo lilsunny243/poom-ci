@@ -42,3 +42,13 @@ GHRepository:
   ssh_url: string
   clone_url: string
   svn_url: string
+
+UpstreamBuild:
+  downstream:
+    id: string
+    name: string
+    checkoutSpec: string
+  upstream:
+    id: string
+    name: string
+    checkoutSpec: string

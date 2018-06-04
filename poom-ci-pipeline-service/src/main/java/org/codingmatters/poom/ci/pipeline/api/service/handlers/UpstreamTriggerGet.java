@@ -1,10 +1,10 @@
 package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
-import org.codingmatters.poom.ci.pipeline.api.GithubTriggerGetRequest;
-import org.codingmatters.poom.ci.pipeline.api.GithubTriggerGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggerGetRequest;
+import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggerGetResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
-import org.codingmatters.poom.ci.triggers.GithubPushEvent;
+import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -12,28 +12,28 @@ import org.codingmatters.poom.servives.domain.entities.Entity;
 
 import java.util.function.Function;
 
-public class GithubTriggerGet implements Function<GithubTriggerGetRequest, GithubTriggerGetResponse> {
-    static private CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggersBrowsing.class);
+public class UpstreamTriggerGet implements Function<UpstreamBuildTriggerGetRequest, UpstreamBuildTriggerGetResponse> {
+    static private CategorizedLogger log = CategorizedLogger.getLogger(UpstreamTriggerGet.class);
 
-    private final Repository<GithubPushEvent, String> repository;
+    private final Repository<UpstreamBuild, String> repository;
 
-    public GithubTriggerGet(PoomCIRepository repository) {
-        this.repository = repository.githubPushEventRepository();
+    public UpstreamTriggerGet(PoomCIRepository repository) {
+        this.repository = repository.upstreamBuildRepository();
     }
 
     @Override
-    public GithubTriggerGetResponse apply(GithubTriggerGetRequest request) {
+    public UpstreamBuildTriggerGetResponse apply(UpstreamBuildTriggerGetRequest request) {
         try {
-            Entity<GithubPushEvent> trigger = this.repository.retrieve(request.triggerId());
+            Entity<UpstreamBuild> trigger = this.repository.retrieve(request.triggerId());
             if(trigger != null) {
-                return GithubTriggerGetResponse.builder()
+                return UpstreamBuildTriggerGetResponse.builder()
                         .status200(status -> status
                                 .payload(trigger.value())
                                 .xEntityId(trigger.id())
                         )
                         .build();
             } else {
-                return GithubTriggerGetResponse.builder()
+                return UpstreamBuildTriggerGetResponse.builder()
                         .status404(status -> status.payload(error -> error
                                 .token(log.audit().tokenized().info("requested for a not existing github trigger : {}", request.triggerId()))
                                 .code(Error.Code.RESOURCE_NOT_FOUND)
@@ -42,7 +42,7 @@ public class GithubTriggerGet implements Function<GithubTriggerGetRequest, Githu
                         .build();
             }
         } catch (RepositoryException e) {
-            return GithubTriggerGetResponse.builder()
+            return UpstreamBuildTriggerGetResponse.builder()
                     .status500(status -> status.payload(error -> error
                             .token(log.tokenized().error("error accessing trigger repository", e))
                             .code(Error.Code.UNEXPECTED_ERROR)
