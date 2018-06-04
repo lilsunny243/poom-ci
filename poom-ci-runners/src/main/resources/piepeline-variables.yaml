@@ -1,0 +1,8 @@
+pipelineVariables:
+  pipelineId: string
+  repositoryId: string
+  repository: string
+  repositoryUrl: string
+  checkoutSpec: string
+  branch: string
+  changeset: string

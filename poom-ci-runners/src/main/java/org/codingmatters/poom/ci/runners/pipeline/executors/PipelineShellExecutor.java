@@ -84,10 +84,7 @@ public class PipelineShellExecutor implements PipelineExecutor {
                 this.context.sources().getAbsolutePath()
         ).directory(this.context.workspace());
 
-        processBuilder.environment().put("PIPELINE_ID", this.context.pipelineId());
-        processBuilder.environment().put("REPOSITORY", this.context.repository());
-        processBuilder.environment().put("BRANCH", this.context.branch());
-        processBuilder.environment().put("CHANGESET", this.context.changeset());
+        this.context.setVariablesTo(processBuilder.environment());
 
         if(! this.secretVars.isEmpty()) {
             processBuilder.environment().putAll(this.secretVars);

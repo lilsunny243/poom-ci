@@ -87,12 +87,20 @@ public class PipelineJobProcessorTest {
     private final List<PipelineTrigger> contextProviderCalls = Collections.synchronizedList(new LinkedList<>());
     private PipelineContext.PipelineContextProvider testContextProvider = (pipelineId, trigger) -> {
         contextProviderCalls.add(trigger);
-        return new PipelineContext(pipelineId, Pipeline.builder()
+
+        PipelineVariables vars = PipelineVariables.builder()
+                .pipelineId(pipelineId)
+                .repository("repo")
+                .branch("master")
+                .changeset("1234567890")
+                .build();
+
+        return new PipelineContext(vars, Pipeline.builder()
                 .stages(
                         stage -> stage.name("stage1"),
                         stage -> stage.name("stage2")
                 )
-                .build(), new File("./"), new File("./"), "repo", "master", "1234567890");
+                .build(), new File("./"), new File("./"));
     };
 
     private final AtomicInteger execInitCount = new AtomicInteger(0);

@@ -9,6 +9,7 @@ import org.codingmatters.poom.ci.pipeline.stage.onlywhen.OnlyWhenVariableProvide
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 public class PipelineContext {
 
@@ -17,45 +18,55 @@ public class PipelineContext {
         PipelineContext pipelineContext(String pipelineId, PipelineTrigger trigger) throws IOException;
     }
 
-    private final String pipelineId;
+    private final PipelineVariables variables;
     private final Pipeline pipeline;
     private final File workspace;
     private final File sources;
-    private final String repository;
-    private final String branch;
-    private final String changeset;
 
     private final OnlyWhenVariableProvider variableProvider = new OnlyWhenVariableProvider() {
         @Override
         public String branch() {
-            return branch;
+            return variableProvider.branch();
         }
     };
 
-    public PipelineContext(String pipelineId, Pipeline pipeline, File workspace, File sources, String repository, String branch, String changeset) {
-        this.pipelineId = pipelineId;
+    public PipelineContext(PipelineVariables variables, Pipeline pipeline, File workspace, File sources) {
+        this.variables = variables;
         this.pipeline = pipeline;
         this.workspace = workspace;
         this.sources = sources;
-        this.repository = repository;
-        this.branch = branch;
-        this.changeset = changeset;
+    }
+
+    public PipelineVariables variables() {
+        return variables;
+    }
+
+
+
+    public void setVariablesTo(Map<String, String> env) {
+        env.put("PIPELINE_ID", this.variables.pipelineId());
+        env.put("REPOSITORY_ID", this.variables.repositoryId());
+        env.put("REPOSITORY", this.variables.repository());
+        env.put("REPOSITORY_URL", this.variables.repositoryUrl());
+        env.put("CHECKOUT_SPEC", this.variables.checkoutSpec());
+        env.put("BRANCH", this.variables.branch());
+        env.put("CHANGESET", this.variables.changeset());
     }
 
     public String repository() {
-        return this.repository;
+        return this.variables.repository();
     }
 
     public String pipelineId() {
-        return pipelineId;
+        return this.variables.pipelineId();
     }
 
     public String changeset() {
-        return changeset;
+        return this.variables.changeset();
     }
 
     public String branch() {
-        return branch;
+        return this.variables.branch();
     }
 
     public Pipeline pipeline() {

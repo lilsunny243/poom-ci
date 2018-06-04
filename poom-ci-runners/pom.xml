@@ -65,6 +65,24 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codingmatters.value.objects</groupId>
+                <artifactId>cdm-value-objects-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>spec1</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                            <goal>json</goal>
+                        </goals>
+                        <configuration>
+                            <destination-package>org.codingmatters.poom.ci.runners.pipeline</destination-package>
+                            <input-spec>src/main/resources/piepeline-variables.yaml</input-spec>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
@@ -81,6 +99,24 @@
                                     <mainClass>org.codingmatters.poom.ci.runners.PoomCIRunner</mainClass>
                                 </transformer>
                             </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources</source>
+                            </sources>
                         </configuration>
                     </execution>
                 </executions>

@@ -8,6 +8,7 @@ import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.json.PipelineReader;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
+import org.codingmatters.poom.ci.runners.pipeline.PipelineVariables;
 import org.codingmatters.poom.ci.runners.pipeline.providers.gh.Ref;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -41,23 +42,31 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
 
             Pipeline pipeline = this.readPipeline(sources);
 
+            PipelineVariables vars = PipelineVariables.builder()
+                    .pipelineId(pipelineId)
+
+                    .repositoryId(event.repository().id().toString())
+                    .repository(event.repository().full_name())
+                    .repositoryUrl(this.repositoryUrl(event))
+
+                    .branch(this.branchFromRef(event))
+                    .changeset(event.after())
+
+                    .checkoutSpec(String.format("git|%s|%s", this.repositoryUrl(event), this.branchFromRef(event)))
+
+                    .build();
+
             return new PipelineContext(
-                    pipelineId,
+                    vars,
                     pipeline,
                     workspace,
-                    sources,
-                    event.repository().full_name(),
-                    this.branchFromRef(event),
-                    event.after());
+                    sources);
         } catch (ProcessingException e) {
             throw new IOException("failed creating pipeline context", e);
         }
     }
 
     private String branchFromRef(GithubPushEvent event) {
-//        String[] splitted = event.ref().split("\\/");
-//        return splitted[splitted.length - 1];
-
         return new Ref(event.ref()).branch();
     }
 
@@ -79,12 +88,7 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
             status = invoker.exec(processBuilder.command("git", "init"), line -> log.info(line), line -> log.error(line));
             if(status != 0) throw new ProcessingException("git init exited with a none 0 status");
 
-            String url = event.repository().clone_url();
-            if(Env.optional("GH_PIPE_USE_SSH").orElse(new Env.Var("false")).asString().equals("true")) {
-                url = event.repository().ssh_url();
-            }
-
-            status = invoker.exec(processBuilder.command("git", "fetch", "-u", url, branchFromRef(event)), line -> log.info(line), line -> log.error(line));
+            status = invoker.exec(processBuilder.command("git", "fetch", "-u", this.repositoryUrl(event), branchFromRef(event)), line -> log.info(line), line -> log.error(line));
             if(status != 0) throw new ProcessingException("git fetch exited with a none 0 status");
 
             status = invoker.exec(processBuilder.command("git", "checkout", event.after()), line -> log.info(line), line -> log.error(line));
@@ -92,6 +96,14 @@ public class GithubPipelineContextProvider implements PipelineContext.PipelineCo
         } catch (InterruptedException | IOException e) {
             throw new ProcessingException("exception raised whlie checking out workspace", e);
         }
+    }
+
+    private String repositoryUrl(GithubPushEvent event) {
+        String url = event.repository().clone_url();
+        if(Env.optional("GH_PIPE_USE_SSH").orElse(new Env.Var("false")).asString().equals("true")) {
+            url = event.repository().ssh_url();
+        }
+        return url;
     }
 
     private File createWorkspace(String pipelineId) throws ProcessingException {
