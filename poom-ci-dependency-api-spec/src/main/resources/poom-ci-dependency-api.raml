@@ -7,6 +7,16 @@ mediaType: application/json
 /repositories:
    displayName: Repositories
 
+   get:
+      responses:
+         200:
+            body: Repository[]
+         400:
+            body: Error
+         404:
+            body: Error
+         500:
+            body: Error
 
    /{repository-id}:
       displayName: Repository

@@ -10,6 +10,11 @@ import static org.junit.Assert.assertThat;
 public class DependencyGraphTest {
 
     @Test
+    public void givenGraphIsEmpty__whenListingRepositoris__thenRepositoryListIsEmpty() throws Exception {
+        assertThat(new DependencyGraph().repositories(), is(emptyArray()));
+    }
+
+    @Test
     public void createRepositories() throws Exception {
         int count = 23;
         Repository[] repos = new Repository[count];
@@ -252,5 +257,38 @@ public class DependencyGraphTest {
 
         assertThat(updated, is(repo));
         assertThat(graph.repositoryById(repo.id()).get(), is(repo));
+    }
+
+    @Test
+    public void produces() throws Exception {
+        DependencyGraph graph = new DependencyGraph();
+
+        Repository repo = Repository.builder()
+                .id("repo")
+                .name("repo")
+                .checkoutSpec("checkout/spec")
+                .build();
+
+
+        graph.add(repo);
+
+        graph.produces(repo,
+                Module.builder().spec("a").version("1").build(),
+                Module.builder().spec("b").version("1").build(),
+                Module.builder().spec("c").version("1").build(),
+                Module.builder().spec("d").version("1").build()
+        );
+
+        for (Module module : graph.produced(repo)) {
+            System.out.println(module);
+        }
+
+
+        assertThat(graph.produced(repo), is(arrayContainingInAnyOrder(
+                Module.builder().spec("a").version("1").build(),
+                Module.builder().spec("b").version("1").build(),
+                Module.builder().spec("c").version("1").build(),
+                Module.builder().spec("d").version("1").build()
+        )));
     }
 }

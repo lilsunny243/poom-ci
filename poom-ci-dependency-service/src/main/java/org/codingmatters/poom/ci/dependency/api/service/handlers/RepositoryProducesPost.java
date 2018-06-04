@@ -6,12 +6,15 @@ import org.codingmatters.poom.ci.dependency.api.types.Error;
 import org.codingmatters.poom.ci.dependency.api.types.Module;
 import org.codingmatters.poom.ci.dependency.api.types.Repository;
 import org.codingmatters.poom.ci.dependency.graph.DependencyGraph;
+import org.codingmatters.poom.services.logging.CategorizedLogger;
 
 import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class RepositoryProducesPost implements Function<RepositoryModulesPostRequest, RepositoryModulesPostResponse> {
+    static private final CategorizedLogger log = CategorizedLogger.getLogger(RepositoryProducesPost.class);
+
     private final DependencyGraph dependencyGraph;
 
     public RepositoryProducesPost(DependencyGraph dependencyGraph) {
@@ -27,6 +30,7 @@ public class RepositoryProducesPost implements Function<RepositoryModulesPostReq
                 if(request.opt().payload().isPresent() && ! request.payload().isEmpty()) {
                     try {
                         this.dependencyGraph.produces(repository.get(), request.payload().toArray(new Module[request.payload().size()]));
+                        log.info("repository {}: produced are {}", repository.get(), request.payload());
                     } catch (IOException e) {
                         return RepositoryModulesPostResponse.builder()
                                 .status500(status -> status.payload(error -> error.code(Error.Code.UNEXPECTED_ERROR)))

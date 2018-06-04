@@ -21,6 +21,8 @@ public class DependencyApi {
         this.dependencyGraph = dependencyGraph;
 
         this.handlers = new PoomCIDependencyAPIHandlers.Builder()
+                .repositoriesGetHandler(new RepositoriesGet(this.dependencyGraph))
+
                 .repositoryGetHandler(new RepositoryGet(this.dependencyGraph))
                 .repositoryDependenciesGetHandler(new RepositoryDependenciesGet(this.dependencyGraph))
                 .repositoryModulesGetHandler(new RepositoryModulesGet(this.dependencyGraph))

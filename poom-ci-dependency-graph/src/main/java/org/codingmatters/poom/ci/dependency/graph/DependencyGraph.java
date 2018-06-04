@@ -11,9 +11,7 @@ import org.codingmatters.poom.ci.dependency.api.types.Repository;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.otherV;
 import static org.apache.tinkerpop.gremlin.structure.io.IoCore.graphml;
@@ -60,6 +58,7 @@ public class DependencyGraph {
         GraphTraversal<Vertex, Vertex> repo = this.repositoryVertexById(repository.id());
         if(repo.hasNext()) {
             this.graph.traversal().V(repo.next().id())
+                    .property("id", repository.id())
                     .property("name", repository.name())
                     .property("checkoutSpec", repository.checkoutSpec())
                     .next();
@@ -146,7 +145,7 @@ public class DependencyGraph {
     }
 
     public Module[] produced(Repository repository) {
-        List<Module> results = new LinkedList<>();
+        Set<Module> results = new HashSet<>();
         GraphTraversal<Vertex, Vertex> targets = this.repositoryQuery(this.graph.traversal(), repository)
                 .out(PRODUCES_PREDICATE).V().hasLabel(MODULE_LABEL);
         while(targets.hasNext()) {
@@ -157,7 +156,7 @@ public class DependencyGraph {
 
     public Repository[] depending(Module module) throws IOException {
         this.add(module);
-        List<Repository> results = new LinkedList<>();
+        Set<Repository> results = new HashSet<>();
         GraphTraversal<Vertex, Vertex> sources = this.moduleQuery(this.graph.traversal(), module)
                 .in(DEPENDS_ON_PREDICATE).V().hasLabel(REPOSITORY_LABEL);
         while(sources.hasNext()) {
@@ -167,7 +166,7 @@ public class DependencyGraph {
     }
 
     public Module[] dependencies(Repository repository) {
-        List<Module> result = new LinkedList<>();
+        Set<Module> result = new HashSet<>();
         GraphTraversal<Vertex, Vertex> modules = this.repositoryQuery(this.graph.traversal(), repository)
                 .out(DEPENDS_ON_PREDICATE).V().hasLabel(MODULE_LABEL);
         while(modules.hasNext()) {
@@ -177,7 +176,7 @@ public class DependencyGraph {
     }
 
     public Repository[] downstream(Repository repository) {
-        List<Repository> result = new LinkedList<>();
+        Set<Repository> result = new HashSet<>();
         GraphTraversal<Vertex, Vertex> downstream = this.repositoryQuery(this.graph.traversal(), repository)
                 .out(PRODUCES_PREDICATE).hasLabel(MODULE_LABEL)
                 .in(DEPENDS_ON_PREDICATE).hasLabel(REPOSITORY_LABEL).as("downstream")
@@ -186,6 +185,7 @@ public class DependencyGraph {
             Vertex next = downstream.next();
             result.add(this.repositoryFrom(next));
         }
+        result.remove(repository);
         return result.toArray(new Repository[result.size()]);
     }
 

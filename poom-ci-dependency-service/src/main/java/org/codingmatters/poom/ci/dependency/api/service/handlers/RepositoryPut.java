@@ -21,7 +21,7 @@ public class RepositoryPut implements Function<RepositoryPutRequest, RepositoryP
         if(request.opt().repositoryId().isPresent()) {
             if(request.opt().payload().name().isPresent() && request.opt().payload().checkoutSpec().isPresent()) {
                 try {
-                    Repository repository = this.dependencyGraph.update(request.payload());
+                    Repository repository = this.dependencyGraph.update(request.payload().withId(request.repositoryId()));
                     return RepositoryPutResponse.builder()
                             .status200(status -> status.payload(repository))
                             .build();

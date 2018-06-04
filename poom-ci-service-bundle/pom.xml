@@ -27,5 +27,13 @@
             <groupId>org.codingmatters.poom.ci</groupId>
             <artifactId>poom-ci-dependency-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.codingmatters.poom</groupId>
+            <artifactId>poomjobs-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codingmatters.poom</groupId>
+            <artifactId>poomjobs-runner-manager</artifactId>
+        </dependency>
     </dependencies>
 </project>
