@@ -2,7 +2,11 @@ package org.codingmatters.poom.ci.dependency.graph;
 
 import org.codingmatters.poom.ci.dependency.api.types.Module;
 import org.codingmatters.poom.ci.dependency.api.types.Repository;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import java.io.File;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -287,6 +291,81 @@ public class DependencyGraphTest {
         assertThat(graph.produced(repo), is(arrayContainingInAnyOrder(
                 Module.builder().spec("a").version("1").build(),
                 Module.builder().spec("b").version("1").build(),
+                Module.builder().spec("c").version("1").build(),
+                Module.builder().spec("d").version("1").build()
+        )));
+    }
+
+    @Test
+    public void dependsOn() throws Exception {
+        DependencyGraph graph = new DependencyGraph();
+
+        Repository repo = Repository.builder()
+                .id("repo")
+                .name("repo")
+                .checkoutSpec("checkout/spec")
+                .build();
+
+
+        graph.add(repo);
+
+        graph.dependsOn(repo,
+                Module.builder().spec("a").version("1").build(),
+                Module.builder().spec("b").version("1").build(),
+                Module.builder().spec("c").version("1").build(),
+                Module.builder().spec("d").version("1").build()
+        );
+
+        for (Module module : graph.dependencies(repo)) {
+            System.out.println(module);
+        }
+
+
+        assertThat(graph.dependencies(repo), is(arrayContainingInAnyOrder(
+                Module.builder().spec("a").version("1").build(),
+                Module.builder().spec("b").version("1").build(),
+                Module.builder().spec("c").version("1").build(),
+                Module.builder().spec("d").version("1").build()
+        )));
+    }
+
+
+    @Rule
+    public TemporaryFolder dir = new TemporaryFolder();
+
+    @Test
+    public void producesAndDependsOn() throws Exception {
+        File backupFile = this.dir.newFile();
+        DependencyGraph graph = new DependencyGraph(backupFile);
+
+        Repository repo = Repository.builder()
+                .id("repo")
+                .name("repo")
+                .checkoutSpec("checkout/spec")
+                .build();
+
+
+        graph.add(repo);
+
+        graph.produces(repo,
+                Module.builder().spec("a").version("1").build(),
+                Module.builder().spec("b").version("1").build()
+        );
+        graph.dependsOn(repo,
+                Module.builder().spec("c").version("1").build(),
+                Module.builder().spec("d").version("1").build()
+        );
+
+        for (Module module : graph.produced(repo)) {
+            System.out.println(module);
+        }
+
+
+        assertThat(graph.produced(repo), is(arrayContainingInAnyOrder(
+                Module.builder().spec("a").version("1").build(),
+                Module.builder().spec("b").version("1").build()
+        )));
+        assertThat(graph.dependencies(repo), is(arrayContainingInAnyOrder(
                 Module.builder().spec("c").version("1").build(),
                 Module.builder().spec("d").version("1").build()
         )));

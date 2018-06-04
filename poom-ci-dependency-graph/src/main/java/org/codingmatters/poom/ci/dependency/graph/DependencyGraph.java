@@ -147,7 +147,7 @@ public class DependencyGraph {
     public Module[] produced(Repository repository) {
         Set<Module> results = new HashSet<>();
         GraphTraversal<Vertex, Vertex> targets = this.repositoryQuery(this.graph.traversal(), repository)
-                .out(PRODUCES_PREDICATE).V().hasLabel(MODULE_LABEL);
+                .out(PRODUCES_PREDICATE).hasLabel(MODULE_LABEL);
         while(targets.hasNext()) {
             results.add(this.moduleFrom(targets.next()));
         }
@@ -158,7 +158,7 @@ public class DependencyGraph {
         this.add(module);
         Set<Repository> results = new HashSet<>();
         GraphTraversal<Vertex, Vertex> sources = this.moduleQuery(this.graph.traversal(), module)
-                .in(DEPENDS_ON_PREDICATE).V().hasLabel(REPOSITORY_LABEL);
+                .in(DEPENDS_ON_PREDICATE).hasLabel(REPOSITORY_LABEL);
         while(sources.hasNext()) {
             results.add(this.repositoryFrom(sources.next()));
         }
@@ -168,7 +168,7 @@ public class DependencyGraph {
     public Module[] dependencies(Repository repository) {
         Set<Module> result = new HashSet<>();
         GraphTraversal<Vertex, Vertex> modules = this.repositoryQuery(this.graph.traversal(), repository)
-                .out(DEPENDS_ON_PREDICATE).V().hasLabel(MODULE_LABEL);
+                .out(DEPENDS_ON_PREDICATE).hasLabel(MODULE_LABEL);
         while(modules.hasNext()) {
             result.add(this.moduleFrom(modules.next()));
         }
