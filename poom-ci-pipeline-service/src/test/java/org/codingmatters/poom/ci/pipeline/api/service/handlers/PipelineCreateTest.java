@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class PipelineCreateTest extends AbstractPoomCITest {
@@ -34,9 +35,9 @@ public class PipelineCreateTest extends AbstractPoomCITest {
         assertThat(response.location(), is("%API_PATH%/pipelines/" + pipeline.id()));
 
         assertThat(pipeline.value().id(), is(pipeline.id()));
-        assertThat(pipeline.value().status(), is(Status.builder()
-                .run(Status.Run.RUNNING)
-                .build()));
+
+        assertThat(pipeline.value().status().run(), is(Status.Run.RUNNING));
+        assertThat(pipeline.value().status().triggered(), is(notNullValue()));
         assertThat(pipeline.value().trigger(), is(PipelineTrigger.builder()
                 .type(PipelineTrigger.Type.GITHUB_PUSH)
                 .triggerId("12")

@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class StageUpdateTest extends AbstractPoomCITest {
@@ -88,13 +89,15 @@ public class StageUpdateTest extends AbstractPoomCITest {
         Entity<PipelineStage> updated = this.repository().stageRepository().retrieve(this.existingStage.id());
 
         assertThat(
-                updated.value().stage(),
-                is(this.existingStage.value().stage().withStatus(StageStatus.builder()
+                updated.value().stage().status(),
+                is(StageStatus.builder()
                         .run(StageStatus.Run.DONE)
                         .exit(StageStatus.Exit.SUCCESS)
                         .build()
-                ))
+                )
         );
+        assertThat(updated.value().stage(), is(notNullValue()));
+        assertThat(updated.value().stage().finished(), is(notNullValue()));
 
         assertThat(
                 response.payload(),

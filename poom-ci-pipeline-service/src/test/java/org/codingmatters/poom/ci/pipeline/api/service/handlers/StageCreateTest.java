@@ -13,8 +13,7 @@ import org.codingmatters.poom.servives.domain.entities.Entity;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class StageCreateTest extends AbstractPoomCITest {
@@ -51,17 +50,15 @@ public class StageCreateTest extends AbstractPoomCITest {
         assertThat(response.xEntityId(), is("a-stage"));
         assertThat(response.location(), is("%API_PATH%/pipelines/" + this.runningPipelineId + "/stages/a-stage"));
 
-        Entity<PipelineStage> created = this.repository().stageRepository().all(0, 0).get(0);
-        assertThat(
-                created.value(),
-                is(PipelineStage.builder()
-                        .pipelineId(this.runningPipelineId)
-                        .stage(stage -> stage
-                                .name("a-stage")
-                                .stageType(Stage.StageType.MAIN)
-                                .status(status -> status.run(StageStatus.Run.RUNNING).exit(null)))
-                        .build())
-        );
+        PipelineStage created = this.repository().stageRepository().all(0, 0).get(0).value();
+
+        assertThat(created.pipelineId(), is(this.runningPipelineId));
+        assertThat(created.stage().name(), is("a-stage"));
+        assertThat(created.stage().stageType(), is(Stage.StageType.MAIN));
+        assertThat(created.stage().status().run(), is(StageStatus.Run.RUNNING));
+        assertThat(created.stage().status().exit(), is(nullValue()));
+        assertThat(created.stage().triggered(), is(notNullValue()));
+        assertThat(created.stage().finished(), is(nullValue()));
     }
 
     @Test
