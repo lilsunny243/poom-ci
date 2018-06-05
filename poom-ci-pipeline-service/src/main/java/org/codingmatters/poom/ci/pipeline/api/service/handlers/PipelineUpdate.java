@@ -9,10 +9,9 @@ import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.services.support.date.UTC;
 import org.codingmatters.poom.servives.domain.entities.Entity;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.function.Function;
 
 public class PipelineUpdate implements Function<PipelinePatchRequest, PipelinePatchResponse> {
@@ -61,7 +60,7 @@ public class PipelineUpdate implements Function<PipelinePatchRequest, PipelinePa
             Entity<Pipeline> updated = this.pipelineRepository.update(entity, entity.value().withStatus(entity.value().status()
                     .withRun(Status.Run.DONE)
                     .withExit(Status.Exit.valueOf(request.payload().exit().name()))
-                    .withFinished(LocalDateTime.now(ZoneOffset.UTC.normalized()))
+                    .withFinished(UTC.now())
             ));
 
             log.audit().info("pipeline {} done with exit status {}", request.pipelineId(), request.payload().exit());

@@ -10,6 +10,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.services.support.date.UTC;
 import org.codingmatters.poom.servives.domain.entities.Entity;
 import org.codingmatters.rest.api.Processor;
 
@@ -36,7 +37,11 @@ public class PipelineCreate implements Function<PipelinesPostRequest, PipelinesP
 
             Entity<Pipeline> entity = this.pipelineRepository.create(Pipeline.builder()
                     .trigger(request.payload())
-                    .status(Status.builder().run(Status.Run.RUNNING).build())
+                    .status(Status.builder()
+                            .run(Status.Run.RUNNING)
+                            .triggered(UTC.now())
+                            .build())
+
                     .build());
             entity = this.pipelineRepository.update(entity, entity.value().withId(entity.id()));
 

@@ -11,6 +11,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.services.support.date.UTC;
 import org.codingmatters.poom.servives.domain.entities.Entity;
 import org.codingmatters.rest.api.Processor;
 
@@ -45,6 +46,7 @@ public class StageCreate implements Function<PipelineStagesPostRequest, Pipeline
                             .name(creation.name())
                             .status(status -> status.run(StageStatus.Run.RUNNING))
                             .stageType(Stage.StageType.valueOf(request.stageType().toUpperCase()))
+                            .triggered(UTC.now())
                     )
                     .build());
 

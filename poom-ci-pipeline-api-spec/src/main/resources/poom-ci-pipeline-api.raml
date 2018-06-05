@@ -93,6 +93,7 @@ types:
       type: object
       properties:
          id: string
+         name: string
          status:
             type: object
             properties:
@@ -132,6 +133,8 @@ types:
          status: StageStatus
          stageType:
             enum: [MAIN, ERROR, SUCCESS, CLEANUP]
+         triggered: datetime-only
+         finished: datetime-only
 
    StageCreation:
       type: object

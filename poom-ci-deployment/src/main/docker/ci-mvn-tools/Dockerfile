@@ -94,6 +94,9 @@ RUN mkdir -p /src
 
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
+ENV MAVEN_MS "256m"
+ENV MAVEN_MX "512m"
+ENV MAVEN_OPTS "-Xms$MAVEN_MS -Xmx$MAVEN_MX"
 
 VOLUME ["$USER_HOME_DIR/.m2", "/src"]
 WORKDIR /src

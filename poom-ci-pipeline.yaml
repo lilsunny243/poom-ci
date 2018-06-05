@@ -44,7 +44,6 @@ onError:
 
 
 env:
-  - SETTING_FILE: /home/nel/Documents/POOM-CI/settings-oss.xml
   - FLEXIO_SCRIPTS: git@github.com:Flexio-corp/flexio-ci-scripts.git
   - FLEXIO_SCRIPTS_BRANCH: master
   - CI_TOOLS_IMAGE: codingmatters/ci-tools:0.0.1-SNAPSHOT

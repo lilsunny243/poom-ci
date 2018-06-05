@@ -12,6 +12,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.services.support.date.UTC;
 import org.codingmatters.poom.servives.domain.entities.Entity;
 import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
 
@@ -75,7 +76,7 @@ public class StageUpdate implements Function<PipelineStagePatchRequest, Pipeline
 
             entity = this.stageRepository.update(
                     entity,
-                    entity.value().withStage(entity.value().stage().withStatus(StageStatus.builder()
+                    entity.value().withStage(entity.value().stage().withFinished(UTC.now()).withStatus(StageStatus.builder()
                             .run(StageStatus.Run.DONE)
                             .exit(StageStatus.Exit.valueOf(request.payload().exit().name()))
                             .build()))
