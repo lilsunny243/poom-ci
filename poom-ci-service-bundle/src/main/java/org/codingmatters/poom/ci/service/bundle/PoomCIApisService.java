@@ -2,12 +2,10 @@ package org.codingmatters.poom.ci.service.bundle;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Undertow;
-import okhttp3.OkHttpClient;
 import org.codingmatters.poom.ci.dependency.api.service.DependencyApi;
 import org.codingmatters.poom.ci.dependency.graph.DependencyGraph;
 import org.codingmatters.poom.ci.pipeline.api.service.PoomCIApi;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
-import org.codingmatters.poom.client.PoomjobsJobRegistryAPIRequesterClient;
+import org.codingmatters.poom.ci.pipeline.api.service.PoomCIPipelineService;
 import org.codingmatters.poom.client.PoomjobsRunnerRegistryAPIHandlersClient;
 import org.codingmatters.poom.poomjobs.domain.jobs.repositories.JobRepository;
 import org.codingmatters.poom.poomjobs.domain.runners.repositories.RunnerRepository;
@@ -24,7 +22,6 @@ import org.codingmatters.poomjobs.service.PoomjobsRunnerRegistryAPI;
 import org.codingmatters.poomjobs.service.api.PoomjobsJobRegistryAPIProcessor;
 import org.codingmatters.poomjobs.service.api.PoomjobsRunnerRegistryAPIProcessor;
 import org.codingmatters.rest.api.Processor;
-import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 import org.codingmatters.rest.api.processors.MatchingPathProcessor;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 
@@ -51,7 +48,7 @@ public class PoomCIApisService {
 
         PoomjobsRunnerRegistryAPI runnerRegistryAPI = runnerRegistryAPI();
         PoomCIApisService service = new PoomCIApisService(host, port, jsonFactory,
-                poomCIApi(jsonFactory),
+                PoomCIPipelineService.api(),
                 dependencyApi(jsonFactory),
                 runnerRegistryAPI,
                 jobRegistryAPI(runnerRegistryAPI, clientPool)
@@ -69,14 +66,6 @@ public class PoomCIApisService {
         log.info("poom-ci pipeline api service stopping...");
         service.stop();
         log.info("poom-ci pipeline api service stopped.");
-    }
-
-    private static PoomCIApi poomCIApi(JsonFactory jsonFactory) {
-        String jobRegistryUrl = Env.mandatory("JOB_REGISTRY_URL").asString();
-        PoomCIRepository repository = PoomCIRepository.inMemory();
-        return new PoomCIApi(repository, "/pipelines", jsonFactory, new PoomjobsJobRegistryAPIRequesterClient(
-                new OkHttpRequesterFactory(new OkHttpClient()), jsonFactory, jobRegistryUrl)
-        );
     }
 
     private static DependencyApi dependencyApi(JsonFactory jsonFactory) {

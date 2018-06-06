@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.ValueList;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogspatchresponse.Status201;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.types.AppendedLogLine;
@@ -42,7 +43,9 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .build());
 
         for (long i = 0; i < 500; i++) {
-            this.repository().logRepository().create(StageLog.builder()
+            this.repository().logRepository().repository(
+                    new PoomCIRepository.StageLogKey("a-pipeline", Stage.StageType.MAIN, "a-running-stage")
+            ).create(StageLog.builder()
                     .pipelineId("a-pipeline")
                     .stageName("a-running-stage")
                     .stageType(Stage.StageType.MAIN)
@@ -78,7 +81,9 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
 
     @Test
     public void givenStageExists__whenAppendingOneLog__thenLineIsStoredAndAssignedLastIndex() throws Exception {
-        long logCount = this.repository().logRepository().all(0, 0).total();
+        PoomCIRepository.StageLogKey stageLogKey = new PoomCIRepository.StageLogKey("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
+
+        long logCount = this.repository().logRepository().repository(stageLogKey).all(0, 0).total();
         Status201 response = this.handler.apply(PipelineStageLogsPatchRequest.builder()
                 .pipelineId("a-pipeline")
                 .stageName("a-running-stage")
@@ -87,10 +92,10 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .build())
                 .opt().status201()
                 .orElseThrow(() -> new AssertionError("should have a 201"));
-        StageLog lastLog = this.repository().logRepository().all(500, 500).valueList().get(0);
+        StageLog lastLog = this.repository().logRepository().repository(stageLogKey).all(500, 500).valueList().get(0);
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
-        assertThat(this.repository().logRepository().all(0, 0).total(), is(logCount + 1));
+        assertThat(this.repository().logRepository().repository(stageLogKey).all(0, 0).total(), is(logCount + 1));
         assertThat(lastLog.pipelineId(), is("a-pipeline"));
         assertThat(lastLog.stageName(), is("a-running-stage"));
         assertThat(lastLog.stageType(), is(Stage.StageType.MAIN));
@@ -99,7 +104,9 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
 
     @Test
     public void givenStageExists__whenAppendingManyLogs__thenLinesAreStoredAndAssignedLastIndex() throws Exception {
-        long logCount = this.repository().logRepository().all(0, 0).total();
+        PoomCIRepository.StageLogKey stageLogKey = new PoomCIRepository.StageLogKey("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
+
+        long logCount = this.repository().logRepository().repository(stageLogKey).all(0, 0).total();
         ValueList.Builder<AppendedLogLine> listBuilder = new ValueList.Builder<AppendedLogLine>();
         for (int i = 1; i <= 10; i++) {
             listBuilder.with(AppendedLogLine.builder().content("added " + i).build());
@@ -114,10 +121,10 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .opt().status201()
                 .orElseThrow(() -> new AssertionError("should have a 201"));
 
-        List<StageLog> lastLogs = this.repository().logRepository().all(500, 600).valueList();
+        List<StageLog> lastLogs = this.repository().logRepository().repository(stageLogKey).all(500, 600).valueList();
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
-        assertThat(this.repository().logRepository().all(0, 0).total(), is(logCount + 10));
+        assertThat(this.repository().logRepository().repository(stageLogKey).all(0, 0).total(), is(logCount + 10));
 
         assertThat(lastLogs.size(), is(10));
 

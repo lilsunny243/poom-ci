@@ -1,6 +1,7 @@
 package org.codingmatters.poom.ci.pipeline.api.service.repository.impl;
 
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.SegmentedRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
@@ -19,28 +20,28 @@ import java.util.stream.Stream;
 
 public class InMemoryPoomCIRepository implements PoomCIRepository {
 
-    private InMemoryRepository<Pipeline, String> pipelineRepository = new InMemoryRepository<Pipeline, String>() {
+    private final InMemoryRepository<Pipeline, String> pipelineRepository = new InMemoryRepository<Pipeline, String>() {
         @Override
         public PagedEntityList<Pipeline> search(String query, long startIndex, long endIndex) throws RepositoryException {
             return null;
         }
     };
 
-    private InMemoryRepository<GithubPushEvent, String> githubPushEventRepository = new InMemoryRepository<GithubPushEvent, String>() {
+    private final InMemoryRepository<GithubPushEvent, String> githubPushEventRepository = new InMemoryRepository<GithubPushEvent, String>() {
         @Override
         public PagedEntityList<GithubPushEvent> search(String query, long startIndex, long endIndex) throws RepositoryException {
             return null;
         }
     };
 
-    private Repository<UpstreamBuild, String> upstreamBuildRepository = new InMemoryRepository<UpstreamBuild, String>() {
+    private final Repository<UpstreamBuild, String> upstreamBuildRepository = new InMemoryRepository<UpstreamBuild, String>() {
         @Override
         public PagedEntityList<UpstreamBuild> search(String query, long startIndex, long endIndex) throws RepositoryException {
             return null;
         }
     };
 
-    private InMemoryRepository<PipelineStage, PipelineStageQuery> stageRepository = new InMemoryRepository<PipelineStage, PipelineStageQuery>() {
+    private final InMemoryRepository<PipelineStage, PipelineStageQuery> stageRepository = new InMemoryRepository<PipelineStage, PipelineStageQuery>() {
         @Override
         public PagedEntityList<PipelineStage> search(PipelineStageQuery query, long startIndex, long endIndex) throws RepositoryException {
             Stream<Entity<PipelineStage>> filtered = this.stream();
@@ -63,25 +64,12 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
             return this.paged(filtered, startIndex, endIndex);
         }
     };
-    private Repository<StageLog, StageLogQuery> logRepository = new InMemoryRepository<StageLog, StageLogQuery>() {
-        @Override
-        public PagedEntityList<StageLog> search(StageLogQuery query, long startIndex, long endIndex) throws RepositoryException {
-            Stream<Entity<StageLog>> filtered = this.stream();
-            if(query.opt().withPipelineId().isPresent()) {
-                filtered = filtered.filter(entity -> query.withPipelineId().equals(entity.value().pipelineId()));
-            }
-            if(query.opt().withStageName().isPresent()) {
-                filtered = filtered.filter(entity -> query.withStageName().equals(entity.value().stageName()));
-            }
-            if(query.opt().withStageType().isPresent()) {
-                filtered = filtered.filter(entity ->
-                        entity.value().opt().stageType().isPresent() &&
-                                entity.value().stageType().name().toUpperCase().equals(query.withStageType().toUpperCase())
-                );
-            }
-            return this.paged(filtered, startIndex, endIndex);
-        }
-    };
+
+    private final SegmentedRepository<StageLogKey, StageLog, StageLogQuery> logRepository;
+
+    public InMemoryPoomCIRepository(SegmentedRepository<StageLogKey, StageLog, StageLogQuery> logRepository) {
+        this.logRepository = logRepository;
+    }
 
 
     @Override
@@ -100,7 +88,7 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
     }
 
     @Override
-    public Repository<StageLog, StageLogQuery> logRepository() {
+    public SegmentedRepository<StageLogKey, StageLog, StageLogQuery> logRepository() {
         return this.logRepository;
     }
 

@@ -4,6 +4,7 @@ import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.ValueList;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogsgetresponse.Status200;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogsgetresponse.Status206;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
@@ -20,8 +21,9 @@ public class StageLogsBrowsingTest extends AbstractPoomCITest {
 
     @Before
     public void setUp() throws Exception {
+        PoomCIRepository.StageLogKey key = new PoomCIRepository.StageLogKey("a-pipeline", Stage.StageType.MAIN, "a-stage");
         for (long i = 0; i < 500; i++) {
-            this.repository().logRepository().create(StageLog.builder()
+            this.repository().logRepository().repository(key).create(StageLog.builder()
                     .pipelineId("a-pipeline")
                     .stageName("a-stage")
                     .stageType(Stage.StageType.MAIN)

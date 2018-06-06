@@ -4,6 +4,7 @@ import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.helpers.StageHelper;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.SegmentedRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
@@ -23,7 +24,7 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
     static private final CategorizedLogger log = CategorizedLogger.getLogger(StageLogsAppend.class);
 
     private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
-    private final Repository<StageLog, StageLogQuery> logRepository;
+    private final SegmentedRepository<PoomCIRepository.StageLogKey, StageLog, StageLogQuery> logRepository;
 
     public StageLogsAppend(PoomCIRepository repository) {
         this.stageRepository = repository.stageRepository();
@@ -102,11 +103,11 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
     }
 
     private void appendLogs(PipelineStageLogsPatchRequest request) throws RepositoryException {
-        long logCount = this.logRepository.search(StageLogQuery.builder()
-                .withPipelineId(request.pipelineId())
-                .withStageName(request.stageName())
-                .withStageType(request.stageType())
-                .build(), 0, 0).total();
+        Stage.StageType stageType = Stage.StageType.valueOf(request.stageType().toUpperCase());
+        PoomCIRepository.StageLogKey key = new PoomCIRepository.StageLogKey(request.pipelineId(), stageType, request.stageName());
+        Repository<StageLog, StageLogQuery> repository = this.logRepository.repository(key);
+
+        long logCount = repository.all(0, 0).total();
         long nextLine = logCount;
 
         for (AppendedLogLine logLine : request.payload()) {
@@ -117,11 +118,11 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
                     .line(nextLine)
                     .content(logLine.content())
                     .build();
-            this.logRepository.create(StageLog.builder()
+            repository.create(StageLog.builder()
                     .log(logEntry)
                     .pipelineId(request.pipelineId())
                     .stageName(request.stageName())
-                    .stageType(Stage.StageType.valueOf(request.stageType().toUpperCase()))
+                    .stageType(stageType)
                     .build());
         }
 

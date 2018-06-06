@@ -4,10 +4,12 @@ import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsGetResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.helpers.StageHelper;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.SegmentedRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
+import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 public class StageLogsBrowsing implements Function<PipelineStageLogsGetRequest, PipelineStageLogsGetResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(StageLogsBrowsing.class);
 
-    private final Repository<StageLog, StageLogQuery> logRepository;
+    private final SegmentedRepository<PoomCIRepository.StageLogKey, StageLog, StageLogQuery> logRepository;
 
     public StageLogsBrowsing(PoomCIRepository repository) {
         this.logRepository = repository.logRepository();
@@ -28,11 +30,6 @@ public class StageLogsBrowsing implements Function<PipelineStageLogsGetRequest, 
 
     @Override
     public PipelineStageLogsGetResponse apply(PipelineStageLogsGetRequest request) {
-
-        Rfc7233Pager<StageLog, StageLogQuery> pager = Rfc7233Pager.forRequestedRange(request.range())
-                .unit("LogLine")
-                .maxPageSize(100)
-                .pager(this.logRepository);
         if(! StageHelper.isStageTypeValid(request.stageType())) {
             return PipelineStageLogsGetResponse.builder()
                     .status400(status -> status.payload(error -> error
@@ -43,11 +40,17 @@ public class StageLogsBrowsing implements Function<PipelineStageLogsGetRequest, 
                     ))
                     .build();
         }
+
+        Stage.StageType stageType = Stage.StageType.valueOf(request.stageType().toUpperCase());
+        PoomCIRepository.StageLogKey key = new PoomCIRepository.StageLogKey(request.pipelineId(), stageType, request.stageName());
+        Repository<StageLog, StageLogQuery> repository = this.logRepository.repository(key);
+
+        Rfc7233Pager<StageLog, StageLogQuery> pager = Rfc7233Pager.forRequestedRange(request.range())
+                .unit("LogLine")
+                .maxPageSize(100)
+                .pager(repository);
         try {
-            Rfc7233Pager.Page<StageLog> page = pager.page(StageLogQuery.builder()
-                    .withPipelineId(request.pipelineId())
-                    .withStageName(request.stageName())
-                    .build());
+            Rfc7233Pager.Page<StageLog> page = pager.page();
 
             if(! page.isValid()) {
                 return PipelineStageLogsGetResponse.builder()
