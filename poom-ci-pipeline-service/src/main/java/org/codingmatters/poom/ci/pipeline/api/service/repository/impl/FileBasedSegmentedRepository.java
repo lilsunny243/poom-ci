@@ -105,9 +105,19 @@ public class FileBasedSegmentedRepository<K extends SegmentedRepository.Key, V, 
         if(! storageFile.exists()) {
             storageFile.createNewFile();
 
+
             try(OutputStream out = new FileOutputStream(storageFile)) {
                 long start = 0;
-                long step = 10000;
+                long step = 1000;
+
+                long total;
+                try {
+                    total = repository.all(0, 0).total();
+                } catch (RepositoryException e) {
+                    throw new IOException("failed calculating total from repository", e);
+                }
+                long stored = 0;
+
                 PagedEntityList<V> page;
                 do {
                     long end = start + step - 1;
@@ -118,9 +128,10 @@ public class FileBasedSegmentedRepository<K extends SegmentedRepository.Key, V, 
                     }
                     for (Entity<V> entity : page) {
                         this.storeEntity(entity, out);
+                        stored++;
                     }
 
-                } while (page.size() == step);
+                } while (stored < total);
             }
 
             boolean renamed = storageFile.renameTo(this.storageFile(key));
