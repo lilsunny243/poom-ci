@@ -33,7 +33,7 @@ stages:
 onSuccess:
   - name: metadata
     exec:
-      - $UPLOAD_PROJECT_METADATA $DEPENDENCIES_URL $SRC
+      - $UPLOAD_PROJECT_METADATA
   - name: notify-flexio
     exec:
       - $NOTIFY --data-urlencode "status=0" --data-urlencode "current-stage="
@@ -54,7 +54,7 @@ env:
   - MVN: docker run --rm -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 -v $WORKSPACE/secrets/settings.xml:/root/.m2/settings.xml $CI_TOOLS_IMAGE mvn $MVN_OPTS
   - NOTIFY: curl -G "https://my.flexio.io/channelApi/flexHttpInOut/59d3a0105d443519843d0496/5adf40aededdbb452368cfca" --data-urlencode "repository=$REPOSITORY" --data-urlencode "branch=$BRANCH" --data-urlencode "pipeline-id=$PIPELINE_ID"
   - DOCKER_BUILD: $WORKSPACE/flexio-ci-scripts/bin/docker-compose-build.sh
-  - UPLOAD_PROJECT_METADATA: $WORKSPACE/flexio-ci-scripts/bin/upload-project-metadata.sh
+  - UPLOAD_PROJECT_METADATA: $WORKSPACE/flexio-ci-scripts/bin/upload-project-metadata.sh http://master.ci.flexio.io:6545 $SRC
 
 secrets:
   - name: settings.xml
