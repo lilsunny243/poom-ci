@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.runners;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import okhttp3.OkHttpClient;
+import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIRequesterClient;
 import org.codingmatters.poom.client.PoomjobsJobRegistryAPIClient;
@@ -127,7 +128,10 @@ public class PoomCIRunner {
                         jsonFactory))
 
                 .jobCategory("poom-ci")
-                .jobName("github-pipeline")
+                .jobName(
+                        PoomCIJobProcessorFactory.triggerJobName(PipelineTrigger.Type.GITHUB_PUSH),
+                        PoomCIJobProcessorFactory.triggerJobName(PipelineTrigger.Type.UPSTREAM_BUILD)
+                )
 
                 .jobRegistryAPIClient(jobRegistryAPIClient)
                 .runnerRegistryAPIClient(runnerRegistryApi)

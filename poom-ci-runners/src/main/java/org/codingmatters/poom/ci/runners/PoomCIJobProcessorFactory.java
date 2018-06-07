@@ -17,6 +17,10 @@ import java.security.KeyStore;
 
 public class PoomCIJobProcessorFactory implements JobProcessor.Factory {
 
+    static public String triggerJobName(PipelineTrigger.Type triggerType) {
+        return triggerType.name().toLowerCase().replaceAll("_", "-") + "-pipeline";
+    }
+
     private final PoomCIPipelineAPIClient pipelineClient;
     private final YAMLFactory yamlFactory;
     private final KeyStore keystore;
@@ -42,7 +46,7 @@ public class PoomCIJobProcessorFactory implements JobProcessor.Factory {
     }
 
     private boolean hasTriggerType(PipelineTrigger.Type triggerType, Job job) {
-        return job.name().equals(triggerType.name().toLowerCase().replaceAll("_", "-") + "-pipeline");
+        return job.name().equals(triggerJobName(triggerType));
     }
 
     private PipelineExecutor shellExecutor(PipelineContext context) {
