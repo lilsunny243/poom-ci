@@ -104,30 +104,31 @@ public class FileBasedSegmentedRepository<K extends SegmentedRepository.Key, V, 
         File storageFile = this.temporaryStorageFile(key);
         if(! storageFile.exists()) {
             storageFile.createNewFile();
+
+            try(OutputStream out = new FileOutputStream(storageFile)) {
+                long start = 0;
+                long step = 10000;
+                PagedEntityList<V> page;
+                do {
+                    long end = start + step - 1;
+                    try {
+                        page = repository.all(start, end);
+                    } catch (RepositoryException e) {
+                        throw new IOException("failed getting values from repository", e);
+                    }
+                    for (Entity<V> entity : page) {
+                        this.storeEntity(entity, out);
+                    }
+
+                } while (page.size() == step);
+            }
+
+            boolean renamed = storageFile.renameTo(this.storageFile(key));
+            if(! renamed) {
+                throw new IOException("failed swapping temporary file : " + storageFile.getAbsolutePath());
+            }
         }
 
-        try(OutputStream out = new FileOutputStream(storageFile)) {
-            long start = 0;
-            long step = 10000;
-            PagedEntityList<V> page;
-            do {
-                long end = start + step - 1;
-                try {
-                    page = repository.all(start, end);
-                } catch (RepositoryException e) {
-                    throw new IOException("failed getting values from repository", e);
-                }
-                for (Entity<V> entity : page) {
-                    this.storeEntity(entity, out);
-                }
-
-            } while (page.size() == step);
-        }
-
-        boolean renamed = storageFile.renameTo(this.storageFile(key));
-        if(! renamed) {
-            throw new IOException("failed swapping temporary file : " + storageFile.getAbsolutePath());
-        }
     }
 
     private File temporaryStorageFile(K key) {
