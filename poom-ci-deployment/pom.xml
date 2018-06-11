@@ -15,7 +15,7 @@
 
     <properties>
         <archiva.version>2.2.3</archiva.version>
-        <ci-mvn-tools.maven.version>3.5.2</ci-mvn-tools.maven.version>
+        <ci-mvn-tools.maven.version>3.5.3</ci-mvn-tools.maven.version>
         <ci-mvn-tools.node.version>8.9.4</ci-mvn-tools.node.version>
     </properties>
 
