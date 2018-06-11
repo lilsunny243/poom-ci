@@ -61,16 +61,21 @@ public abstract class AbstractGitHubPipelineContextProvider implements PipelineC
 
         int status;
         try {
+            log.info("initializing local repo");
             status = invoker.exec(processBuilder.command("git", "init"), line -> log.info(line), line -> log.error(line));
             if(status != 0) throw new ProcessingException("git init exited with a none 0 status");
 
+            log.info("fetching remote repo : {}, {}", vars.repositoryUrl(), vars.branch());
             status = invoker.exec(processBuilder.command("git", "fetch", "-u", vars.repositoryUrl(), vars.branch()), line -> log.info(line), line -> log.error(line));
             if(status != 0) throw new ProcessingException("git fetch exited with a none 0 status");
 
+            String checkoutTarget = "FETCH_HEAD";
             if(vars.changeset() != null && ! vars.changeset().isEmpty()) {
-                status = invoker.exec(processBuilder.command("git", "checkout", vars.changeset()), line -> log.info(line), line -> log.error(line));
-                if (status != 0) throw new ProcessingException("git checkout exited with a none 0 status");
+                checkoutTarget = vars.changeset();
             }
+            log.info("checking out {}", checkoutTarget);
+            status = invoker.exec(processBuilder.command("git", "checkout", vars.changeset()), line -> log.info(line), line -> log.error(line));
+            if (status != 0) throw new ProcessingException("git checkout exited with a none 0 status");
         } catch (InterruptedException | IOException e) {
             throw new ProcessingException("exception raised whlie checking out workspace", e);
         }
