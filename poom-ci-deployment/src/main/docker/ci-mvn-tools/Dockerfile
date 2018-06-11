@@ -89,6 +89,8 @@ RUN npm i -g raml2html
 
 RUN apk add --no-cache imagemagick graphviz
 
+COPY ${org.codingmatters.poom.ci:poom-ci:jar:uber} /usr/local/lib/
+
 RUN mkdir -p /m2
 RUN mkdir -p /src
 

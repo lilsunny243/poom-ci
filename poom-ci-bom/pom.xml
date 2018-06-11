@@ -86,6 +86,11 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>poom-ci-dependency-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>poom-ci-dependency-graph</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -85,6 +85,7 @@
         <module>poom-ci-dependency-api</module>
         <module>poom-ci-dependency-service</module>
         <module>poom-ci-dependency-graph</module>
+        <module>poom-ci-dependency-client</module>
 
         <module>poom-ci-deployment</module>
         <module>poom-ci-service-bundle</module>

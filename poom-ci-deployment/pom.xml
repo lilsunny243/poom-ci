@@ -34,6 +34,10 @@
             <groupId>org.codingmatters.poom</groupId>
             <artifactId>poomjobs-registries-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.codingmatters.poom.ci</groupId>
+            <artifactId>poom-ci-utilities</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

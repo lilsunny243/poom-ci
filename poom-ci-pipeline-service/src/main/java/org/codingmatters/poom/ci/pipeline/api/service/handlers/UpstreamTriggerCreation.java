@@ -30,10 +30,10 @@ public class UpstreamTriggerCreation implements Function<UpstreamBuildTriggersPo
     public UpstreamBuildTriggersPostResponse apply(UpstreamBuildTriggersPostRequest request) {
         try {
             Entity<UpstreamBuild> trigger = this.repository.create(request.payload());
-            log.audit().info("trigger created for github push event {}", trigger);
+            log.audit().info("trigger created for upstream build {}", trigger);
 
             this.triggerCreated.accept(PipelineTrigger.builder()
-                    .type(PipelineTrigger.Type.GITHUB_PUSH)
+                    .type(PipelineTrigger.Type.UPSTREAM_BUILD)
                     .triggerId(trigger.id())
                     .build());
             return UpstreamBuildTriggersPostResponse.builder()
