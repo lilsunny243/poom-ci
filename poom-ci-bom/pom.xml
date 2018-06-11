@@ -101,6 +101,12 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>poom-ci-utilities</artifactId>
+                <version>${project.version}</version>
+                <classifier>uber</classifier>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>poom-ci-dependency-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
