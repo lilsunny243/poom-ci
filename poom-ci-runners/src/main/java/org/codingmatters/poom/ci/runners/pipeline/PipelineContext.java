@@ -44,13 +44,19 @@ public class PipelineContext {
 
 
     public void setVariablesTo(Map<String, String> env) {
-        env.put("PIPELINE_ID", this.variables.pipelineId());
-        env.put("REPOSITORY_ID", this.variables.repositoryId());
-        env.put("REPOSITORY", this.variables.repository());
-        env.put("REPOSITORY_URL", this.variables.repositoryUrl());
-        env.put("CHECKOUT_SPEC", this.variables.checkoutSpec());
-        env.put("BRANCH", this.variables.branch());
-        env.put("CHANGESET", this.variables.changeset());
+        this.putIfNotNull(env, "PIPELINE_ID", this.variables.pipelineId());
+        this.putIfNotNull(env, "REPOSITORY_ID", this.variables.repositoryId());
+        this.putIfNotNull(env, "REPOSITORY", this.variables.repository());
+        this.putIfNotNull(env,"REPOSITORY_URL", this.variables.repositoryUrl());
+        this.putIfNotNull(env,"CHECKOUT_SPEC", this.variables.checkoutSpec());
+        this.putIfNotNull(env, "BRANCH", this.variables.branch());
+        this.putIfNotNull(env, "CHANGESET", this.variables.changeset());
+    }
+
+    public void putIfNotNull(Map<String, String> env, String key, String value) {
+        if(value != null) {
+            env.put(key, value);
+        }
     }
 
     public String repository() {
