@@ -89,7 +89,9 @@ RUN npm i -g raml2html
 
 RUN apk add --no-cache imagemagick graphviz
 
-COPY ${org.codingmatters.poom.ci:poom-ci:jar:uber} /usr/local/lib/
+COPY ${org.codingmatters.poom.ci:poom-ci-utilities:jar:uber} /usr/local/lib/poom-ci-utilities.jar
+COPY trigger-downstream.sh /usr/local/bin/
+RUN chmod a+x  /usr/local/bin/trigger-downstream.sh
 
 RUN mkdir -p /m2
 RUN mkdir -p /src
