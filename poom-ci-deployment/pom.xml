@@ -12,6 +12,7 @@
 
     <artifactId>poom-ci-deployment</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
+    <packaging>pom</packaging>
 
     <properties>
         <archiva.version>2.2.3</archiva.version>

@@ -18,4 +18,13 @@
             <filtered>true</filtered>
         </fileSet>
     </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>org.codingmatters.poom.ci:poom-ci-utilities:jar:uber</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
 </assembly>

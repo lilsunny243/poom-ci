@@ -89,7 +89,7 @@ RUN npm i -g raml2html
 
 RUN apk add --no-cache imagemagick graphviz
 
-COPY ${org.codingmatters.poom.ci:poom-ci-utilities:jar:uber} /usr/local/lib/poom-ci-utilities.jar
+COPY poom-ci-utilities-${io.flexio.services.registry:flexio-service-registry-service:jar.version}-uber.jar /usr/local/lib/poom-ci-utilities.jar
 COPY trigger-downstream.sh /usr/local/bin/
 RUN chmod a+x  /usr/local/bin/trigger-downstream.sh
 
