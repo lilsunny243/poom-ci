@@ -23,10 +23,15 @@ public class GithubPipelineContextProvider extends AbstractGitHubPipelineContext
     @Override
     protected PipelineVariables createVariables(String pipelineId, PipelineTrigger trigger) throws ProcessingException {
         GithubPushEvent event = this.retrieveEvent(trigger);
+        String repositoryId = String.format(
+                "%s-%s",
+                event.repository().name().replaceAll("/", "-"),
+                this.branchFromRef(event)
+        );
         return PipelineVariables.builder()
                         .pipelineId(pipelineId)
 
-                        .repositoryId(event.repository().id().toString())
+                        .repositoryId(repositoryId)
                         .repository(event.repository().full_name())
                         .repositoryUrl(this.repositoryUrl(event))
 
