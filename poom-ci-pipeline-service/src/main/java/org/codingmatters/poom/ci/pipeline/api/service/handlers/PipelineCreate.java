@@ -41,7 +41,7 @@ public class PipelineCreate implements Function<PipelinesPostRequest, PipelinesP
                             .run(Status.Run.RUNNING)
                             .triggered(UTC.now())
                             .build())
-
+                    .name(request.payload().name())
                     .build());
             entity = this.pipelineRepository.update(entity, entity.value().withId(entity.id()));
 

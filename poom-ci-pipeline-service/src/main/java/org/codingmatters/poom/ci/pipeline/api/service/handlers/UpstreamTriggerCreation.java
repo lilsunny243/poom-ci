@@ -35,6 +35,7 @@ public class UpstreamTriggerCreation implements Function<UpstreamBuildTriggersPo
             this.triggerCreated.accept(PipelineTrigger.builder()
                     .type(PipelineTrigger.Type.UPSTREAM_BUILD)
                     .triggerId(trigger.id())
+                    .name(this.nameFrom(request.payload()))
                     .build());
             return UpstreamBuildTriggersPostResponse.builder()
                     .status201(status -> status
@@ -50,5 +51,14 @@ public class UpstreamTriggerCreation implements Function<UpstreamBuildTriggersPo
             ))
                     .build();
         }
+    }
+
+    private String nameFrom(UpstreamBuild upstream) {
+        return String.format(
+                "%s (%s) triggered by upstream build : %s",
+                upstream.downstream().name(),
+                upstream.downstream().checkoutSpec(),
+                upstream.upstream().name()
+                );
     }
 }

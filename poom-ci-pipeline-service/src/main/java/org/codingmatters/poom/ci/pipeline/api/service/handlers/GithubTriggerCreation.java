@@ -14,6 +14,7 @@ import org.codingmatters.rest.api.Processor;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class GithubTriggerCreation implements Function<GithubTriggersPostRequest, GithubTriggersPostResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggerCreation.class);
@@ -35,6 +36,7 @@ public class GithubTriggerCreation implements Function<GithubTriggersPostRequest
             this.triggerCreated.accept(PipelineTrigger.builder()
                     .type(PipelineTrigger.Type.GITHUB_PUSH)
                     .triggerId(trigger.id())
+                    .name(this.nameFrom(request.payload()))
                     .build());
             return GithubTriggersPostResponse.builder()
                     .status201(status -> status
@@ -50,5 +52,19 @@ public class GithubTriggerCreation implements Function<GithubTriggersPostRequest
                     ))
                     .build();
         }
+    }
+
+    private String nameFrom(GithubPushEvent event) {
+        String authors = "";
+        if(event.opt().commits().isPresent()) {
+            authors = event.commits().stream().map(commit -> commit.author().name()).collect(Collectors.joining(","));
+        }
+        return String.format(
+                "%s (%s-%s) triggered by push from : ",
+                event.repository().name(),
+                event.ref(),
+                event.after(),
+                authors
+        );
     }
 }
