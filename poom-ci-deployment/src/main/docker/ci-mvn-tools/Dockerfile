@@ -15,8 +15,8 @@ ARG USER_HOME_DIR="/root"
 #  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 ## END FROM
 
-RUN apk add --nocache maven
-RUN apk add --nocache nodejs yarn
+RUN apk add --no-cache maven
+RUN apk add --no-cache nodejs yarn
 
 ### from https://github.com/nodejs/docker-node/blob/db3b27c8388136b5e529861d7c3fa12fd8328301/8/alpine/Dockerfile
 #ENV NODE_VERSION ${ci-mvn-tools.node.version}
