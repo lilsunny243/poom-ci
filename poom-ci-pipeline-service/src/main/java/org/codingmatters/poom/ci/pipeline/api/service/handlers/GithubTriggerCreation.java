@@ -61,7 +61,7 @@ public class GithubTriggerCreation implements Function<GithubTriggersPostRequest
         }
         return String.format(
                 "%s (%s-%s) triggered by push from : ",
-                event.repository().name(),
+                event.opt().repository().name().orElse("none"),
                 event.ref(),
                 event.after(),
                 authors

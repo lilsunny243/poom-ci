@@ -57,7 +57,7 @@ public class PoomCIApiTest extends AbstractPoomCITest {
 
         assertThat(
                 this.repository().pipelineRepository().all(0, 1).get(0).value().trigger(),
-                is(PipelineTrigger.builder().type(PipelineTrigger.Type.GITHUB_PUSH).triggerId(triggerId).build())
+                is(PipelineTrigger.builder().type(PipelineTrigger.Type.GITHUB_PUSH).triggerId(triggerId).name("none (just-triggered-null) triggered by push from : ").build())
         );
     }
 }
