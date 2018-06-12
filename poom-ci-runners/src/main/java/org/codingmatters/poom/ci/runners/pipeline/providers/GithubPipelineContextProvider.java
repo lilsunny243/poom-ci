@@ -25,7 +25,7 @@ public class GithubPipelineContextProvider extends AbstractGitHubPipelineContext
         GithubPushEvent event = this.retrieveEvent(trigger);
         String repositoryId = String.format(
                 "%s-%s",
-                event.repository().name().replaceAll("/", "-"),
+                event.repository().full_name().replaceAll("/", "-"),
                 this.branchFromRef(event)
         );
         return PipelineVariables.builder()
