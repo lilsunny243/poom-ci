@@ -66,6 +66,7 @@
                         <configuration>
                             <attach>false</attach>
                             <appendAssemblyId>true</appendAssemblyId>
+                            <escapeString>\</escapeString>
                             <descriptors>
                                 <descriptor>${basedir}/src/main/docker/docker-assembly.xml</descriptor>
                             </descriptors>
