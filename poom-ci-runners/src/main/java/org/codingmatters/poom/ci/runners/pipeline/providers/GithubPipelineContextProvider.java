@@ -39,7 +39,6 @@ public class GithubPipelineContextProvider extends AbstractGitHubPipelineContext
                         .changeset(event.after())
 
                         .checkoutSpec(String.format("git|%s|%s", this.repositoryUrl(event), this.branchFromRef(event)))
-
                         .build();
     }
 
