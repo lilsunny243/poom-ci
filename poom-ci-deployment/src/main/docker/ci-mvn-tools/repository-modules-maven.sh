@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+set -x
 if [ $# -lt 1 ]; then
         echo "Usage: $0 <lookup dir> {json}"
         exit 1
@@ -14,6 +15,7 @@ fi
 MVN="mvn -f $LOOKUP_DIR/pom.xml"
 
 DEPS=$($MVN -q -Dexec.executable='echo' -Dexec.args='${project.groupId}:${project.artifactId}:${project.version}' exec:exec)
+#DEPS=$($MVN -Dexec.executable='echo' -Dexec.args='${project.groupId}:${project.artifactId}:${project.version}' exec:exec)
 
 if [ "$FORMAT" = "json" ]; then
     #declare -a MODULES
