@@ -216,8 +216,7 @@ public class PipelineJobProcessor implements JobProcessor {
             for (File child : file.listFiles()) {
                 this.recursiveDelete(child);
             }
-        } else {
-            file.delete();
         }
+        file.delete();
     }
 }
