@@ -14,8 +14,10 @@ import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class UpstreamBuildTriggerer {
     public static void main(String[] args) {
@@ -51,15 +53,44 @@ public class UpstreamBuildTriggerer {
 
         System.out.println("calculating downstream projects for " + upstream);
 
+        List<Downstream> downstreams = downstreams(dependencyApiUrl, dependencyAPIClient, repositoryId);
+        List<Downstream> donwstreamsDownstreams = new LinkedList<>();
+        for (Downstream downstream : downstreams) {
+            donwstreamsDownstreams.addAll(recursiveDownstreamDownstreams(dependencyApiUrl, dependencyAPIClient, downstream));
+        }
+        downstreams.removeAll(donwstreamsDownstreams);
+
+        if(args.length > 5 && args[5].equals("--dry-run")) {
+            for (Downstream downstream : downstreams) {
+                System.out.println("should trigger downstream : " + downstream);
+            }
+        } else {
+            triggerDownstreams(pipelineApiUrl, pipelineAPIClient, upstream, downstreams);
+        }
+    }
+
+    private static Set<Downstream> recursiveDownstreamDownstreams(String dependencyApiUrl, PoomCIDependencyAPIClient dependencyAPIClient, Downstream repository) {
+        Set<Downstream> results = new HashSet<>();
+
+        List<Downstream> downstreams = downstreams(dependencyApiUrl, dependencyAPIClient, repository.id());
+        if(! downstreams.isEmpty()) {
+            for (Downstream downstream : downstreams) {
+                results.addAll(recursiveDownstreamDownstreams(dependencyApiUrl, dependencyAPIClient, downstream));
+            }
+        }
+
+        results.addAll(downstreams);
+        return results;
+    }
+
+    private static List<Downstream> downstreams(String dependencyApiUrl, PoomCIDependencyAPIClient dependencyAPIClient, String repositoryId) {
+        List<Downstream> downstreams = new LinkedList<>();
         ValueList<Repository> downstreamRepositories = null;
         try {
             downstreamRepositories = dependencyAPIClient.repositories().repository().repositoryDownstreamRepositories().get(req -> req.repositoryId(repositoryId)).opt().status200().payload().orElseThrow(() -> new RuntimeException("failed getting downstream repositories"));
         } catch (IOException e) {
             throw new RuntimeException("failed connecting to dependency api at " + dependencyApiUrl, e);
         }
-
-
-        List<Downstream> downstreams = new LinkedList<>();
 
         for (Repository downstreamRepository : downstreamRepositories) {
             Downstream downstream = Downstream.builder()
@@ -72,7 +103,10 @@ public class UpstreamBuildTriggerer {
                 downstreams.add(downstream);
             }
         }
+        return downstreams;
+    }
 
+    private static void triggerDownstreams(String pipelineApiUrl, PoomCIPipelineAPIClient pipelineAPIClient, Upstream upstream, List<Downstream> downstreams) {
         for (Downstream downstream : downstreams) {
             try {
                 UpstreamBuild upstreamBuild = UpstreamBuild.builder()
@@ -86,7 +120,5 @@ public class UpstreamBuildTriggerer {
                 throw new RuntimeException("failed connecting to pipeline api at " + pipelineApiUrl, e);
             }
         }
-
-
     }
 }
