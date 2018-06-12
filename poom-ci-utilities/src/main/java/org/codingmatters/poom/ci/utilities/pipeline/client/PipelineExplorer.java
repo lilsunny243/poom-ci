@@ -42,11 +42,7 @@ public class PipelineExplorer {
             public void run(String baseUrl, Optional<String> pipeline, Optional<String> stageType, Optional<String> stage) throws Exception {
                 new PipelinesReader(baseUrl).readPipelines(
                         (pipe, trigger) -> {
-                            if(trigger.isPresent()) {
-                                System.out.printf("%s (%s) ; trigged on : %s %s\n", pipe.id(), pipe.status(), trigger.get().repository().full_name(), trigger.get().ref());
-                            } else {
-                                System.out.printf("%s (%s)\n", pipe.id(), pipe.status());
-                            }
+                            System.out.printf("%s (%s) - %s ()\n", pipe.id(), pipe.status(), pipe.name(), pipe.trigger().type());
                         }
                 );
             }
