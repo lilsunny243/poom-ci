@@ -75,14 +75,14 @@ public class UpstreamBuildTriggerer {
         }
 
         for (Downstream downstream : downstreams) {
-
             try {
                 UpstreamBuild upstreamBuild = UpstreamBuild.builder()
                         .upstream(upstream)
                         .downstream(downstream)
                         .build();
-                log.info("triggered downstream {}", downstream);
+                System.out.println("triggering downstream " + downstream);
                 pipelineAPIClient.triggers().upstreamBuildTriggers().post(req -> req.payload(upstreamBuild)).opt().status201().orElseThrow(() -> new RuntimeException("failed triggering downstream build"));
+                System.out.println("done triggering downstream " + downstream);
             } catch (IOException e) {
                 throw new RuntimeException("failed connecting to pipeline api at " + pipelineApiUrl, e);
             }
