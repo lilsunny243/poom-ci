@@ -1,4 +1,4 @@
-package org.codingmatters.poom.ci.utilities.pipeline.client.org.codingmatters.poom.ci.utilities.upstream;
+package org.codingmatters.poom.ci.utilities.upstream;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import org.codingmatters.poom.ci.dependency.api.ValueList;
@@ -10,13 +10,16 @@ import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIRequesterClien
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.ci.triggers.upstreambuild.Downstream;
 import org.codingmatters.poom.ci.triggers.upstreambuild.Upstream;
+import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class UpstreamBuildTriggerer {
-
+    static private final CategorizedLogger log = CategorizedLogger.getLogger(UpstreamBuildTriggerer.class);
 
     public static void main(String[] args) {
         if(args.length < 5) {
@@ -56,23 +59,35 @@ public class UpstreamBuildTriggerer {
             throw new RuntimeException("failed connecting to dependency api at " + dependencyApiUrl, e);
         }
 
-        for (Repository downstreamRepository : downstreamRepositories) {
-            try {
-                Downstream downstream = Downstream.builder()
-                        .id(downstreamRepository.id())
-                        .name(downstreamRepository.name())
-                        .checkoutSpec(downstreamRepository.checkoutSpec())
-                        .build();
 
+        List<Downstream> downstreams = new LinkedList<>();
+
+        for (Repository downstreamRepository : downstreamRepositories) {
+            Downstream downstream = Downstream.builder()
+                    .id(downstreamRepository.id())
+                    .name(downstreamRepository.name())
+                    .checkoutSpec(downstreamRepository.checkoutSpec())
+                    .build();
+
+            if(! downstreams.contains(downstream)) {
+                downstreams.add(downstream);
+            }
+        }
+
+        for (Downstream downstream : downstreams) {
+
+            try {
                 UpstreamBuild upstreamBuild = UpstreamBuild.builder()
                         .upstream(upstream)
                         .downstream(downstream)
                         .build();
+                log.info("triggered downstream {}", downstream);
                 pipelineAPIClient.triggers().upstreamBuildTriggers().post(req -> req.payload(upstreamBuild)).opt().status201().orElseThrow(() -> new RuntimeException("failed triggering downstream build"));
             } catch (IOException e) {
                 throw new RuntimeException("failed connecting to pipeline api at " + pipelineApiUrl, e);
             }
         }
+
 
     }
 }
