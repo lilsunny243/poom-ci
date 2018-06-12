@@ -8,9 +8,10 @@ import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
 import org.codingmatters.poomjobs.api.types.Job;
 import org.codingmatters.poomjobs.api.types.job.Status;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -84,6 +85,9 @@ public class PipelineJobProcessorTest {
                 .build();
     }
 
+    @Rule
+    public TemporaryFolder dir = new TemporaryFolder();
+
     private final List<PipelineTrigger> contextProviderCalls = Collections.synchronizedList(new LinkedList<>());
     private PipelineContext.PipelineContextProvider testContextProvider = (pipelineId, trigger) -> {
         contextProviderCalls.add(trigger);
@@ -100,7 +104,7 @@ public class PipelineJobProcessorTest {
                         stage -> stage.name("stage1"),
                         stage -> stage.name("stage2")
                 )
-                .build(), new File("./"), new File("./"));
+                .build(), dir.newFolder(), dir.newFolder());
     };
 
     private final AtomicInteger execInitCount = new AtomicInteger(0);

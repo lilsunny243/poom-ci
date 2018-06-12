@@ -205,7 +205,9 @@ public class PipelineJobProcessor implements JobProcessor {
     }
 
     private void cleanup(PipelineContext context) {
+        log.info("deleting workspace : " + context.workspace());
         this.recursiveDelete(context.workspace());
+        log.info("deleting sources : " + context.sources());
         this.recursiveDelete(context.sources());
     }
 
