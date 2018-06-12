@@ -6,6 +6,7 @@
     <formats>
         <format>dir</format>
     </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
 
     <fileSets>
         <fileSet>
@@ -21,7 +22,7 @@
 
     <dependencySets>
         <dependencySet>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>/ci-mvn-tools/</outputDirectory>
             <includes>
                 <include>org.codingmatters.poom.ci:poom-ci-utilities:jar:uber</include>
             </includes>

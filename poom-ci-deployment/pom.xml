@@ -58,14 +58,14 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>deployment</id>
+                        <id>docker-image-build</id>
                         <goals>
                             <goal>single</goal>
                         </goals>
                         <phase>package</phase>
                         <configuration>
-                            <attach>true</attach>
-                            <appendAssemblyId>false</appendAssemblyId>
+                            <attach>false</attach>
+                            <appendAssemblyId>true</appendAssemblyId>
                             <descriptors>
                                 <descriptor>${basedir}/src/main/docker/docker-assembly.xml</descriptor>
                             </descriptors>
