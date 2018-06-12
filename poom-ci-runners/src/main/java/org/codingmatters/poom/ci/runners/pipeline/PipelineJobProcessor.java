@@ -13,6 +13,7 @@ import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poomjobs.api.types.Job;
 import org.codingmatters.poomjobs.api.types.job.Status;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -58,6 +59,8 @@ public class PipelineJobProcessor implements JobProcessor {
 
         log.audit().info("successfully executed pipeline {} with exit status {}", context.pipelineId(), status);
         this.notifyPipelineTerminationStatus(context, status);
+
+        this.cleanup(context);
 
         return this.job
                 .withStatus(Status.builder().run(Status.Run.DONE).exit(Status.Exit.SUCCESS).build())
@@ -198,6 +201,21 @@ public class PipelineJobProcessor implements JobProcessor {
                     context.pipelineId(), status),
                     e);
             throw new JobProcessingException("error executing pipeline, see logs with error-token=" + errorToken);
+        }
+    }
+
+    private void cleanup(PipelineContext context) {
+        this.recursiveDelete(context.workspace());
+        this.recursiveDelete(context.sources());
+    }
+
+    private void recursiveDelete(File file) {
+        if(file.isDirectory()) {
+            for (File child : file.listFiles()) {
+                this.recursiveDelete(child);
+            }
+        } else {
+            file.delete();
         }
     }
 }
