@@ -10,7 +10,6 @@ import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIRequesterClien
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.ci.triggers.upstreambuild.Downstream;
 import org.codingmatters.poom.ci.triggers.upstreambuild.Upstream;
-import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 
@@ -19,8 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class UpstreamBuildTriggerer {
-    static private final CategorizedLogger log = CategorizedLogger.getLogger(UpstreamBuildTriggerer.class);
-
     public static void main(String[] args) {
         if(args.length < 5) {
             throw new RuntimeException("usage : <pipeline base url> <dependencies base url> <repository id> <repository name> <checkout spec>");
@@ -51,6 +48,8 @@ public class UpstreamBuildTriggerer {
                 .name(repositoryName)
                 .checkoutSpec(checkoutSpec)
                 .build();
+
+        System.out.println("calculating downstream projects for " + upstream);
 
         ValueList<Repository> downstreamRepositories = null;
         try {
