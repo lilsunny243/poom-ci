@@ -46,6 +46,10 @@ onError:
     exec:
       - $NOTIFY --data-urlencode "status=1" --data-urlencode "current-stage="
 
+cleanup:
+  - name: maven-clean
+    exec:
+      - $MVN clean
 
 
 env:
