@@ -4,8 +4,7 @@ RUN apk add --no-cache curl tar bash fontconfig ttf-dejavu git imagemagick graph
 RUN npm i -g raml2html
 
 COPY poom-ci-utilities-${org.codingmatters.poom.ci:poom-ci-utilities:jar:uber.version}-uber.jar /usr/local/lib/poom-ci-utilities.jar
-COPY trigger-downstream.sh /usr/local/bin/
-COPY upload-project-metadata.sh /usr/local/bin/
+COPY *.sh /usr/local/bin/
 RUN chmod a+x  /usr/local/bin/*.sh
 
 RUN mkdir -p /m2
