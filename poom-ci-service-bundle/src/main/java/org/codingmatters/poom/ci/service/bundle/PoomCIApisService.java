@@ -13,6 +13,7 @@ import org.codingmatters.poom.poomjobs.domain.values.jobs.JobQuery;
 import org.codingmatters.poom.poomjobs.domain.values.jobs.JobValue;
 import org.codingmatters.poom.poomjobs.domain.values.runners.RunnerQuery;
 import org.codingmatters.poom.poomjobs.domain.values.runners.RunnerValue;
+import org.codingmatters.poom.runner.manager.DefaultRunnerClientFactory;
 import org.codingmatters.poom.runner.manager.RunnerInvokerListener;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -22,6 +23,7 @@ import org.codingmatters.poomjobs.service.PoomjobsRunnerRegistryAPI;
 import org.codingmatters.poomjobs.service.api.PoomjobsJobRegistryAPIProcessor;
 import org.codingmatters.poomjobs.service.api.PoomjobsRunnerRegistryAPIProcessor;
 import org.codingmatters.rest.api.Processor;
+import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.processors.MatchingPathProcessor;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 
@@ -51,7 +53,7 @@ public class PoomCIApisService {
                 PoomCIPipelineService.api(),
                 dependencyApi(jsonFactory),
                 runnerRegistryAPI,
-                jobRegistryAPI(runnerRegistryAPI, clientPool)
+                jobRegistryAPI(runnerRegistryAPI, clientPool, jsonFactory, OkHttpClientWrapper.build())
         );
         service.start();
 
@@ -84,15 +86,14 @@ public class PoomCIApisService {
         return new PoomjobsRunnerRegistryAPI(runnerRepository);
     }
 
-    static public PoomjobsJobRegistryAPI jobRegistryAPI(PoomjobsRunnerRegistryAPI runnerRegistryApi, ExecutorService clientPool) {
+    static public PoomjobsJobRegistryAPI jobRegistryAPI(PoomjobsRunnerRegistryAPI runnerRegistryApi, ExecutorService clientPool, JsonFactory jsonFactory, OkHttpClientWrapper client) {
         Repository<JobValue, JobQuery> jobRepository = JobRepository.createInMemory();
         PoomjobsRunnerRegistryAPIHandlersClient runnerRegistryClient = new PoomjobsRunnerRegistryAPIHandlersClient(
                 runnerRegistryApi.handlers(),
                 clientPool
         );
         return new PoomjobsJobRegistryAPI(
-                jobRepository,
-                new RunnerInvokerListener(runnerRegistryClient)
+                jobRepository, new RunnerInvokerListener(runnerRegistryClient, new DefaultRunnerClientFactory(jsonFactory, client))
         );
     }
 
