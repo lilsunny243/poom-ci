@@ -2,7 +2,6 @@ package org.codingmatters.poom.ci.pipeline.api.service;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Undertow;
-import okhttp3.OkHttpClient;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PeriodicalOperator;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.StageLogSegmentedRepository;
@@ -11,6 +10,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
 import org.codingmatters.poom.client.PoomjobsJobRegistryAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
+import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 
@@ -95,7 +95,7 @@ public class PoomCIPipelineService {
 
         String jobRegistryUrl = Env.mandatory("JOB_REGISTRY_URL").asString();
         return new PoomCIApi(repository, "/pipelines", jsonFactory, new PoomjobsJobRegistryAPIRequesterClient(
-                new OkHttpRequesterFactory(new OkHttpClient()), jsonFactory, jobRegistryUrl
+                new OkHttpRequesterFactory(OkHttpClientWrapper.build()), jsonFactory, jobRegistryUrl
         ));
     }
 

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Handlers;
 import io.undertow.Undertow;
 import io.undertow.server.handlers.PathHandler;
-import okhttp3.OkHttpClient;
 import org.codingmatters.poom.ci.github.webhook.api.GithubWebhookAPIHandlers;
 import org.codingmatters.poom.ci.github.webhook.api.service.GithubWebhookAPIProcessor;
 import org.codingmatters.poom.ci.github.webhook.handlers.GithubWebhook;
@@ -14,6 +13,7 @@ import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.rest.api.RequestDelegate;
 import org.codingmatters.rest.api.ResponseDelegate;
+import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 
@@ -44,7 +44,7 @@ public class GithubWebhookService {
         String pipelineUrl = Env.mandatory(PIPELINE_API_URL).asString();
 
         JsonFactory jsonFactory = new JsonFactory();
-        PoomCIPipelineAPIClient pipelineClient = new PoomCIPipelineAPIRequesterClient(new OkHttpRequesterFactory(new OkHttpClient()), jsonFactory, pipelineUrl);
+        PoomCIPipelineAPIClient pipelineClient = new PoomCIPipelineAPIRequesterClient(new OkHttpRequesterFactory(OkHttpClientWrapper.build()), jsonFactory, pipelineUrl);
         new GithubWebhookService(host, port, token, jsonFactory, pipelineClient).start();
 
         log.info("started...");

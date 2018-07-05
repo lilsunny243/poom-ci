@@ -2,7 +2,6 @@ package org.codingmatters.poom.ci.runners;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import okhttp3.OkHttpClient;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIRequesterClient;
@@ -16,6 +15,7 @@ import org.codingmatters.poom.runner.exception.RunnerInitializationException;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.rest.api.client.RequesterFactory;
+import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 
 import java.io.FileInputStream;
@@ -93,7 +93,7 @@ public class PoomCIRunner {
         JsonFactory jsonFactory = new JsonFactory();
         YAMLFactory yamlFactory = new YAMLFactory();
 
-        RequesterFactory requesterFactory = new OkHttpRequesterFactory(new OkHttpClient());
+        RequesterFactory requesterFactory = new OkHttpRequesterFactory(OkHttpClientWrapper.build());
 
         PoomjobsJobRegistryAPIClient jobRegistryAPIClient = new PoomjobsJobRegistryAPIRequesterClient(
                 requesterFactory,
