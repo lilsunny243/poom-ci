@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.runners.pipeline.providers.downstream;
 import org.codingmatters.poom.ci.pipeline.api.PoomCIPipelineAPIHandlers;
 import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggerGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggerGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggerPatchResponse;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIHandlersClient;
@@ -20,6 +21,9 @@ public class DownstreamPipelineContextVariablesTest {
     private PoomCIPipelineAPIClient pipelineAPIClient = new PoomCIPipelineAPIHandlersClient(
             new PoomCIPipelineAPIHandlers.Builder()
                     .upstreamBuildTriggerGetHandler(this::trigger)
+                    .upstreamBuildTriggerPatchHandler(r -> UpstreamBuildTriggerPatchResponse.builder()
+                            .status200(status -> status.payload(r.payload()))
+                            .build())
                     .build(),
             Executors.newFixedThreadPool(4));
 
