@@ -1,6 +1,7 @@
 package org.codingmatters.poom.ci.runners.pipeline.providers.downstream;
 
 import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggerGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggerPatchResponse;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineVariables;
@@ -25,6 +26,7 @@ public class DownstreamPipelineContextVariables {
 
     public PipelineVariables variables() throws AbstractGitHubPipelineContextProvider.ProcessingException {
         UpstreamBuild build = this.retrieveTrigger(this.trigger);
+        this.consumeTrigger(build);
 
         //git|git@github.com:flexiooss/codingmatters-rest.git|master
         String[] splittedCheckoutSpec = build.downstream().checkoutSpec().split("\\|");
@@ -40,9 +42,21 @@ public class DownstreamPipelineContextVariables {
                 .build();
     }
 
+    private void consumeTrigger(UpstreamBuild build) throws AbstractGitHubPipelineContextProvider.ProcessingException {
+        try {
+            UpstreamBuildTriggerPatchResponse response = this.pipelineAPIClient.triggers().upstreamBuildTriggers().upstreamBuildTrigger().patch(
+                    req -> req.triggerId(this.trigger.triggerId()).payload(build.withConsumed(true))
+            );
+        } catch (IOException e) {
+            throw new AbstractGitHubPipelineContextProvider.ProcessingException("failed updating build as being consumed", e);
+        }
+    }
+
     private UpstreamBuild retrieveTrigger(PipelineTrigger trigger) throws AbstractGitHubPipelineContextProvider.ProcessingException {
         try {
-            UpstreamBuildTriggerGetResponse response = this.pipelineAPIClient.triggers().upstreamBuildTriggers().upstreamBuildTrigger().get(req -> req.triggerId(trigger.triggerId()));
+            UpstreamBuildTriggerGetResponse response = this.pipelineAPIClient.triggers().upstreamBuildTriggers().upstreamBuildTrigger().get(
+                    req -> req.triggerId(trigger.triggerId())
+            );
 
             return response.opt().status200().payload()
                     .orElseThrow(() -> {
@@ -50,7 +64,7 @@ public class DownstreamPipelineContextVariables {
                         return new AbstractGitHubPipelineContextProvider.ProcessingException("error getting pipeline trigger, see logs with token " + token);
                     });
         } catch (IOException e) {
-            throw new AbstractGitHubPipelineContextProvider.ProcessingException("failed accessing pipeline api");
+            throw new AbstractGitHubPipelineContextProvider.ProcessingException("failed accessing pipeline api", e);
         }
     }
 }

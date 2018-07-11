@@ -41,6 +41,7 @@ public class PoomCIApi {
                 .upstreamBuildTriggersPostHandler(new UpstreamTriggerCreation(this.repository, this::triggerCreated))
                 .upstreamBuildTriggersGetHandler(new UpstreamTriggerBrowsing(this.repository))
                 .upstreamBuildTriggerGetHandler(new UpstreamTriggerGet(this.repository))
+                .upstreamBuildTriggerPatchHandler(new UpstreamTriggerPatch(this.repository))
 
                 .pipelinesGetHandler(new PipelinesBrowsing(this.repository))
                 .pipelinesPostHandler(new PipelineCreate(this.repository, this::pipelineCreated))
