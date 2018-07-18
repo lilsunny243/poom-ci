@@ -3,7 +3,7 @@ FROM openjdk:8-alpine
 RUN apk add --no-cache curl tar bash fontconfig ttf-dejavu git imagemagick graphviz maven nodejs yarn
 RUN npm i -g raml2html
 
-COPY poom-ci-utilities-${org.codingmatters.poom.ci:poom-ci-utilities:jar:uber.version}-uber.jar /usr/local/lib/poom-ci-utilities.jar
+COPY poom-ci-utilities.jar /usr/local/lib/poom-ci-utilities.jar
 COPY *.sh /usr/local/bin/
 RUN chmod a+x  /usr/local/bin/*.sh
 
