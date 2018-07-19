@@ -1,4 +1,4 @@
-FROM registry.containers.ovh.net/flexio/r:1.0.0
+FROM registry.containers.ovh.net/flexio/minimal_interpretors:1.0.0
 
 
 ENV APT_FLAGS="--no-install-recommends -y"
