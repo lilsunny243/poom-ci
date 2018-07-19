@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggersGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggersGetResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.UpstreamBuildQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
@@ -15,7 +16,7 @@ import java.util.function.Function;
 public class UpstreamTriggerBrowsing implements Function<UpstreamBuildTriggersGetRequest, UpstreamBuildTriggersGetResponse> {
     static private CategorizedLogger log = CategorizedLogger.getLogger(UpstreamTriggerBrowsing.class);
 
-    private final Repository<UpstreamBuild, String> repository;
+    private final Repository<UpstreamBuild, UpstreamBuildQuery> repository;
 
     public UpstreamTriggerBrowsing(PoomCIRepository repository) {
         this.repository = repository.upstreamBuildRepository();
@@ -23,7 +24,7 @@ public class UpstreamTriggerBrowsing implements Function<UpstreamBuildTriggersGe
 
     @Override
     public UpstreamBuildTriggersGetResponse apply(UpstreamBuildTriggersGetRequest request) {
-        Rfc7233Pager<UpstreamBuild, String> pager = Rfc7233Pager
+        Rfc7233Pager<UpstreamBuild, UpstreamBuildQuery> pager = Rfc7233Pager
                 .forRequestedRange(request.range())
                 .unit("UpstreamBuild")
                 .maxPageSize(100)

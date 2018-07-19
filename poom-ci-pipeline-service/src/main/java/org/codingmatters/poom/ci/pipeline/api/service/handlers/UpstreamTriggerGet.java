@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggerGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.UpstreamBuildTriggerGetResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.UpstreamBuildQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
@@ -15,7 +16,7 @@ import java.util.function.Function;
 public class UpstreamTriggerGet implements Function<UpstreamBuildTriggerGetRequest, UpstreamBuildTriggerGetResponse> {
     static private CategorizedLogger log = CategorizedLogger.getLogger(UpstreamTriggerGet.class);
 
-    private final Repository<UpstreamBuild, String> repository;
+    private final Repository<UpstreamBuild, UpstreamBuildQuery> repository;
 
     public UpstreamTriggerGet(PoomCIRepository repository) {
         this.repository = repository.upstreamBuildRepository();

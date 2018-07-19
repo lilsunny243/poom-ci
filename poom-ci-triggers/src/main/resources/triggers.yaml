@@ -10,6 +10,7 @@ GithubPushEvent:
   head_commit: $GHCommit
   repository: $GHRepository
   received: date-time
+  consumed: bool
 
 GHAuthor:
   name: string
@@ -52,3 +53,4 @@ UpstreamBuild:
     id: string
     name: string
     checkoutSpec: string
+  consumed: bool

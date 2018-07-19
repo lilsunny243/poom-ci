@@ -33,6 +33,9 @@ mediaType: application/json
             trigger-id: string
          get:
             is: [{resourceRead: {elementType: UpstreamBuild}}]
+         patch:
+            is: [{resourceUpdate: {elementType: UpstreamBuild, elementTypeChangeData: UpstreamBuild}}]
+
 
 /pipelines:
    displayName: Pipelines

@@ -23,3 +23,7 @@ stageLogQuery:
   withPipelineId: string
   withStageName: string
   withStageType: string
+
+upstreamBuildQuery:
+  withDownstreamId: string
+  withConsumed: bool
