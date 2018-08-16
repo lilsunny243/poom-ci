@@ -56,7 +56,7 @@ public class UpstreamBuildTriggerer {
         List<Downstream> downstreams = downstreams(dependencyApiUrl, dependencyAPIClient, repositoryId);
         List<Downstream> donwstreamsDownstreams = new LinkedList<>();
         for (Downstream downstream : downstreams) {
-            donwstreamsDownstreams.addAll(recursiveDownstreamDownstreams(dependencyApiUrl, dependencyAPIClient, downstream));
+            donwstreamsDownstreams.addAll(recursiveDownstreamDownstreams(dependencyApiUrl, dependencyAPIClient, downstream, donwstreamsDownstreams));
         }
         downstreams.removeAll(donwstreamsDownstreams);
 
@@ -69,13 +69,15 @@ public class UpstreamBuildTriggerer {
         }
     }
 
-    private static Set<Downstream> recursiveDownstreamDownstreams(String dependencyApiUrl, PoomCIDependencyAPIClient dependencyAPIClient, Downstream repository) {
+    private static Set<Downstream> recursiveDownstreamDownstreams(String dependencyApiUrl, PoomCIDependencyAPIClient dependencyAPIClient, Downstream repository, List<Downstream> alreadIn) {
         Set<Downstream> results = new HashSet<>();
 
         List<Downstream> downstreams = downstreams(dependencyApiUrl, dependencyAPIClient, repository.id());
         if(! downstreams.isEmpty()) {
             for (Downstream downstream : downstreams) {
-                results.addAll(recursiveDownstreamDownstreams(dependencyApiUrl, dependencyAPIClient, downstream));
+                if(! alreadIn.contains(downstream)) {
+                    results.addAll(recursiveDownstreamDownstreams(dependencyApiUrl, dependencyAPIClient, downstream, alreadIn));
+                }
             }
         }
 
