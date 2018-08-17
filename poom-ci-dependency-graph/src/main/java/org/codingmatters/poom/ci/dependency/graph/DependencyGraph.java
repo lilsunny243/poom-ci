@@ -3,9 +3,7 @@ package org.codingmatters.poom.ci.dependency.graph;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Edge;
-import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
 import org.codingmatters.poom.ci.dependency.api.types.Module;
 import org.codingmatters.poom.ci.dependency.api.types.Repository;
 
@@ -14,16 +12,10 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.otherV;
-import static org.apache.tinkerpop.gremlin.structure.io.IoCore.graphml;
 
-public class DependencyGraph {
-    public static final String DEPENDS_ON_PREDICATE = "depends-on";
-    public static final String PRODUCES_PREDICATE = "produces";
-    public static final String REPOSITORY_LABEL = "repository";
-    public static final String MODULE_LABEL = "module";
+public class DependencyGraph extends AbstractRepositoryGraph<DependencyGraph> {
 
     private final Optional<File> backupFile;
-    private final Graph graph = TinkerGraph.open();
 
     public DependencyGraph() throws IOException {
         this(null);
@@ -40,38 +32,10 @@ public class DependencyGraph {
         this.loadBackup();
     }
 
-    public DependencyGraph add(Repository ... repositories) throws IOException {
-        for (Repository repository : repositories) {
-            if(! this.repositoryQuery(this.graph.traversal(), repository).hasNext()) {
-                this.graph.traversal().addV(REPOSITORY_LABEL)
-                        .property("id", repository.id())
-                        .property("name", repository.name())
-                        .property("checkoutSpec", repository.checkoutSpec())
-                        .next();
-                this.backup();
-            }
-        }
-        return this;
-    }
-
-    public Repository update(Repository repository) throws IOException {
-        GraphTraversal<Vertex, Vertex> repo = this.repositoryVertexById(repository.id());
-        if(repo.hasNext()) {
-            this.graph.traversal().V(repo.next().id())
-                    .property("id", repository.id())
-                    .property("name", repository.name())
-                    .property("checkoutSpec", repository.checkoutSpec())
-                    .next();
-        } else {
-            this.add(repository);
-        }
-        return repository;
-    }
-
     public DependencyGraph add(Module ... modules) throws IOException {
         for (Module module : modules) {
-            if(! this.moduleQuery(this.graph.traversal(), module).hasNext()) {
-                this.graph.traversal().addV(MODULE_LABEL)
+            if(! this.moduleQuery(this.traversal(), module).hasNext()) {
+                this.traversal().addV(MODULE_LABEL)
                         .property("spec", module.spec())
                         .property("version", module.version())
                         .next();
@@ -94,13 +58,13 @@ public class DependencyGraph {
         boolean changed = false;
         this.add(repository).add(modules);
 
-        Vertex repoVertex = this.repositoryQuery(this.graph.traversal(), repository).next();
+        Vertex repoVertex = this.repositoryQuery(this.traversal(), repository).next();
 
         for (Module module : modules) {
-            Vertex moduleVertex = this.moduleQuery(this.graph.traversal(), module).next();
-            GraphTraversal<Vertex, Edge> existingEdge = this.graph.traversal().V(repoVertex.id()).bothE(predicate).where(otherV().hasId(moduleVertex.id()));
+            Vertex moduleVertex = this.moduleQuery(this.traversal(), module).next();
+            GraphTraversal<Vertex, Edge> existingEdge = this.traversal().V(repoVertex.id()).bothE(predicate).where(otherV().hasId(moduleVertex.id()));
             if(! existingEdge.hasNext()) {
-                this.graph.traversal().addE(predicate).from(repoVertex).to(moduleVertex).next();
+                this.traversal().addE(predicate).from(repoVertex).to(moduleVertex).next();
                 changed = true;
             }
         }
@@ -111,32 +75,9 @@ public class DependencyGraph {
         return this;
     }
 
-    public Optional<Repository> repositoryById(String id) {
-        GraphTraversal<Vertex, Vertex> repo = this.repositoryVertexById(id);
-        if(repo.hasNext()) {
-            return Optional.of(this.repositoryFrom(repo.next()));
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    private GraphTraversal<Vertex, Vertex> repositoryVertexById(String id) {
-        return this.graph.traversal().V().hasLabel(REPOSITORY_LABEL).has("id", id);
-    }
-
-    public Repository[] repositories() {
-        List<Repository> result = new LinkedList<>();
-        GraphTraversal<Vertex, Vertex> repos = this.graph.traversal().V().hasLabel(REPOSITORY_LABEL);
-        while(repos.hasNext()) {
-            Vertex vertex = repos.next();
-            result.add(this.repositoryFrom(vertex));
-        }
-        return result.toArray(new Repository[result.size()]);
-    }
-
     public Module[] modules() {
         List<Module> result = new LinkedList<>();
-        GraphTraversal<Vertex, Vertex> repos = this.graph.traversal().V().hasLabel(MODULE_LABEL);
+        GraphTraversal<Vertex, Vertex> repos = this.traversal().V().hasLabel(MODULE_LABEL);
         while(repos.hasNext()) {
             Vertex vertex = repos.next();
             result.add(this.moduleFrom(vertex));
@@ -146,7 +87,7 @@ public class DependencyGraph {
 
     public Module[] produced(Repository repository) {
         Set<Module> results = new HashSet<>();
-        GraphTraversal<Vertex, Vertex> targets = this.repositoryQuery(this.graph.traversal(), repository)
+        GraphTraversal<Vertex, Vertex> targets = this.repositoryQuery(this.traversal(), repository)
                 .out(PRODUCES_PREDICATE).hasLabel(MODULE_LABEL);
         while(targets.hasNext()) {
             results.add(this.moduleFrom(targets.next()));
@@ -157,7 +98,7 @@ public class DependencyGraph {
     public Repository[] depending(Module module) throws IOException {
         this.add(module);
         Set<Repository> results = new HashSet<>();
-        GraphTraversal<Vertex, Vertex> sources = this.moduleQuery(this.graph.traversal(), module)
+        GraphTraversal<Vertex, Vertex> sources = this.moduleQuery(this.traversal(), module)
                 .in(DEPENDS_ON_PREDICATE).hasLabel(REPOSITORY_LABEL);
         while(sources.hasNext()) {
             results.add(this.repositoryFrom(sources.next()));
@@ -167,7 +108,7 @@ public class DependencyGraph {
 
     public Module[] dependencies(Repository repository) {
         Set<Module> result = new HashSet<>();
-        GraphTraversal<Vertex, Vertex> modules = this.repositoryQuery(this.graph.traversal(), repository)
+        GraphTraversal<Vertex, Vertex> modules = this.repositoryQuery(this.traversal(), repository)
                 .out(DEPENDS_ON_PREDICATE).hasLabel(MODULE_LABEL);
         while(modules.hasNext()) {
             result.add(this.moduleFrom(modules.next()));
@@ -177,7 +118,7 @@ public class DependencyGraph {
 
     public Repository[] downstream(Repository repository) {
         Set<Repository> result = new HashSet<>();
-        GraphTraversal<Vertex, Vertex> downstream = this.repositoryQuery(this.graph.traversal(), repository)
+        GraphTraversal<Vertex, Vertex> downstream = this.repositoryQuery(this.traversal(), repository)
                 .out(PRODUCES_PREDICATE).hasLabel(MODULE_LABEL)
                 .in(DEPENDS_ON_PREDICATE).hasLabel(REPOSITORY_LABEL).as("downstream")
                 .select("downstream");
@@ -189,12 +130,8 @@ public class DependencyGraph {
         return result.toArray(new Repository[result.size()]);
     }
 
-
-    private GraphTraversal<Vertex, Vertex> repositoryQuery(GraphTraversalSource traversal, Repository repository) {
-        return traversal
-                .V().hasLabel("repository")
-                .has("id", repository.id())
-                ;
+    public DownstreamGraph downstreamGraph(Repository repository) throws IOException {
+        return DownstreamGraph.from(this, repository);
     }
 
 
@@ -203,14 +140,6 @@ public class DependencyGraph {
                 .V().hasLabel("module")
                 .has("spec", module.spec())
                 .has("version", module.version());
-    }
-
-    private Repository repositoryFrom(Vertex vertex) {
-        return Repository.builder()
-                .id(vertex.value("id").toString())
-                .name(vertex.value("name").toString())
-                .checkoutSpec(vertex.value("checkoutSpec").toString())
-                .build();
     }
 
     private Module moduleFrom(Vertex vertex) {
@@ -222,27 +151,33 @@ public class DependencyGraph {
 
     private void backup() throws IOException {
         if(this.backupFile.isPresent()) {
-            this.graph.io(graphml()).writeGraph(this.backupFile.get().getAbsolutePath());
+            this.io().writeGraph(this.backupFile.get().getAbsolutePath());
         }
     }
 
     private void loadBackup() throws IOException {
         if(this.hasBackup()) {
-            this.graph.io(graphml()).readGraph(this.backupFile.get().getAbsolutePath());
+            this.io().readGraph(this.backupFile.get().getAbsolutePath());
         }
     }
+
 
     private boolean hasBackup() {
         return this.backupFile.isPresent() && this.backupFile.get().exists() && this.backupFile.get().length() > 0;
     }
 
     public DependencyGraph resetDependencies(Repository repository) {
-        this.repositoryQuery(this.graph.traversal(), repository).outE(DEPENDS_ON_PREDICATE).drop().iterate();
+        this.repositoryQuery(this.traversal(), repository).outE(DEPENDS_ON_PREDICATE).drop().iterate();
         return this;
     }
 
     public DependencyGraph resetProduced(Repository repository) {
-        this.repositoryQuery(this.graph.traversal(), repository).outE(PRODUCES_PREDICATE).drop().iterate();
+        this.repositoryQuery(this.traversal(), repository).outE(PRODUCES_PREDICATE).drop().iterate();
         return this;
+    }
+
+    @Override
+    protected void graphChanged() throws IOException {
+        this.backup();
     }
 }

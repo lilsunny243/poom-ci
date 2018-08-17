@@ -26,7 +26,9 @@ public class DependencyApi {
                 .repositoryGetHandler(new RepositoryGet(this.dependencyGraph))
                 .repositoryDependenciesGetHandler(new RepositoryDependenciesGet(this.dependencyGraph))
                 .repositoryModulesGetHandler(new RepositoryModulesGet(this.dependencyGraph))
+
                 .repositoryDownstreamRepositoriesGetHandler(new RepositoryDownstreamGet(this.dependencyGraph))
+                .repositoryJustNextDownstreamRepositoriesGetHandler(new RepositoryJustNextDownstreamGet(this.dependencyGraph))
 
                 .repositoryPutHandler(new RepositoryPut(this.dependencyGraph))
                 .repositoryDependenciesPostHandler(new RepositoryDependencyPost(this.dependencyGraph))

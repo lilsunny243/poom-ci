@@ -35,7 +35,7 @@ onSuccess:
     exec:
       - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
       - $UPLOAD_PROJECT_METADATA
-      - $TRIGGER_DOWNSTREAM
+#      - $TRIGGER_DOWNSTREAM
   - name: notify-flexio
     exec:
       - $NOTIFY --data-urlencode "status=0" --data-urlencode "current-stage="

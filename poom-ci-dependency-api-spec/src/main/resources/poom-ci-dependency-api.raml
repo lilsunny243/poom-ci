@@ -107,6 +107,18 @@ mediaType: application/json
                500:
                   body: Error
 
+         /just-next:
+            displayName: RepositoryJustNextDownstreamRepositories
+            get:
+               responses:
+                  200:
+                     body: Repository[]
+                  400:
+                     body: Error
+                  404:
+                     body: Error
+                  500:
+                     body: Error
 
 
 types:
