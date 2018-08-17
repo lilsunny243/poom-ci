@@ -61,7 +61,6 @@ public class DownstreamGraph extends AbstractRepositoryGraph {
 
         GraphTraversal<Vertex, Edge> existingEdge = this.traversal().V(fromVertex.id()).bothE(DOWNSTREAM_PREDICATE).where(otherV().hasId(toVertex.id()));
         if(! existingEdge.hasNext()) {
-            System.out.println("[" + fromVertex + " -> " + toVertex + "] adding : " + from.id() +  " to " + to.id() );
             this.traversal().addE(DOWNSTREAM_PREDICATE).from(fromVertex).to(toVertex).next();
         }
         return this;
@@ -96,6 +95,8 @@ public class DownstreamGraph extends AbstractRepositoryGraph {
         while(targets.hasNext()) {
             secondLevelLinkedRepositoryId.add(targets.next().value("id"));
         }
+
+        System.out.println(secondLevelLinkedRepositoryId);
 
         List<Repository> result = new LinkedList<>();
         for (Repository repository : direct) {

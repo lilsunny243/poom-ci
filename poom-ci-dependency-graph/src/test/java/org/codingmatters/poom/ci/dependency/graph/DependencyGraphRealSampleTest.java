@@ -46,7 +46,7 @@ public class DependencyGraphRealSampleTest {
 
     @Test
     public void buildDownstreamGraph() throws IOException {
-        DownstreamGraph downstreamGraph = this.graph.downstreamGraph(this.graph.repositoryById("flexiooss-codingmatters-reflect-unit-master").get());
+        DownstreamGraph downstreamGraph = this.graph.downstreamGraph(this.graph.repositoryById("Flexio-corp-flexio-commons-develop").get());
         downstreamGraph.io().writeGraph("/tmp/flexiooss-codingmatters-reflect-unit-master-downstream.graphml");
         System.out.println("######################################");
         System.out.println("######################################");
