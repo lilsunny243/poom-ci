@@ -1,6 +1,6 @@
 FROM openjdk:8-alpine
 
-RUN apk add --no-cache curl tar bash fontconfig ttf-dejavu git imagemagick graphviz maven nodejs yarn
+RUN apk add --no-cache curl tar bash fontconfig ttf-dejavu git imagemagick graphviz maven nodejs yarn php7
 RUN npm i -g raml2html
 
 COPY poom-ci-utilities.jar /usr/local/lib/poom-ci-utilities.jar
