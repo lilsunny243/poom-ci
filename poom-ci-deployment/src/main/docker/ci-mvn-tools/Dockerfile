@@ -1,7 +1,8 @@
 FROM openjdk:8-alpine
 
-RUN apk add --no-cache curl tar bash fontconfig ttf-dejavu git imagemagick graphviz maven nodejs yarn php7
+RUN apk add --no-cache curl tar bash fontconfig ttf-dejavu git imagemagick graphviz maven nodejs yarn php7 php7-json php7-phar php7-iconv php7-openssl npm
 RUN npm i -g raml2html
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 COPY poom-ci-utilities.jar /usr/local/lib/poom-ci-utilities.jar
 COPY *.sh /usr/local/bin/
