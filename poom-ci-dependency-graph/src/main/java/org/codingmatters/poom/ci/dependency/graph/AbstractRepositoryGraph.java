@@ -42,6 +42,14 @@ public abstract class AbstractRepositoryGraph<G extends AbstractRepositoryGraph>
         return (G) this;
     }
 
+    public void remove(Repository repo) throws IOException {
+        GraphTraversal<Vertex, Vertex> repositoryQuery = this.repositoryQuery(this.traversal(), repo);
+        if(repositoryQuery.hasNext()) {
+            repositoryQuery.next().remove();
+            this.graphChanged();
+        }
+    }
+
     public Repository update(Repository repository) throws IOException {
         GraphTraversal<Vertex, Vertex> repo = this.repositoryVertexById(repository.id());
         if(repo.hasNext()) {
@@ -101,4 +109,5 @@ public abstract class AbstractRepositoryGraph<G extends AbstractRepositoryGraph>
     protected GraphMLIo io() {
         return this.graph.io(graphml());
     }
+
 }

@@ -9,7 +9,7 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class DependencyGraphTest {
 
@@ -54,6 +54,36 @@ public class DependencyGraphTest {
         }
 
         assertThat(graph.repositoryById("repo-12").get(), is(repos[12]));
+    }
+
+    @Test
+    public void deleteRepository() throws Exception {
+        DependencyGraph graph = new DependencyGraph();
+        Repository repository = Repository.builder()
+                .id("repo")
+                .name("repo")
+                .checkoutSpec("checkout/spec")
+                .build();
+        graph.add(repository);
+        assertTrue(graph.repositoryById("repo").isPresent());
+
+        graph.remove(repository);
+
+        assertFalse(graph.repositoryById("repo").isPresent());
+    }
+
+    @Test
+    public void deleteUnexistentRepositoryIsSilent() throws Exception {
+        DependencyGraph graph = new DependencyGraph();
+        Repository repository = Repository.builder()
+                .id("repo")
+                .name("repo")
+                .checkoutSpec("checkout/spec")
+                .build();
+        graph.add(repository);
+        graph.remove(repository);
+
+        graph.remove(repository);
     }
 
     @Test

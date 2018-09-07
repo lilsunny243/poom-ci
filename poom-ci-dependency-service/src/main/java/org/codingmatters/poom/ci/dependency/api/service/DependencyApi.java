@@ -24,13 +24,15 @@ public class DependencyApi {
                 .repositoriesGetHandler(new RepositoriesGet(this.dependencyGraph))
 
                 .repositoryGetHandler(new RepositoryGet(this.dependencyGraph))
+                .repositoryPutHandler(new RepositoryPut(this.dependencyGraph))
+                .repositoryDeleteHandler(new RepositoryDelete(this.dependencyGraph))
+
                 .repositoryDependenciesGetHandler(new RepositoryDependenciesGet(this.dependencyGraph))
                 .repositoryModulesGetHandler(new RepositoryModulesGet(this.dependencyGraph))
 
                 .repositoryDownstreamRepositoriesGetHandler(new RepositoryDownstreamGet(this.dependencyGraph))
                 .repositoryJustNextDownstreamRepositoriesGetHandler(new RepositoryJustNextDownstreamGet(this.dependencyGraph))
 
-                .repositoryPutHandler(new RepositoryPut(this.dependencyGraph))
                 .repositoryDependenciesPostHandler(new RepositoryDependencyPost(this.dependencyGraph))
                 .repositoryModulesPostHandler(new RepositoryProducesPost(this.dependencyGraph))
                 .build();
