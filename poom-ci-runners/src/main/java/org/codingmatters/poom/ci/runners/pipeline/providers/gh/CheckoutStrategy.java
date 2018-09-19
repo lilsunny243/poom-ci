@@ -6,7 +6,7 @@ import java.io.File;
 
 public interface CheckoutStrategy {
     static CheckoutStrategy strategy() {
-        return new FetchCheckoutStrategy();
+        return new CloneCheckoutStrategy();
     }
 
     void checkout(PipelineVariables vars, File workspace) throws AbstractGitHubPipelineContextProvider.ProcessingException;
