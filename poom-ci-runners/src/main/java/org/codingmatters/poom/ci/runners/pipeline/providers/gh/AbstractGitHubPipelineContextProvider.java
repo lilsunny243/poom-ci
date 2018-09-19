@@ -9,7 +9,6 @@ import org.codingmatters.poom.ci.pipeline.descriptors.json.PipelineReader;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineVariables;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
-import org.codingmatters.poom.services.support.process.ProcessInvoker;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,10 +20,12 @@ public abstract class AbstractGitHubPipelineContextProvider implements PipelineC
 
     private final PoomCIPipelineAPIClient pipelineAPIClient;
     private final YAMLFactory yamlFactory;
+    private final CheckoutStrategy checkoutStrategy;
 
-    public AbstractGitHubPipelineContextProvider(PoomCIPipelineAPIClient pipelineAPIClient, YAMLFactory yamlFactory) {
+    public AbstractGitHubPipelineContextProvider(PoomCIPipelineAPIClient pipelineAPIClient, YAMLFactory yamlFactory, CheckoutStrategy checkoutStrategy) {
         this.pipelineAPIClient = pipelineAPIClient;
         this.yamlFactory = yamlFactory;
+        this.checkoutStrategy = checkoutStrategy;
     }
 
     protected abstract PipelineVariables createVariables(String pipelineId, PipelineTrigger trigger) throws ProcessingException;
@@ -54,31 +55,7 @@ public abstract class AbstractGitHubPipelineContextProvider implements PipelineC
     }
 
     private void checkoutTo(PipelineVariables vars, File workspace) throws ProcessingException {
-        ProcessInvoker invoker = new ProcessInvoker();
-        ProcessBuilder processBuilder = new ProcessBuilder()
-                .directory(workspace)
-                ;
-
-        int status;
-        try {
-            log.info("initializing local repo");
-            status = invoker.exec(processBuilder.command("git", "init"), line -> log.info(line), line -> log.error(line));
-            if(status != 0) throw new ProcessingException("git init exited with a none 0 status");
-
-            log.info("fetching remote repo : {}, {}", vars.repositoryUrl(), vars.branch());
-            status = invoker.exec(processBuilder.command("git", "fetch", "-u", vars.repositoryUrl(), vars.branch()), line -> log.info(line), line -> log.error(line));
-            if(status != 0) throw new ProcessingException("git fetch exited with a none 0 status");
-
-            String checkoutTarget = "FETCH_HEAD";
-            if(vars.changeset() != null && ! vars.changeset().isEmpty()) {
-                checkoutTarget = vars.changeset();
-            }
-            log.info("checking out {}", checkoutTarget);
-            status = invoker.exec(processBuilder.command("git", "checkout", checkoutTarget), line -> log.info(line), line -> log.error(line));
-            if (status != 0) throw new ProcessingException("git checkout exited with a none 0 status");
-        } catch (InterruptedException | IOException e) {
-            throw new ProcessingException("exception raised whlie checking out workspace", e);
-        }
+        this.checkoutStrategy.checkout(vars, workspace);
     }
 
     public PoomCIPipelineAPIClient pipelineAPIClient() {

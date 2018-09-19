@@ -6,6 +6,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineVariables;
 import org.codingmatters.poom.ci.runners.pipeline.providers.gh.AbstractGitHubPipelineContextProvider;
+import org.codingmatters.poom.ci.runners.pipeline.providers.gh.CheckoutStrategy;
 import org.codingmatters.poom.ci.runners.pipeline.providers.gh.Ref;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -17,7 +18,7 @@ public class GithubPipelineContextProvider extends AbstractGitHubPipelineContext
     static private final CategorizedLogger log = CategorizedLogger.getLogger(GithubPipelineContextProvider.class);
 
     public GithubPipelineContextProvider(PoomCIPipelineAPIClient pipelineAPIClient, YAMLFactory yamlFactory) {
-        super(pipelineAPIClient, yamlFactory);
+        super(pipelineAPIClient, yamlFactory, CheckoutStrategy.strategy());
     }
 
     @Override

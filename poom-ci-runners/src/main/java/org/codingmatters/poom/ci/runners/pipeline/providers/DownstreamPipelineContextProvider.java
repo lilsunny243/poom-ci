@@ -7,10 +7,11 @@ import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineVariables;
 import org.codingmatters.poom.ci.runners.pipeline.providers.downstream.DownstreamPipelineContextVariables;
 import org.codingmatters.poom.ci.runners.pipeline.providers.gh.AbstractGitHubPipelineContextProvider;
+import org.codingmatters.poom.ci.runners.pipeline.providers.gh.CheckoutStrategy;
 
 public class DownstreamPipelineContextProvider extends AbstractGitHubPipelineContextProvider implements PipelineContext.PipelineContextProvider {
     public DownstreamPipelineContextProvider(PoomCIPipelineAPIClient pipelineClient, YAMLFactory yamlFactory) {
-        super(pipelineClient, yamlFactory);
+        super(pipelineClient, yamlFactory, CheckoutStrategy.strategy());
     }
 
     @Override
