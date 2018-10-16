@@ -7,6 +7,8 @@ import org.codingmatters.poom.ci.dependency.graph.DependencyGraph;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.rest.api.Processor;
 
+import static org.codingmatters.poom.ci.dependency.api.service.handlers.WithLock.locked;
+
 public class DependencyApi {
     static private CategorizedLogger log = CategorizedLogger.getLogger(DependencyApi.class);
 
@@ -21,20 +23,20 @@ public class DependencyApi {
         this.dependencyGraph = dependencyGraph;
 
         this.handlers = new PoomCIDependencyAPIHandlers.Builder()
-                .repositoriesGetHandler(new RepositoriesGet(this.dependencyGraph))
+                .repositoriesGetHandler(locked(new RepositoriesGet(this.dependencyGraph), this.dependencyGraph))
 
-                .repositoryGetHandler(new RepositoryGet(this.dependencyGraph))
-                .repositoryPutHandler(new RepositoryPut(this.dependencyGraph))
-                .repositoryDeleteHandler(new RepositoryDelete(this.dependencyGraph))
+                .repositoryGetHandler(locked(new RepositoryGet(this.dependencyGraph), this.dependencyGraph))
+                .repositoryPutHandler(locked(new RepositoryPut(this.dependencyGraph), this.dependencyGraph))
+                .repositoryDeleteHandler(locked(new RepositoryDelete(this.dependencyGraph), this.dependencyGraph))
 
-                .repositoryDependenciesGetHandler(new RepositoryDependenciesGet(this.dependencyGraph))
-                .repositoryModulesGetHandler(new RepositoryModulesGet(this.dependencyGraph))
+                .repositoryDependenciesGetHandler(locked(new RepositoryDependenciesGet(this.dependencyGraph), this.dependencyGraph))
+                .repositoryModulesGetHandler(locked(new RepositoryModulesGet(this.dependencyGraph), this.dependencyGraph))
 
-                .repositoryDownstreamRepositoriesGetHandler(new RepositoryDownstreamGet(this.dependencyGraph))
-                .repositoryJustNextDownstreamRepositoriesGetHandler(new RepositoryJustNextDownstreamGet(this.dependencyGraph))
+                .repositoryDownstreamRepositoriesGetHandler(locked(new RepositoryDownstreamGet(this.dependencyGraph), this.dependencyGraph))
+                .repositoryJustNextDownstreamRepositoriesGetHandler(locked(new RepositoryJustNextDownstreamGet(this.dependencyGraph), this.dependencyGraph))
 
-                .repositoryDependenciesPostHandler(new RepositoryDependencyPost(this.dependencyGraph))
-                .repositoryModulesPostHandler(new RepositoryProducesPost(this.dependencyGraph))
+                .repositoryDependenciesPostHandler(locked(new RepositoryDependencyPost(this.dependencyGraph), this.dependencyGraph))
+                .repositoryModulesPostHandler(locked(new RepositoryProducesPost(this.dependencyGraph), this.dependencyGraph))
                 .build();
     }
 
