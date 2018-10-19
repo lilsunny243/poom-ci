@@ -2,6 +2,7 @@ FROM registry.containers.ovh.net/flexio/minimal_interpretors:1.0.0
 
 
 ENV APT_FLAGS="--no-install-recommends -y"
+RUN apt update
 RUN apt install ${APT_FLAGS} curl tar bash fontconfig ttf-dejavu git imagemagick graphviz maven
 
 RUN apt install ${APT_FLAGS} gnupg
