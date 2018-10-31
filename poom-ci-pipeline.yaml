@@ -55,8 +55,8 @@ env:
   - FLEXIO_SCRIPTS: git@github.com:Flexio-corp/flexio-ci-scripts.git
   - FLEXIO_SCRIPTS_BRANCH: master
 
-  - PIPELINES_URL: http://master.ci.flexio.io:6545/pipelines
-  - DEPENDENCIES_URL: http://master.ci.flexio.io:6545/dependencies
+  - PIPELINES_URL: https://pipelines.ci.flexio.io/pipelines
+  - DEPENDENCIES_URL: https://dependencies.ci.flexio.io/dependencies
   - CI_TOOLS_IMAGE: codingmatters/ci-tools:0.0.1-SNAPSHOT
   - MVN_OPTS: -B -Dcodingmatters.docker.namespace=codingmatters
   - MVN: docker run --user $(id -u):$(id -g) --rm --env REPOSITORY_ID="$REPOSITORY_ID" --env REPOSITORY="$REPOSITORY" --env CHECKOUT_SPEC="$CHECKOUT_SPEC" -v $SRC:/src -v $WORKSPACE/.m2:/m2 -v $WORKSPACE/secrets/settings.xml:/settings.xml $CI_TOOLS_IMAGE mvn -Dmaven.repo.local=/m2 --settings /settings.xml $MVN_OPTS

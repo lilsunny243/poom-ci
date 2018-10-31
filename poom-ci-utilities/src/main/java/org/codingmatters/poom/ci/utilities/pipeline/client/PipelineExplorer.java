@@ -13,7 +13,7 @@ public class PipelineExplorer {
             throw new RuntimeException("usage : <base url> {pipeline id} {stage type} {stage name}");
         }
 
-        //http://master.ci.flexio.io:6545/pipelines/v1/
+        //https://pipelines.ci.flexio.io/pipelines/v1/
         String baseUrl = argOrNull(args, 0).get();
         Optional<String> pipeline = argOrNull(args, 1);
         Optional<String> stageType = argOrNull(args, 2);
