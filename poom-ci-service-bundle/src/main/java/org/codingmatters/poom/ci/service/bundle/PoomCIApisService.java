@@ -2,10 +2,6 @@ package org.codingmatters.poom.ci.service.bundle;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Undertow;
-import org.codingmatters.poom.ci.dependency.api.service.DependencyApi;
-import org.codingmatters.poom.ci.dependency.graph.DependencyGraph;
-import org.codingmatters.poom.ci.pipeline.api.service.PoomCIApi;
-import org.codingmatters.poom.ci.pipeline.api.service.PoomCIPipelineService;
 import org.codingmatters.poom.client.PoomjobsRunnerRegistryAPIHandlersClient;
 import org.codingmatters.poom.poomjobs.domain.jobs.repositories.JobRepository;
 import org.codingmatters.poom.poomjobs.domain.runners.repositories.RunnerRepository;
@@ -27,8 +23,6 @@ import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.processors.MatchingPathProcessor;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -50,8 +44,6 @@ public class PoomCIApisService {
 
         PoomjobsRunnerRegistryAPI runnerRegistryAPI = runnerRegistryAPI();
         PoomCIApisService service = new PoomCIApisService(host, port, jsonFactory,
-                PoomCIPipelineService.api(),
-                dependencyApi(jsonFactory),
                 runnerRegistryAPI,
                 jobRegistryAPI(runnerRegistryAPI, clientPool, jsonFactory, OkHttpClientWrapper.build())
         );
@@ -68,17 +60,6 @@ public class PoomCIApisService {
         log.info("poom-ci pipeline api service stopping...");
         service.stop();
         log.info("poom-ci pipeline api service stopped.");
-    }
-
-    private static DependencyApi dependencyApi(JsonFactory jsonFactory) {
-        File graphFile = new File(Env.mandatory("GRAPH_STORAGE_FILE").asString());
-        DependencyGraph dependencyGraph = null;
-        try {
-            dependencyGraph = new DependencyGraph(graphFile);
-        } catch (IOException e) {
-            throw new RuntimeException("error creating dependency service graph storage", e);
-        }
-        return new DependencyApi(jsonFactory, "/dependencies", dependencyGraph);
     }
 
     static public PoomjobsRunnerRegistryAPI runnerRegistryAPI() {
@@ -103,17 +84,13 @@ public class PoomCIApisService {
     private final String host;
     private final JsonFactory jsonFactory;
 
-    private final PoomCIApi poomCIApi;
-    private final DependencyApi dependencyApi;
     private final PoomjobsRunnerRegistryAPI runnerRegistryAPI;
     private final PoomjobsJobRegistryAPI jobRegistryAPI;
 
-    public PoomCIApisService(String host, int port, JsonFactory jsonFactory, PoomCIApi poomCIApi, DependencyApi dependencyApi, PoomjobsRunnerRegistryAPI runnerRegistryAPI, PoomjobsJobRegistryAPI jobRegistryAPI) {
+    public PoomCIApisService(String host, int port, JsonFactory jsonFactory, PoomjobsRunnerRegistryAPI runnerRegistryAPI, PoomjobsJobRegistryAPI jobRegistryAPI) {
         this.port = port;
         this.host = host;
         this.jsonFactory = jsonFactory;
-        this.poomCIApi = poomCIApi;
-        this.dependencyApi = dependencyApi;
         this.runnerRegistryAPI = runnerRegistryAPI;
         this.jobRegistryAPI = jobRegistryAPI;
     }
@@ -128,8 +105,6 @@ public class PoomCIApisService {
 
     private Processor processor() {
         return MatchingPathProcessor
-                .whenMatching(this.poomCIApi.path() + "/.*", this.poomCIApi.processor())
-                .whenMatching(this.dependencyApi.path() + "/.*", this.dependencyApi.processor())
                 .whenMatching("/poomjobs-jobs/v1/.*", new PoomjobsJobRegistryAPIProcessor(
                         "/poomjobs-jobs/v1",
                         this.jsonFactory,
