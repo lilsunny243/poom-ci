@@ -19,6 +19,7 @@ import org.codingmatters.poomjobs.service.PoomjobsRunnerRegistryAPI;
 import org.codingmatters.poomjobs.service.api.PoomjobsJobRegistryAPIProcessor;
 import org.codingmatters.poomjobs.service.api.PoomjobsRunnerRegistryAPIProcessor;
 import org.codingmatters.rest.api.Processor;
+import org.codingmatters.rest.api.client.okhttp.HttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.processors.MatchingPathProcessor;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
@@ -67,7 +68,7 @@ public class PoomCIApisService {
         return new PoomjobsRunnerRegistryAPI(runnerRepository);
     }
 
-    static public PoomjobsJobRegistryAPI jobRegistryAPI(PoomjobsRunnerRegistryAPI runnerRegistryApi, ExecutorService clientPool, JsonFactory jsonFactory, OkHttpClientWrapper client) {
+    static public PoomjobsJobRegistryAPI jobRegistryAPI(PoomjobsRunnerRegistryAPI runnerRegistryApi, ExecutorService clientPool, JsonFactory jsonFactory, HttpClientWrapper client) {
         Repository<JobValue, JobQuery> jobRepository = JobRepository.createInMemory();
         PoomjobsRunnerRegistryAPIHandlersClient runnerRegistryClient = new PoomjobsRunnerRegistryAPIHandlersClient(
                 runnerRegistryApi.handlers(),
