@@ -15,7 +15,7 @@ public class PipelineContext {
 
     @FunctionalInterface
     public interface PipelineContextProvider {
-        PipelineContext pipelineContext(String pipelineId, PipelineTrigger trigger) throws IOException;
+        PipelineContext pipelineContext(String pipelineId, PipelineTrigger trigger) throws IOException, NotAPipelineContextException;
     }
 
     private final PipelineVariables variables;

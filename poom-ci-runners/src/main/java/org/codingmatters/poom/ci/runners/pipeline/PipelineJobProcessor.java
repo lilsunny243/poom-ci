@@ -35,7 +35,18 @@ public class PipelineJobProcessor implements JobProcessor {
 
     @Override
     public Job process() throws JobProcessingException {
-        PipelineContext context = this.initializeContext();
+        PipelineContext context = null;
+        try {
+            context = this.initializeContext();
+        } catch (NotAPipelineContextException e) {
+            log.info("ignoring job witch is not pointing to a pipeline context");
+            return this.job
+                    .withStatus(Status.builder().run(Status.Run.DONE).exit(Status.Exit.SUCCESS).build())
+                    .withResult("not a pipeline context")
+                    .withProcessing(this.job.processing().withFinished(LocalDateTime.now(ZoneOffset.UTC.normalized())));
+        }
+
+
         PipelineExecutor executor = this.pipelineExecutorProvider.forContext(context);
 
         PipelineTermination.Exit status;
@@ -67,7 +78,7 @@ public class PipelineJobProcessor implements JobProcessor {
                 .withProcessing(this.job.processing().withFinished(LocalDateTime.now(ZoneOffset.UTC.normalized())));
     }
 
-    private PipelineContext initializeContext() throws JobProcessingException {
+    private PipelineContext initializeContext() throws JobProcessingException, NotAPipelineContextException {
         String pipelineId = this.job.arguments().get(0);
         log.audit().info("starting pipeline {} execution", pipelineId);
 
@@ -91,12 +102,11 @@ public class PipelineJobProcessor implements JobProcessor {
         }
     }
 
-    private PipelineContext createContext(String pipelineId, PipelineTrigger trigger) throws JobProcessingException {
+    private PipelineContext createContext(String pipelineId, PipelineTrigger trigger) throws JobProcessingException, NotAPipelineContextException {
         try {
             return this.pipelineContextProvider.pipelineContext(pipelineId, trigger);
         } catch (IOException e) {
-            String errorToken = log.personalData().tokenized().error("couldn't initialize pipeline context", e);
-            throw new JobProcessingException("error initializing pipeline context, see logs with error-token=" + errorToken);
+            throw new NotAPipelineContextException();
         }
     }
 

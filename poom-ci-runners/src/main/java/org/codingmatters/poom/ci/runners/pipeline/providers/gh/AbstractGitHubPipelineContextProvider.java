@@ -30,7 +30,6 @@ public abstract class AbstractGitHubPipelineContextProvider implements PipelineC
 
     protected abstract PipelineVariables createVariables(String pipelineId, PipelineTrigger trigger) throws ProcessingException;
 
-
     @Override
     public PipelineContext pipelineContext(String pipelineId, PipelineTrigger trigger) throws IOException {
         try {
