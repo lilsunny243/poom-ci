@@ -124,7 +124,7 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
                     .build());
         }
 
-        log.audit().trace("appended {} lines of log to pipeline {} stage {}",
+        log.audit().trace("appended {} lines to pipeline log {} stage {}",
                 nextLine - logCount,
                 request.pipelineId(),
                 request.stageName()
