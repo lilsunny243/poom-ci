@@ -39,7 +39,7 @@ public class PipelineJobProcessor implements JobProcessor {
         try {
             context = this.initializeContext();
         } catch (NotAPipelineContextException e) {
-            log.info("ignoring job witch is not pointing to a pipeline context");
+            log.info("ignoring job witch is not pointing to a pipeline context : {}", e.getMessage());
             return this.job
                     .withStatus(Status.builder().run(Status.Run.DONE).exit(Status.Exit.SUCCESS).build())
                     .withResult("not a pipeline context")
@@ -106,7 +106,8 @@ public class PipelineJobProcessor implements JobProcessor {
         try {
             return this.pipelineContextProvider.pipelineContext(pipelineId, trigger);
         } catch (IOException e) {
-            throw new NotAPipelineContextException();
+            String errorToken = log.personalData().tokenized().error("couldn't initialize pipeline context", e);
+            throw new JobProcessingException("error initializing pipeline context, see logs with error-token=" + errorToken);
         }
     }
 

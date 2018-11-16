@@ -6,6 +6,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.json.PipelineReader;
+import org.codingmatters.poom.ci.runners.pipeline.NotAPipelineContextException;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineVariables;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -31,7 +32,7 @@ public abstract class AbstractGitHubPipelineContextProvider implements PipelineC
     protected abstract PipelineVariables createVariables(String pipelineId, PipelineTrigger trigger) throws ProcessingException;
 
     @Override
-    public PipelineContext pipelineContext(String pipelineId, PipelineTrigger trigger) throws IOException {
+    public PipelineContext pipelineContext(String pipelineId, PipelineTrigger trigger) throws IOException, NotAPipelineContextException {
         try {
 
             File workspace = this.createWorkspace(pipelineId);
@@ -41,7 +42,7 @@ public abstract class AbstractGitHubPipelineContextProvider implements PipelineC
 
             this.checkoutTo(vars, sources);
 
-            Pipeline pipeline = this.readPipeline(sources);
+            Pipeline pipeline = this.readPipeline(vars, sources);
 
             return new PipelineContext(
                     vars,
@@ -61,8 +62,11 @@ public abstract class AbstractGitHubPipelineContextProvider implements PipelineC
         return pipelineAPIClient;
     }
 
-    protected Pipeline readPipeline(File workspace) throws IOException {
+    protected Pipeline readPipeline(PipelineVariables vars, File workspace) throws IOException, NotAPipelineContextException {
         File pipelineDescriptor = new File(workspace, "poom-ci-pipeline.yaml");
+        if(! pipelineDescriptor.exists()) {
+            throw new NotAPipelineContextException(vars.repository());
+        }
         try(JsonParser parser = this.yamlFactory.createParser(pipelineDescriptor)) {
             return new PipelineReader().read(parser);
         }
