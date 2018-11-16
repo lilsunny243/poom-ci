@@ -112,8 +112,6 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
 
         for (AppendedLogLine logLine : request.payload()) {
             nextLine++;
-
-            log.debug("append log: ");
             LogLine logEntry = LogLine.builder()
                     .line(nextLine)
                     .content(logLine.content())
@@ -126,7 +124,7 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
                     .build());
         }
 
-        log.audit().info("appended {} lines of log to pipeline {} stage {}",
+        log.audit().trace("appended {} lines of log to pipeline {} stage {}",
                 nextLine - logCount,
                 request.pipelineId(),
                 request.stageName()
