@@ -20,6 +20,8 @@ import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GithubWebhookService {
 
@@ -27,6 +29,7 @@ public class GithubWebhookService {
 
     static public final String GITHUB_SECRET_TOKEN = "GITHUB_SECRET_TOKEN";
     static public final String PIPELINE_API_URL = "PIPELINE_API_URL";
+    static public final String REPOSITORIES = "REPOSITORIES";
 
     private final String token;
     private final PathHandler handlers;
@@ -36,6 +39,7 @@ public class GithubWebhookService {
     private Undertow server;
     private final PoomCIPipelineAPIClient pipelineClient;
     private final String host;
+    private final Set<String> repositoryWhiteList;
 
     public static void main(String[] args) {
         String host = Env.mandatory(Env.SERVICE_HOST).asString();
@@ -43,9 +47,11 @@ public class GithubWebhookService {
         String token = Env.mandatory(GITHUB_SECRET_TOKEN).asString();
         String pipelineUrl = Env.mandatory(PIPELINE_API_URL).asString();
 
+        Set<String> repositoryWhiteList = Env.mandatory(REPOSITORIES).asSet(",");
+
         JsonFactory jsonFactory = new JsonFactory();
         PoomCIPipelineAPIClient pipelineClient = new PoomCIPipelineAPIRequesterClient(new OkHttpRequesterFactory(OkHttpClientWrapper.build()), jsonFactory, pipelineUrl);
-        new GithubWebhookService(host, port, token, jsonFactory, pipelineClient).start();
+        new GithubWebhookService(host, port, token, jsonFactory, pipelineClient, repositoryWhiteList).start();
 
         log.info("started...");
 
@@ -59,12 +65,13 @@ public class GithubWebhookService {
         }
     }
 
-    public GithubWebhookService(String host, int port, String token, JsonFactory jsonFactory, PoomCIPipelineAPIClient pipelineClient) {
+    public GithubWebhookService(String host, int port, String token, JsonFactory jsonFactory, PoomCIPipelineAPIClient pipelineClient, Set<String> repositoryWhiteList) {
         this.host = host;
         this.port = port;
         this.token = token;
         this.jsonFactory = jsonFactory;
         this.pipelineClient = pipelineClient;
+        this.repositoryWhiteList = repositoryWhiteList;
         this.handlers = Handlers.path();
 
         this.handlers.addExactPath(
@@ -121,7 +128,7 @@ public class GithubWebhookService {
 
     private GithubWebhookAPIHandlers webhookHandlers() {
         return new GithubWebhookAPIHandlers.Builder()
-                .webhookPostHandler(new GithubWebhook(this.pipelineClient))
+                .webhookPostHandler(new GithubWebhook(this.repositoryWhiteList, this.pipelineClient))
                 .build();
     }
 
