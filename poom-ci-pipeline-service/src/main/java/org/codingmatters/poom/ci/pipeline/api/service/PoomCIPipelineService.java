@@ -95,8 +95,8 @@ public class PoomCIPipelineService {
 
         String jobRegistryUrl = Env.mandatory("JOB_REGISTRY_URL").asString();
         return new PoomCIApi(repository, "/pipelines", jsonFactory, new PoomjobsJobRegistryAPIRequesterClient(
-                new OkHttpRequesterFactory(OkHttpClientWrapper.build()), jsonFactory, jobRegistryUrl
-        ));
+                new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> jobRegistryUrl), jsonFactory, jobRegistryUrl)
+        );
     }
 
     private final PoomCIApi api;

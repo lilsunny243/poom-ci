@@ -44,7 +44,10 @@ public class GithubWebhookService {
         String pipelineUrl = Env.mandatory(PIPELINE_API_URL).asString();
 
         JsonFactory jsonFactory = new JsonFactory();
-        PoomCIPipelineAPIClient pipelineClient = new PoomCIPipelineAPIRequesterClient(new OkHttpRequesterFactory(OkHttpClientWrapper.build()), jsonFactory, pipelineUrl);
+        PoomCIPipelineAPIClient pipelineClient = new PoomCIPipelineAPIRequesterClient(
+                new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> pipelineUrl),
+                jsonFactory,
+                pipelineUrl);
         new GithubWebhookService(host, port, token, jsonFactory, pipelineClient).start();
 
         log.info("started...");

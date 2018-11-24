@@ -14,7 +14,6 @@ import org.codingmatters.poom.runner.configuration.RunnerConfiguration;
 import org.codingmatters.poom.runner.exception.RunnerInitializationException;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
-import org.codingmatters.rest.api.client.RequesterFactory;
 import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 
@@ -93,22 +92,20 @@ public class PoomCIRunner {
         JsonFactory jsonFactory = new JsonFactory();
         YAMLFactory yamlFactory = new YAMLFactory();
 
-        RequesterFactory requesterFactory = new OkHttpRequesterFactory(OkHttpClientWrapper.build());
-
         PoomjobsJobRegistryAPIClient jobRegistryAPIClient = new PoomjobsJobRegistryAPIRequesterClient(
-                requesterFactory,
+                new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> this.jobRegistryUrl),
                 jsonFactory,
                 this.jobRegistryUrl
         );
 
         PoomjobsRunnerRegistryAPIClient runnerRegistryApi = new PoomjobsRunnerRegistryAPIRequesterClient(
-                requesterFactory,
+                new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> this.runnerRegistryUrl),
                 jsonFactory,
                 this.runnerRegistryUrl
         );
 
         PoomCIPipelineAPIClient pipelineAPIClient = new PoomCIPipelineAPIRequesterClient(
-                requesterFactory,
+                new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> this.pipelineUrl),
                 jsonFactory,
                 this.pipelineUrl
         );

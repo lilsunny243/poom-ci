@@ -24,17 +24,16 @@ public class UpstreamBuildTriggerer {
         }
 
         JsonFactory jsonFactory = new JsonFactory();
-        OkHttpRequesterFactory requesterFactory = new OkHttpRequesterFactory(OkHttpClientWrapper.build());
 
         String pipelineApiUrl = args[0];
         PoomCIPipelineAPIClient pipelineAPIClient = new PoomCIPipelineAPIRequesterClient(
-                requesterFactory,
+                new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> pipelineApiUrl),
                 jsonFactory,
                 pipelineApiUrl
         );
         String dependencyApiUrl = args[1];
         PoomCIDependencyAPIClient dependencyAPIClient = new PoomCIDependencyAPIRequesterClient(
-                requesterFactory,
+                new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> dependencyApiUrl),
                 jsonFactory,
                 dependencyApiUrl
         );

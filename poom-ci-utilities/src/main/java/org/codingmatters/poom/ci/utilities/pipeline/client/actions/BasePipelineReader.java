@@ -11,7 +11,7 @@ public class BasePipelineReader {
 
     public BasePipelineReader(String baseUrl) {
         this.client = new PoomCIPipelineAPIRequesterClient(
-                new OkHttpRequesterFactory(OkHttpClientWrapper.build()),
+                new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> baseUrl),
                 new JsonFactory(),
                 baseUrl
         );
