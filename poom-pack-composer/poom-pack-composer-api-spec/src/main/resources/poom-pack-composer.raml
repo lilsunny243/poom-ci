@@ -1,0 +1,89 @@
+#%RAML 1.0
+title: PoomPackComposer
+version: v1
+description: Flexio PoomPackComposer API
+baseUri: https://api.flexio.io/poom-pack-composer
+mediaType: application/json
+
+/packages:
+  displayName: Repository
+  post:
+    headers:
+      X-version: string
+      X-artifact-id: string
+      X-vendor: string
+      X-api-key: string
+    body: file
+    responses:
+      201:
+        description: Artifact upload successful
+      403:
+        description: Forbidden (bad api key)
+      500:
+        description: Unexpected error
+        body: Error
+  /packages.json:
+    displayName: Packages
+    get:
+      responses:
+        200:
+         body: JsonPackage
+        404:
+          description: Artifact not found
+          body: Error
+
+/{vendor}/{packageName}/{version}/{fileName}:
+  displayName: Artifacts
+  uriParameters:
+    vendor: string
+    packageName: string
+    version: string
+    fileName: string
+  get:
+    responses:
+      200:
+        headers:
+          Content-Length: string
+        body: file
+      404:
+        description: not found
+      500:
+        body: Error
+  delete:
+    headers:
+      X-api-key: string
+    responses:
+      204:
+        description: deleted
+      403:
+        description: permission denied
+      404:
+        description: artifact not found
+      500:
+        description: unexpected error
+        body: Error
+types:
+  JsonPackage:
+    type: object
+    properties:
+      packages: object
+
+  Package:
+    type: object
+    properties:
+      name: string
+      version: string
+      dist: Dist
+
+  Dist:
+    type: object
+    properties:
+      type: string
+      url: string
+
+  Error:
+    type: object
+    properties:
+      code:
+        enum: [ UNEXPECTED_ERROR, ARTIFACT_NOT_FOUND ]
+      description: string
