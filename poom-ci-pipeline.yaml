@@ -18,8 +18,8 @@ stages:
     exec:
       - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
       - $MVN deploy -DskipTests
-#    onlyWhen:
-#      - branch in (master, develop)
+    onlyWhen:
+      - branch in (master, develop)
 
   - name: build-an-deploy-docker-images
     timeout: 16
@@ -27,8 +27,8 @@ stages:
       - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
       - $DOCKER_BUILD $SRC build
       - $DOCKER_BUILD $SRC push
-#    onlyWhen:
-#      - branch in (master, develop)
+    onlyWhen:
+      - branch in (master, develop)
 
 onSuccess:
   - name: metadata-management
