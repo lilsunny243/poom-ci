@@ -26,7 +26,7 @@ public class PipelineContext {
     private final OnlyWhenVariableProvider variableProvider = new OnlyWhenVariableProvider() {
         @Override
         public String branch() {
-            return this.branch();
+            return variables().branch();
         }
     };
 
