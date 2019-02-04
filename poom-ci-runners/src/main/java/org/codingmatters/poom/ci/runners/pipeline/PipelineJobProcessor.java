@@ -134,10 +134,10 @@ public class PipelineJobProcessor implements JobProcessor {
                             return PipelineTermination.Exit.FAILURE;
                         }
                     } else {
-                        log.info("stage {} ({}) is not executable : {}", stage.stage().name(), stage.type(), stage.stage().onlyWen());
+                        log.info("stage {} ({}) is not executable : {}", stage.stage().name(), stage.type(), stage.stage().onlyWhen());
                     }
                 } catch (PipelineExecutor.InvalidStageRestrictionException e) {
-                    log.error(String.format("stage %s (%s) is not valid : %s", stage.stage().name(), stage.type(), stage.stage().onlyWen()), e);
+                    log.error(String.format("stage %s (%s) is not valid : %s", stage.stage().name(), stage.type(), stage.stage().onlyWhen()), e);
                     return PipelineTermination.Exit.FAILURE;
                 }
             }

@@ -23,33 +23,33 @@ public class OnlyWhenProcessorTest {
     @Test
     public void branchIs() throws Exception {
         this.branch = "develop";
-        assertThat(processor.isExecutable(Stage.builder().onlyWen("branch is develop").build()), is(true));
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch is develop").build()), is(true));
 
         this.branch = "master";
-        assertThat(processor.isExecutable(Stage.builder().onlyWen("branch is develop").build()), is(false));
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch is develop").build()), is(false));
 
         this.branch = "yopyop tagada";
-        assertThat(processor.isExecutable(Stage.builder().onlyWen("branch is 'yopyop tagada'").build()), is(true));
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch is 'yopyop tagada'").build()), is(true));
 
         this.branch = "feature/deployment-#1";
-        assertThat(processor.isExecutable(Stage.builder().onlyWen("branch is feature/deployment-#1").build()), is(true));
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch is feature/deployment-#1").build()), is(true));
     }
 
     @Test
     public void branchIn() throws Exception{
         this.branch = "develop";
-        assertThat(processor.isExecutable(Stage.builder().onlyWen("branch in (master, develop)").build()), is(true));
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch in (master, develop)").build()), is(true));
 
         this.branch = "master";
-        assertThat(processor.isExecutable(Stage.builder().onlyWen("branch in (master, develop)").build()), is(true));
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch in (master, develop)").build()), is(true));
 
         this.branch = "feature/deployment-#1";
-        assertThat(processor.isExecutable(Stage.builder().onlyWen("branch in (master, develop)").build()), is(false));
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch in (master, develop)").build()), is(false));
 
     }
 
     @Test(expected = OnlyWhenParsingException.class)
     public void parseError() throws Exception {
-        processor.isExecutable(Stage.builder().onlyWen("not quite parsable").build());
+        processor.isExecutable(Stage.builder().onlyWhen("not quite parsable").build());
     }
 }

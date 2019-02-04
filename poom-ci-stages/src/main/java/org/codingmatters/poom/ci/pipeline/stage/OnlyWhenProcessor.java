@@ -15,8 +15,8 @@ public class OnlyWhenProcessor {
     }
 
     public boolean isExecutable(Stage stage) throws OnlyWhenParsingException {
-        if(stage.onlyWen() != null) {
-            for (String expressionText : stage.onlyWen()) {
+        if(stage.onlyWhen() != null) {
+            for (String expressionText : stage.onlyWhen()) {
                 OnlyWenExpressionParser.ExpressionContext expression = this.parseExpression(expressionText);
                 Boolean result = new OnlyWhenExpressionEvaluator(this.variableProvider).visitExpression(expression);
                 if (result == null || !result) return false;

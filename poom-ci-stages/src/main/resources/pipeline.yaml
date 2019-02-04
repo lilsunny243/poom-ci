@@ -22,7 +22,7 @@ pipeline:
 stage:
   name: string
   timeout: long
-  onlyWen:
+  onlyWhen:
     $list: string
   exec:
     $list: string

@@ -3,6 +3,17 @@ stages:
   - name: build
     exec:
       - $MVN clean install -DskipTests -Ddocker.resource.docker.url=http://172.17.0.1:2375
+  - name: only when on master
+    onlyWhen:
+      - branch in (master)
+
+  - name: metadata
+    exec:
+      - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
+      - $UPLOAD_PROJECT_METADATA
+    onlyWhen:
+      - branch in (master, develop)
+
 
 env:
   - MVN: docker run -it --rm -v $SRC:/src -v $WORKSPACE/M2:/root/.m2 flexio-build-java mvn
