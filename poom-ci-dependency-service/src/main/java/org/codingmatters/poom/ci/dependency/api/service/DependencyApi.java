@@ -8,7 +8,6 @@ import org.codingmatters.poom.ci.dependency.graph.DependencyGraph;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.rest.api.Processor;
 
-import static org.codingmatters.poom.ci.dependency.api.service.handlers.WithLock.locked;
 
 public class DependencyApi {
     static private CategorizedLogger log = CategorizedLogger.getLogger(DependencyApi.class);
