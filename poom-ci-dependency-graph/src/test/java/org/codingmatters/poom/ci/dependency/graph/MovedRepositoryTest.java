@@ -1,6 +1,7 @@
 package org.codingmatters.poom.ci.dependency.graph;
 
 import org.codingmatters.poom.ci.dependency.api.types.Repository;
+import org.codingmatters.poom.ci.dependency.graph.tinkerpop.TinkerPopDependencyGraph;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,12 +20,12 @@ public class MovedRepositoryTest {
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
 
-    private DependencyGraph graph;
+    private TinkerPopDependencyGraph graph;
 
     @Before
     public void setUp() throws Exception {
         File graphml = this.temporaryResource("cyclic-graph.xml");
-        this.graph = new DependencyGraph(graphml);
+        this.graph = new TinkerPopDependencyGraph(graphml);
     }
 
     private File temporaryResource(String resource) throws Exception {

@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.dependency.graph;
 
 import org.codingmatters.poom.ci.dependency.api.types.Module;
 import org.codingmatters.poom.ci.dependency.api.types.Repository;
+import org.codingmatters.poom.ci.dependency.graph.tinkerpop.TinkerPopDependencyGraph;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,12 +17,12 @@ import static org.junit.Assert.assertThat;
 @Ignore
 public class BugFix20181029 {
 
-    private DependencyGraph graph;
+    private TinkerPopDependencyGraph graph;
 
     @Before
     public void setUp() throws Exception {
         File graphml = new File(Thread.currentThread().getContextClassLoader().getResource("bug-first-next-graph.xml").toURI());
-        this.graph = new DependencyGraph(graphml);
+        this.graph = new TinkerPopDependencyGraph(graphml);
     }
 
     @Test

@@ -6,6 +6,7 @@ import org.codingmatters.poom.ci.dependency.api.types.Error;
 import org.codingmatters.poom.ci.dependency.api.types.Module;
 import org.codingmatters.poom.ci.dependency.api.types.Repository;
 import org.codingmatters.poom.ci.dependency.graph.DependencyGraph;
+import org.codingmatters.poom.ci.dependency.graph.tinkerpop.TinkerPopDependencyGraph;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 
 import java.io.IOException;

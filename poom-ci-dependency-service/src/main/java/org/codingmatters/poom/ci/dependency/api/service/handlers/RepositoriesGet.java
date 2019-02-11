@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.dependency.api.service.handlers;
 import org.codingmatters.poom.ci.dependency.api.RepositoriesGetRequest;
 import org.codingmatters.poom.ci.dependency.api.RepositoriesGetResponse;
 import org.codingmatters.poom.ci.dependency.graph.DependencyGraph;
+import org.codingmatters.poom.ci.dependency.graph.tinkerpop.TinkerPopDependencyGraph;
 
 import java.util.function.Function;
 

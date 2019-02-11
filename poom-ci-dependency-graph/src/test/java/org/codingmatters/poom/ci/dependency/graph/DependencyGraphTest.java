@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.dependency.graph;
 
 import org.codingmatters.poom.ci.dependency.api.types.Module;
 import org.codingmatters.poom.ci.dependency.api.types.Repository;
+import org.codingmatters.poom.ci.dependency.graph.tinkerpop.TinkerPopDependencyGraph;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -15,7 +16,7 @@ public class DependencyGraphTest {
 
     @Test
     public void givenGraphIsEmpty__whenListingRepositoris__thenRepositoryListIsEmpty() throws Exception {
-        assertThat(new DependencyGraph().repositories(), is(emptyArray()));
+        assertThat(new TinkerPopDependencyGraph().repositories(), is(emptyArray()));
     }
 
     @Test
@@ -23,7 +24,7 @@ public class DependencyGraphTest {
         int count = 23;
         Repository[] repos = new Repository[count];
 
-        DependencyGraph graph = new DependencyGraph();
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
         for (int i = 0; i < count; i++) {
             Repository repository = Repository.builder()
                     .id("repo-" + i)
@@ -42,7 +43,7 @@ public class DependencyGraphTest {
         int count = 23;
         Repository[] repos = new Repository[count];
 
-        DependencyGraph graph = new DependencyGraph();
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
         for (int i = 0; i < count; i++) {
             Repository repository = Repository.builder()
                     .id("repo-" + i)
@@ -58,7 +59,7 @@ public class DependencyGraphTest {
 
     @Test
     public void deleteRepository() throws Exception {
-        DependencyGraph graph = new DependencyGraph();
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
         Repository repository = Repository.builder()
                 .id("repo")
                 .name("repo")
@@ -74,7 +75,7 @@ public class DependencyGraphTest {
 
     @Test
     public void deleteUnexistentRepositoryIsSilent() throws Exception {
-        DependencyGraph graph = new DependencyGraph();
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
         Repository repository = Repository.builder()
                 .id("repo")
                 .name("repo")
@@ -90,7 +91,7 @@ public class DependencyGraphTest {
     public void givenRepositoryExists__whenReAddingRepo__thenRepositoryIsNotCreated__andRepositoryIsNotUpdated() throws Exception {
         int count = 23;
 
-        DependencyGraph graph = new DependencyGraph();
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
 
         graph.add(Repository.builder()
                 .id("repo")
@@ -117,7 +118,7 @@ public class DependencyGraphTest {
     public void createModules_noMultipleCreation() throws Exception {
         int count = 23;
 
-        DependencyGraph graph = new DependencyGraph();
+        DependencyGraph graph = new TinkerPopDependencyGraph();
         for (int i = 0; i < count; i++) {
             Module module = Module.builder()
                     .spec("module:spec")
@@ -137,7 +138,7 @@ public class DependencyGraphTest {
         int count = 23;
         Module[] modules = new Module[count];
 
-        DependencyGraph graph = new DependencyGraph();
+        DependencyGraph graph = new TinkerPopDependencyGraph();
         for (int i = 0; i < count; i++) {
             Module module = Module.builder()
                     .spec("module:" + i)
@@ -161,7 +162,7 @@ public class DependencyGraphTest {
                 .spec("module:spec")
                 .version("1-SNAPSHOT")
                 .build();
-        DependencyGraph graph = new DependencyGraph();
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
 
         graph.produces(repository, module);
 
@@ -181,7 +182,7 @@ public class DependencyGraphTest {
                 .spec("module:spec")
                 .version("1-SNAPSHOT")
                 .build();
-        DependencyGraph graph = new DependencyGraph();
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
 
         graph.dependsOn(repository, module);
 
@@ -202,7 +203,7 @@ public class DependencyGraphTest {
                 .spec("module:spec")
                 .version("1-SNAPSHOT")
                 .build();
-        DependencyGraph graph = new DependencyGraph()
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph()
                 .dependsOn(repository, module);
 
 
@@ -224,7 +225,7 @@ public class DependencyGraphTest {
                 .spec("module:spec")
                 .version("1-SNAPSHOT")
                 .build();
-        DependencyGraph graph = new DependencyGraph()
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph()
                 .produces(repository, module);
 
 
@@ -250,7 +251,7 @@ public class DependencyGraphTest {
                 .spec("module:spec")
                 .version("1-SNAPSHOT")
                 .build();
-        DependencyGraph graph = new DependencyGraph()
+        DependencyGraph graph = new TinkerPopDependencyGraph()
                 .produces(repo1, module)
                 .dependsOn(repo2, module);
 
@@ -270,7 +271,8 @@ public class DependencyGraphTest {
                 .checkoutSpec("checkout/spec")
                 .build();
 
-        DependencyGraph graph = new DependencyGraph().add(repo);
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
+        graph.add(repo);
 
         Repository updated = graph.update(repo.withName("updated-name").withCheckoutSpec("updated/checkout/spec"));
 
@@ -280,7 +282,7 @@ public class DependencyGraphTest {
 
     @Test
     public void givenGraphDoesntExist__whenUpdatingGraph__thenGraphIsCreated() throws Exception {
-        DependencyGraph graph = new DependencyGraph();
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
 
         Repository repo = Repository.builder()
                 .id("repo")
@@ -295,7 +297,7 @@ public class DependencyGraphTest {
 
     @Test
     public void produces() throws Exception {
-        DependencyGraph graph = new DependencyGraph();
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
 
         Repository repo = Repository.builder()
                 .id("repo")
@@ -328,7 +330,7 @@ public class DependencyGraphTest {
 
     @Test
     public void dependsOn() throws Exception {
-        DependencyGraph graph = new DependencyGraph();
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph();
 
         Repository repo = Repository.builder()
                 .id("repo")
@@ -366,7 +368,7 @@ public class DependencyGraphTest {
     @Test
     public void producesAndDependsOn() throws Exception {
         File backupFile = this.dir.newFile();
-        DependencyGraph graph = new DependencyGraph(backupFile);
+        TinkerPopDependencyGraph graph = new TinkerPopDependencyGraph(backupFile);
 
         Repository repo = Repository.builder()
                 .id("repo")

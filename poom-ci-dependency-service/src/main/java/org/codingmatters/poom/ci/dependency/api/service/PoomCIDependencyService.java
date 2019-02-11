@@ -2,7 +2,7 @@ package org.codingmatters.poom.ci.dependency.api.service;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Undertow;
-import org.codingmatters.poom.ci.dependency.graph.DependencyGraph;
+import org.codingmatters.poom.ci.dependency.graph.tinkerpop.TinkerPopDependencyGraph;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
@@ -22,7 +22,7 @@ public class PoomCIDependencyService {
         PoomCIDependencyService service = null;
         try {
             service = new PoomCIDependencyService(jsonFactory, port, host,
-                    new DependencyApi(jsonFactory, "/dependencies", new DependencyGraph(graphFile))
+                    new DependencyApi(jsonFactory, "/dependencies", new TinkerPopDependencyGraph(graphFile))
             );
         } catch (IOException e) {
             log.error("error creating dependency graph", e);
