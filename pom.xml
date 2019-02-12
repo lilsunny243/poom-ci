@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>org.codingmatters.poom</groupId>
-        <artifactId>poom-services-parent</artifactId>
+        <artifactId>poom-services</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -29,7 +29,8 @@
     <developers>
         <developer>
             <name>Nel Taurisson</name>
-            <email>nel@flexio.fr</email>
+            <organization>Flexio</organization>
+            <organizationUrl>http://www.flexio.fr</organizationUrl>
         </developer>
     </developers>
 
@@ -38,17 +39,6 @@
         <developerConnection>scm:git:git@github.com:flexiooss/poom-ci.git</developerConnection>
         <url>git@github.com:flexiooss/poom-ci.git</url>
     </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <repositories>
         <repository>
@@ -107,56 +97,18 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>poom-ci-bom</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${project.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom</groupId>
                 <artifactId>poomjobs-bom</artifactId>
-                <version>${project.parent.version}</version>
+                <version>0.0.1-SNAPSHOT</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-
-            <dependency>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr4-runtime</artifactId>
-                <version>4.7.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tinkerpop</groupId>
-                <artifactId>tinkergraph-gremlin</artifactId>
-                <version>3.3.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.raml</groupId>
-                <artifactId>raml-parser-2</artifactId>
-                <version>1.0.8</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mongodb</groupId>
-                <artifactId>bson</artifactId>
-                <version>3.6.0</version>
-            </dependency>
-            <dependency>
-                <groupId>io.flexio.io</groupId>
-                <artifactId>flexio-mongo-io-values</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.antlr</groupId>
-                    <artifactId>antlr4-maven-plugin</artifactId>
-                    <version>4.7.1</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 
 </project>

@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.codingmatters.poom</groupId>
-        <artifactId>poom-services</artifactId>
+        <groupId>org.codingmatters</groupId>
+        <artifactId>codingmatters-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
