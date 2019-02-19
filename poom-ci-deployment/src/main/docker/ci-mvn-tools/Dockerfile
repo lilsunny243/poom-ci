@@ -3,7 +3,7 @@ FROM openjdk:8-alpine
 RUN apk add --no-cache curl tar bash fontconfig ttf-dejavu git imagemagick graphviz maven \
     nodejs nodejs-npm yarn \
     php7 php7-json php7-phar php7-iconv php7-openssl php7-dom php7-mbstring php7-xml php7-xmlwriter php7-tokenizer \
-    python python-dev py-pip
+    python python-dev py-pip gnupg
 
 RUN npm i -g raml2html
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
