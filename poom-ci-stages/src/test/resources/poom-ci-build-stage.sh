@@ -15,7 +15,10 @@ fi
 rm -rf $WORKSPACE/logs
 mkdir -p $WORKSPACE/logs
 
-MVN="docker run -it --rm -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 flexio-build-java mvn"
+export $WORKSPACE
+export $SRC
+
+export MVN="docker run -it --rm -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 flexio-build-java mvn"
 
 STAGE=build
 

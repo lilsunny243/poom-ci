@@ -50,7 +50,9 @@ public class PipelineScript {
         "fi\n" +
         "\n" +
         "rm -rf $WORKSPACE/logs\n" +
-        "mkdir -p $WORKSPACE/logs\n\n";
+        "mkdir -p $WORKSPACE/logs\n\n" +
+        "export $WORKSPACE\n" +
+        "export $SRC\n\n";
 
         out.write(header.getBytes());
     }
@@ -61,20 +63,12 @@ public class PipelineScript {
         for (ObjectValue envValues : this.pipeline.env()) {
             if(envValues != null) {
                 for (String variable : envValues.propertyNames()) {
-                    String variableLine = String.format("%s=\"%s\"\n", variable, envValues.property(variable).single().stringValue());
+                    String variableLine = String.format("export %s=\"%s\"\n", variable, envValues.property(variable).single().stringValue());
                     out.write(variableLine.getBytes());
                 }
             }
             out.write("\n".getBytes());
         }
-
-//        if(this.pipeline.env() != null && this.pipeline.env().propertyNames() != null) {
-//            for (String variable : this.pipeline.env().propertyNames()) {
-//                String variableLine = String.format("%s=\"%s\"\n", variable, this.pipeline.env().property(variable).single().stringValue());
-//                out.write(variableLine.getBytes());
-//            }
-//            out.write("\n".getBytes());
-//        }
     }
 
     private void stage(Stage stage, OutputStream out) throws IOException {

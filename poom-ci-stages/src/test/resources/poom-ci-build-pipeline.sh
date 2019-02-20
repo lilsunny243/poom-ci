@@ -15,9 +15,12 @@ fi
 rm -rf $WORKSPACE/logs
 mkdir -p $WORKSPACE/logs
 
-X="x-value"
-Y="y-value"
-Z="z-value"
+export $WORKSPACE
+export $SRC
+
+export X="x-value"
+export Y="y-value"
+export Z="z-value"
 
 STAGE=first
 

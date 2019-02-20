@@ -48,7 +48,8 @@ public class PipelineShellExecutor implements PipelineExecutor {
         if(this.context.pipeline().secrets() != null) {
             for (Secret secret : this.context.pipeline().secrets()) {
                 byte[] data = this.readSecretData(secret);
-                if(secret.as().equals(Secret.As.file)) {
+                Secret.As sercretMode = secret.opt().as().orElse(Secret.As.var);
+                if(sercretMode.equals(Secret.As.file)) {
                     // pipeline.secrets of type file unciphered to $WORKSPACE/secrets/{secret.name}
                     this.writeSecretToFile(secret, data);
                 } else {

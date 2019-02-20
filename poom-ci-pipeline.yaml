@@ -6,6 +6,9 @@ stages:
       - git clone -b $FLEXIO_SCRIPTS_BRANCH $FLEXIO_SCRIPTS $WORKSPACE/flexio-ci-scripts && export PATH=$PATH:$WORKSPACE/flexio-ci-scripts/bin
       - docker pull $CI_TOOLS_IMAGE
       - mkdir -p $WORKSPACE/.m2
+      - mkdir -p $WORKSPACE/gnupg
+      - $DOCKER gpg --homedir /gnupg --list-keys
+      - $DOCKER_CMD -v $WORKSPACE/gnupg:/gnupg -v $WORKSPACE/secrets/codesigning.asc:/codesigning.asc $CI_TOOLS_IMAGE gpg --homedir /gnupg --batch --import /codesigning.asc
 
   - name: build
     timeout: 15
@@ -17,9 +20,9 @@ stages:
     timeout: 15
     exec:
       - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
-      - $MVN deploy -DskipTests
-#    onlyWhen:
-#      - branch in (master, develop)
+      - $MVN_DEPLOY
+    onlyWhen:
+      - branch in (master, develop)
 
   - name: build-an-deploy-docker-images
     timeout: 16
@@ -27,8 +30,8 @@ stages:
       - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
       - $DOCKER_BUILD $SRC build
       - $DOCKER_BUILD $SRC push
-#    onlyWhen:
-#      - branch in (master, develop)
+    onlyWhen:
+      - branch in (master, develop)
 
 onSuccess:
   - name: metadata-management
@@ -58,8 +61,16 @@ env:
   - PIPELINES_URL: https://pipelines.ci.flexio.io/pipelines
   - DEPENDENCIES_URL: https://dependencies.ci.flexio.io/dependencies
   - CI_TOOLS_IMAGE: codingmatters/ci-tools:0.0.1-SNAPSHOT
-  - MVN_OPTS: -B -Dcodingmatters.docker.namespace=codingmatters
-  - MVN: docker run --user $(id -u):$(id -g) --rm --env REPOSITORY_ID="$REPOSITORY_ID" --env REPOSITORY="$REPOSITORY" --env CHECKOUT_SPEC="$CHECKOUT_SPEC" -v $SRC:/src -v $WORKSPACE/.m2:/m2 -v $WORKSPACE/secrets/settings.xml:/settings.xml $CI_TOOLS_IMAGE mvn -Dmaven.repo.local=/m2 --settings /settings.xml $MVN_OPTS
+
+  - DOCKER_VOLUMES: -v $SRC:/src -v $WORKSPACE/.m2:/m2 -v $WORKSPACE/secrets/settings.xml:/settings.xml -v $WORKSPACE/gnupg:/gnupg
+  - DOCKER_ENV: --env REPOSITORY_ID="$REPOSITORY_ID" --env REPOSITORY="$REPOSITORY" --env CHECKOUT_SPEC="$CHECKOUT_SPEC"
+  - DOCKER_CMD: docker run --user $(id -u):$(id -g) --rm
+  - DOCKER: $DOCKER_CMD $DOCKER_ENV $DOCKER_VOLUMES $CI_TOOLS_IMAGE
+
+  - MVN_OPTS: -B -Dcodingmatters.docker.namespace=codingmatters -Ddocker.registry=registry.containers.ovh.net
+  - MVN: $DOCKER mvn -Dmaven.repo.local=/m2 --settings /settings.xml $MVN_OPTS
+  - MVN_DEPLOY: $MVN deploy -DskipTests -Pattach-source-and-javadocs,sign-artifacts -Dgpg.passphrase=$GPG_PASS -Dgpg.homedir=/gnupg
+
   - UPLOAD_PROJECT_METADATA: docker run --rm --env REPOSITORY_ID="$REPOSITORY_ID" --env REPOSITORY="$REPOSITORY" --env CHECKOUT_SPEC="$CHECKOUT_SPEC" -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 -v $WORKSPACE/secrets/settings.xml:/root/.m2/settings.xml $CI_TOOLS_IMAGE /usr/local/bin/upload-project-metadata.sh $DEPENDENCIES_URL /src
   - TRIGGER_DOWNSTREAM: docker run --rm --env REPOSITORY_ID="$REPOSITORY_ID" --env REPOSITORY="$REPOSITORY" --env CHECKOUT_SPEC="$CHECKOUT_SPEC" -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 -v $WORKSPACE/secrets/settings.xml:/root/.m2/settings.xml $CI_TOOLS_IMAGE /usr/local/bin/trigger-downstream.sh $PIPELINES_URL $DEPENDENCIES_URL $REPOSITORY_ID "$REPOSITORY" "$CHECKOUT_SPEC"
 
@@ -70,3 +81,9 @@ secrets:
   - name: settings.xml
     content: $SRC/.poom-ci-pipeline/settings-oss.xml.enc
     as: file
+  - name: codesigning.asc
+    content: $SRC/.poom-ci-pipeline/codesigning.asc.enc
+    as: file
+  - name: GPG_PASS
+    content: $SRC/.poom-ci-pipeline/gpg.pass.enc
+    as: var
