@@ -76,6 +76,7 @@ public class PipelineShellExecutorTest {
                 this.context.pipeline().stageHolder("stage1"),
                 log -> logs.add(log));
         Thread.sleep(500L);
+        System.out.println(logs);
         assertThat(logs, Matchers.hasSize(5));
     }
 

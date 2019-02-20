@@ -51,8 +51,8 @@ public class PipelineScript {
         "\n" +
         "rm -rf $WORKSPACE/logs\n" +
         "mkdir -p $WORKSPACE/logs\n\n" +
-        "export $WORKSPACE\n" +
-        "export $SRC\n\n";
+        "export WORKSPACE=$WORKSPACE\n" +
+        "export SRC=$SRC\n\n";
 
         out.write(header.getBytes());
     }

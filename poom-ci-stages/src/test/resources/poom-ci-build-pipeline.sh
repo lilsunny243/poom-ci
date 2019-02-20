@@ -15,8 +15,8 @@ fi
 rm -rf $WORKSPACE/logs
 mkdir -p $WORKSPACE/logs
 
-export $WORKSPACE
-export $SRC
+export WORKSPACE=$WORKSPACE
+export SRC=$SRC
 
 export X="x-value"
 export Y="y-value"
