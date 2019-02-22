@@ -114,7 +114,7 @@ public class PipelineShellExecutor implements PipelineExecutor {
     }
 
     private ProcessInvoker createInvokerForStage(StageHolder stage) {
-        return new ProcessInvoker(Optional.ofNullable(stage.stage().timeout()).orElse(5L), TimeUnit.MINUTES);
+        return new ProcessInvoker(Optional.ofNullable(stage.stage().timeout()).orElse(30L), TimeUnit.MINUTES);
     }
 
     private void logStageScript(StageHolder stage, File stageScript) {
