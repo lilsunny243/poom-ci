@@ -12,7 +12,7 @@
 
     <groupId>org.codingmatters.poom.ci</groupId>
     <artifactId>poom-ci</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
 
     <name>Poor Man's CI</name>
@@ -104,27 +104,27 @@
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-pack-composer-api</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-pack-composer-api-spec</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-pack-composer-client</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-pack-composer-service</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-stages</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
@@ -134,32 +134,32 @@
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-triggers</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-github-webhook</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-pipeline-api-spec</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-pipeline-api</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-pipeline-service</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-pipeline-api-client</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
@@ -169,53 +169,53 @@
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-ciphering</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-deployment</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-dependency-api-spec</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-dependency-api</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-dependency-client</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-dependency-graph</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-utilities</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-utilities</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
                 <classifier>uber</classifier>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-dependency-service</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-service-bundle</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
             </dependency>
             <!--// BOM-->
         </dependencies>
