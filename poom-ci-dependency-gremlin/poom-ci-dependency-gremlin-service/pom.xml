@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.codingmatters.poom.ci</groupId>
+        <artifactId>poom-ci-dependency-gremlin</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../</relativePath>
+    </parent>
+
+    <artifactId>poom-ci-dependency-gremlin-service</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.tinkerpop</groupId>
+            <artifactId>tinkergraph-gremlin</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.flexio.commons</groupId>
+            <artifactId>flexio-docker-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
