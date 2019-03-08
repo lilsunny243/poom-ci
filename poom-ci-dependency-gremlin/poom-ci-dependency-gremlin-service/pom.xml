@@ -20,6 +20,11 @@
             <artifactId>tinkergraph-gremlin</artifactId>
             <version>3.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tinkerpop</groupId>
+            <artifactId>gremlin-driver</artifactId>
+            <version>3.4.0</version>
+        </dependency>
 
         <dependency>
             <groupId>io.flexio.commons</groupId>
