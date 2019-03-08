@@ -34,11 +34,13 @@ stages:
       - branch in (master, develop)
 
 onSuccess:
-  - name: metadata-management
-    exec:
-      - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
-      - $UPLOAD_PROJECT_METADATA
-      - $TRIGGER_DOWNSTREAM
+#  - name: metadata-management
+#    exec:
+#      - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
+#      - $UPLOAD_PROJECT_METADATA
+#      - $TRIGGER_DOWNSTREAM
+#    onlyWhen:
+#      - branch in (master, develop)
   - name: notify-flexio
     exec:
       - $NOTIFY --data-urlencode "status=0" --data-urlencode "current-stage="
