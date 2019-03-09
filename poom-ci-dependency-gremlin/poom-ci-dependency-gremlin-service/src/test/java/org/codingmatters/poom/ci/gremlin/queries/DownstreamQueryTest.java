@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class DownstreamQueryTest extends AbstractVertexQueryTest {
 
-    private DownstreamQuery<Object> producedByQuery;
+    private DownstreamQuery<String> downstreams;
 
     @Override
     @Before
@@ -19,13 +19,13 @@ public class DownstreamQueryTest extends AbstractVertexQueryTest {
         super.setUp();
 
         GraphTraversalSource g = AnonymousTraversalSource.traversal().withRemote(this.gremlin.remoteConnection());
-        this.producedByQuery = new DownstreamQuery<>(g, map -> (String) map.get("repository-id").get(0).value());
+        this.downstreams = new DownstreamQuery<>(g, map -> (String) map.get("repository-id").get(0).value());
     }
 
     @Test
     public void givenRepoProducesOneModule__whenNoRepoDependsOnThisModule__thenRepoADownstreamIsEmpty() throws Exception {
         assertThat(
-                producedByQuery.forRepository("orga-repo4-branch"),
+                downstreams.forRepository("orga-repo4-branch"),
                 is(empty())
         );
     }
@@ -33,7 +33,7 @@ public class DownstreamQueryTest extends AbstractVertexQueryTest {
     @Test
     public void givenRepoProducesNothin__thenRepoADownstreamIsEmpty() throws Exception {
         assertThat(
-                producedByQuery.forRepository("orga-repo3-branch"),
+                downstreams.forRepository("orga-repo3-branch"),
                 is(empty())
         );
     }
@@ -41,7 +41,7 @@ public class DownstreamQueryTest extends AbstractVertexQueryTest {
     @Test
     public void givenRepoAProducesOneModule__whenRepoBAndCDependsOnThisModule__thenRepoBAndCAreDownstreamOfA() throws Exception {
         assertThat(
-                producedByQuery.forRepository("orga-repo2-branch"),
+                downstreams.forRepository("orga-repo2-branch"),
                 containsInAnyOrder("orga-repo3-branch", "orga-repo4-branch")
         );
     }
@@ -49,7 +49,7 @@ public class DownstreamQueryTest extends AbstractVertexQueryTest {
     @Test
     public void givenRepoAProducesOneModule__whenRepoBDependsOnThisModule__thenRepoBIsDownstreamOfA() throws Exception {
         assertThat(
-                producedByQuery.forRepository("orga-repo5-branch"),
+                downstreams.forRepository("orga-repo5-branch"),
                 containsInAnyOrder("orga-repo3-branch")
         );
     }
@@ -57,7 +57,7 @@ public class DownstreamQueryTest extends AbstractVertexQueryTest {
     @Test
     public void givenRepoAProducesTwoModule__whenRepoBDependsOnOne_andRepoCAndDDependsOnTheOther__thenRepoBCAndDAreDownstreamOfA() throws Exception {
         assertThat(
-                producedByQuery.forRepository("orga-repo1-branch"),
+                downstreams.forRepository("orga-repo1-branch"),
                 containsInAnyOrder("orga-repo2-branch", "orga-repo4-branch")
         );
     }
