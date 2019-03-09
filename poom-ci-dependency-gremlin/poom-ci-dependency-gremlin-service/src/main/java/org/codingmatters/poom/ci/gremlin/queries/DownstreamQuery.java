@@ -13,7 +13,6 @@ public class DownstreamQuery<T> extends VertexQuery<T> {
         super(graph, vertexMapper, "repository-id", "name", "checkoutSpec");
     }
 
-
     public List<T> forRepository(String repositoryId) {
         Vertex repo = this.graph().V().hasLabel("repository").has("repository-id", repositoryId).next();
 
