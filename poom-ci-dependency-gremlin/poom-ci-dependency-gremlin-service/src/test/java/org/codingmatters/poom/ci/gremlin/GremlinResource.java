@@ -14,7 +14,9 @@ public class GremlinResource extends ExternalResource {
                         "gremlin",
                         container -> container
                                 .image("tinkerpop/gremlin-server:3.4.0")
-                ).started().finallyStopped();
+                ).started()
+                .finallyStarted();
+//                .finallyStopped();
     }
 
     private final DockerResource docker;
