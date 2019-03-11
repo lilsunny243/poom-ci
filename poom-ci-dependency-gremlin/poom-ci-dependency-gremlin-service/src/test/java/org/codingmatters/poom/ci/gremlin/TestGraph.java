@@ -68,5 +68,55 @@ public class TestGraph {
         g.V(repo3).addE("depends-on").to(module4).next();
         g.V(repo4).addE("depends-on").to(module1).next();
         g.V(repo4).addE("depends-on").to(module3).next();
+
+
+
+
+
+
+
+
+        Vertex repo10 = g.addV("repository")
+                .property("repository-id", "orga-repo10-branch")
+                .property("name", "orga/repo10")
+                .property("checkout-spec", "git|git@github.com:orga/repo10.git|branch")
+                .next();
+        Vertex repo11 = g.addV("repository")
+                .property("repository-id", "orga-repo11-branch")
+                .property("name", "orga/repo11")
+                .property("checkout-spec", "git|git@github.com:orga/repo11.git|branch")
+                .next();
+        Vertex repo12 = g.addV("repository")
+                .property("repository-id", "orga-repo12-branch")
+                .property("name", "orga/repo12")
+                .property("checkout-spec", "git|git@github.com:orga/repo12.git|branch")
+                .next();
+        Vertex repo13 = g.addV("repository")
+                .property("repository-id", "orga-repo13-branch")
+                .property("name", "orga/repo13")
+                .property("checkout-spec", "git|git@github.com:orga/repo13.git|branch")
+                .next();
+
+        Vertex module10 = g.addV("module")
+                .property("spec", "group:module10")
+                .property("version", "1")
+                .next();
+        Vertex module11 = g.addV("module")
+                .property("spec", "group:module11")
+                .property("version", "1")
+                .next();
+        Vertex module12 = g.addV("module")
+                .property("spec", "group:module12")
+                .property("version", "1")
+                .next();
+
+        g.V(repo10).addE("produces").to(module10).next();
+        g.V(repo11).addE("produces").to(module11).next();
+        g.V(repo12).addE("produces").to(module12).next();
+
+
+        g.V(repo11).addE("depends-on").to(module10).next();
+        g.V(repo12).addE("depends-on").to(module11).next();
+        g.V(repo13).addE("depends-on").to(module12).next();
     }
 }
