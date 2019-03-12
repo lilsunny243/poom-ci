@@ -69,7 +69,9 @@ env:
   - DOCKER_CMD: docker run --user $(id -u):$(id -g) --rm
   - DOCKER: $DOCKER_CMD $DOCKER_ENV $DOCKER_VOLUMES $CI_TOOLS_IMAGE
 
-  - MVN_OPTS: -B -Dcodingmatters.docker.namespace=codingmatters -Ddocker.registry=registry.containers.ovh.net
+  - DOCKER_API_URL: http://172.17.0.1:2375
+
+  - MVN_OPTS: -B -Dcodingmatters.docker.namespace=codingmatters -Ddocker.registry=registry.containers.ovh.net -Ddocker.resource.docker.url=$DOCKER_API_URL
   - MVN: $DOCKER mvn -Dmaven.repo.local=/m2 --settings /settings.xml $MVN_OPTS
   - MVN_DEPLOY: $MVN deploy -DskipTests -Pattach-source-and-javadocs,sign-artifacts -Dgpg.passphrase=$GPG_PASS -Dgpg.homedir=/gnupg
 
