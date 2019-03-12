@@ -1,8 +1,10 @@
 package org.codingmatters.poom.ci.pipeline.api.service.repository.impl;
 
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.SegmentedRepository;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.*;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.UpstreamBuildQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
@@ -69,10 +71,10 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
         }
     };
 
-    private final SegmentedRepository<StageLogKey, StageLog, StageLogQuery> logRepository;
+    private final LogFileStore logStore;
 
-    public InMemoryPoomCIRepository(SegmentedRepository<StageLogKey, StageLog, StageLogQuery> logRepository) {
-        this.logRepository = logRepository;
+    public InMemoryPoomCIRepository(LogFileStore logStore) {
+        this.logStore = logStore;
     }
 
 
@@ -92,8 +94,8 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
     }
 
     @Override
-    public SegmentedRepository<StageLogKey, StageLog, StageLogQuery> logRepository() {
-        return this.logRepository;
+    public LogFileStore logStore() {
+        return logStore;
     }
 
     @Override

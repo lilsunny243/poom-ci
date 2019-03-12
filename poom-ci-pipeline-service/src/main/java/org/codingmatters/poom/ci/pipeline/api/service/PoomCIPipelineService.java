@@ -2,11 +2,8 @@ package org.codingmatters.poom.ci.pipeline.api.service;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Undertow;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.PeriodicalOperator;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.StageLogSegmentedRepository;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
 import org.codingmatters.poom.client.PoomjobsJobRegistryAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
@@ -15,10 +12,6 @@ import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class PoomCIPipelineService {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(PoomCIPipelineService.class);
@@ -48,51 +41,7 @@ public class PoomCIPipelineService {
 
         File logStorage = new File(Env.mandatory("LOG_STORAGE").asString());
 
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        PeriodicalOperator<PoomCIRepository.StageLogKey, StageLog, StageLogQuery> logStorer;
-        PeriodicalOperator<PoomCIRepository.StageLogKey, StageLog, StageLogQuery> logPurger;
-
-        PoomCIRepository repository = null;
-        try {
-            StageLogSegmentedRepository logRepository = new StageLogSegmentedRepository(logStorage, jsonFactory);
-
-            logStorer = new PeriodicalOperator<>(
-                    logRepository,
-                    PeriodicalOperator.PeriodicalOperations.storer(),
-                    scheduler,
-                    Env.optional("STORE_TICK").orElse(new Env.Var("30")).asLong(),
-                    TimeUnit.SECONDS
-            );
-            logStorer.start();
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try {
-                    logStorer.stop();
-                } catch (Exception e) {
-                    throw new RuntimeException("failed stopping log storer", e);
-                }
-            }));
-
-            logPurger = new PeriodicalOperator<>(
-                    logRepository,
-                    PeriodicalOperator.PeriodicalOperations.purger(Env.optional("PURGE_TTL").orElse(new Env.Var("120")).asLong()),
-                    scheduler,
-                    Env.optional("PURGE_TICK").orElse(new Env.Var("240")).asLong(),
-                    TimeUnit.SECONDS
-            );
-            logPurger.start();
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try {
-                    logPurger.stop();
-                } catch (Exception e) {
-                    throw new RuntimeException("failed stopping log purger", e);
-                }
-            }));
-
-            repository = PoomCIRepository.inMemory(logRepository);
-        } catch (IOException e) {
-            throw new RuntimeException("error creating log storage", e);
-        }
-
+        PoomCIRepository repository = PoomCIRepository.inMemory(new LogFileStore(logStorage));
         String jobRegistryUrl = Env.mandatory("JOB_REGISTRY_URL").asString();
         return new PoomCIApi(repository, "/pipelines", jsonFactory, new PoomjobsJobRegistryAPIRequesterClient(
                 new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> jobRegistryUrl), jsonFactory, jobRegistryUrl)

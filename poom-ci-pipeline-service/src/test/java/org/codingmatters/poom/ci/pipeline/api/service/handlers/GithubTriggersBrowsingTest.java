@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
 import org.codingmatters.poom.ci.pipeline.api.GithubTriggersGetRequest;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.emptyArray;
@@ -10,7 +11,14 @@ import static org.junit.Assert.assertThat;
 
 public class GithubTriggersBrowsingTest extends AbstractPoomCITest {
 
-    private GithubTriggersBrowsing handler = new GithubTriggersBrowsing(this.repository());
+    private GithubTriggersBrowsing handler;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        handler = new GithubTriggersBrowsing(this.repository());
+    }
 
     @Test
     public void empty() {

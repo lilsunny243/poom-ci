@@ -71,7 +71,6 @@
 
         <module>poom-ci-dependency-api-spec</module>
         <module>poom-ci-dependency-api</module>
-        <module>poom-ci-dependency-graph</module>
         <module>poom-ci-dependency-client</module>
         <module>poom-ci-dependency-gremlin</module>
 
@@ -220,6 +219,15 @@
     </dependencyManagement>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.flexio.io</groupId>
+                    <artifactId>flexio-mongo-io-maven-plugin</artifactId>
+                    <version>1.2.0-SNAPSHOT</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>

@@ -1,7 +1,9 @@
 package org.codingmatters.poom.ci.pipeline.api.service.repository;
 
 import org.codingmatters.poom.ci.pipeline.api.service.repository.impl.InMemoryPoomCIRepository;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.*;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.UpstreamBuildQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
@@ -12,14 +14,14 @@ import java.util.Objects;
 
 public interface PoomCIRepository {
 
-    static PoomCIRepository inMemory(SegmentedRepository<StageLogKey, StageLog, StageLogQuery> logRepository) {
-        return new InMemoryPoomCIRepository(logRepository);
+    static PoomCIRepository inMemory(LogFileStore logStorage) {
+        return new InMemoryPoomCIRepository(logStorage);
     }
 
     Repository<Pipeline, String> pipelineRepository();
     Repository<GithubPushEvent, String> githubPushEventRepository();
     Repository<PipelineStage, PipelineStageQuery> stageRepository();
-    SegmentedRepository<StageLogKey, StageLog, StageLogQuery> logRepository();
+    LogFileStore logStore();
     Repository<UpstreamBuild, UpstreamBuildQuery> upstreamBuildRepository();
 
     class StageLogKey implements SegmentedRepository.Key {

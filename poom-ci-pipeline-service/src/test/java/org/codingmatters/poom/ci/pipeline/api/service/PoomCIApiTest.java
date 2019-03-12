@@ -10,6 +10,7 @@ import org.codingmatters.poom.client.PoomjobsJobRegistryAPIHandlersClient;
 import org.codingmatters.poomjobs.api.JobCollectionPostRequest;
 import org.codingmatters.poomjobs.api.JobCollectionPostResponse;
 import org.codingmatters.poomjobs.api.PoomjobsJobRegistryAPIHandlers;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.Executors;
@@ -23,7 +24,14 @@ public class PoomCIApiTest extends AbstractPoomCITest {
 
     private final AtomicReference<JobCollectionPostRequest> lastJobPost = new AtomicReference<>(null);
 
-    private PoomjobsJobRegistryAPIClient jobRegistryAPIClient = new PoomjobsJobRegistryAPIHandlersClient(
+    private PoomjobsJobRegistryAPIClient jobRegistryAPIClient;
+    private PoomCIApi api;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        jobRegistryAPIClient = new PoomjobsJobRegistryAPIHandlersClient(
             new PoomjobsJobRegistryAPIHandlers.Builder()
                     .jobCollectionPostHandler(req -> {
                         lastJobPost.set(req);
@@ -31,7 +39,8 @@ public class PoomCIApiTest extends AbstractPoomCITest {
                     })
                     .build(),
             Executors.newFixedThreadPool(4));
-    private PoomCIApi api = new PoomCIApi(this.repository(), "/", new JsonFactory(), this.jobRegistryAPIClient);
+        api = new PoomCIApi(this.repository(), "/", new JsonFactory(), this.jobRegistryAPIClient);
+    }
 
     @Test
     public void whenPipelineIsPosted__thenJobIsPosted() {

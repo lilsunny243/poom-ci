@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.GithubTriggersPostRequest;
 import org.codingmatters.poom.ci.pipeline.api.githubtriggerspostresponse.Status201;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,14 @@ public class GithubTriggerCreationTest extends AbstractPoomCITest {
 
     private AtomicReference<PipelineTrigger> lastTriggered = new AtomicReference<>(null);
 
-    private GithubTriggerCreation handler = new GithubTriggerCreation(this.repository(), pipelineTrigger -> lastTriggered.set(pipelineTrigger));
+    private GithubTriggerCreation handler;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        handler = new GithubTriggerCreation(this.repository(), pipelineTrigger -> lastTriggered.set(pipelineTrigger));
+    }
 
     @Test
     public void whenPushEventPosted__thenTriggerCreated_andPipelineCreated() throws Exception {

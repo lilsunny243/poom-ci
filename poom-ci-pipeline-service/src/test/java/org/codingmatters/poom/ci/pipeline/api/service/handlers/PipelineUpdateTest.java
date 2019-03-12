@@ -20,13 +20,15 @@ import static org.junit.Assert.assertTrue;
 
 public class PipelineUpdateTest extends AbstractPoomCITest {
 
-    private PipelineUpdate handler = new PipelineUpdate(this.repository());
+    private PipelineUpdate handler;
 
     private String runningPipelineId;
     private String donePipelineId;
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
+        handler = new PipelineUpdate(this.repository());
         Entity<Pipeline> pipe = this.repository().pipelineRepository().create(Pipeline.builder()
                 .status(Status.builder()
                         .run(Status.Run.RUNNING)

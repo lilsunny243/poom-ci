@@ -4,6 +4,7 @@ import org.codingmatters.poom.ci.pipeline.api.GithubTriggerGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.githubtriggergetresponse.Status200;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.servives.domain.entities.Entity;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -11,7 +12,14 @@ import static org.junit.Assert.assertThat;
 
 public class GithubTriggerGetTest extends AbstractPoomCITest {
 
-    private GithubTriggerGet handler = new GithubTriggerGet(this.repository());
+    private GithubTriggerGet handler;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        handler = new GithubTriggerGet(this.repository());
+    }
 
     @Test
     public void whenTriggerNotFound__then404() {

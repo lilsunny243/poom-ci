@@ -6,6 +6,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.servives.domain.entities.Entity;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -17,7 +18,14 @@ import static org.junit.Assert.assertThat;
 public class PipelineCreateTest extends AbstractPoomCITest {
 
     private final AtomicReference<Pipeline> lastCreatedPipeline = new AtomicReference<>(null);
-    private PipelineCreate handler = new PipelineCreate(this.repository(), pipeline -> lastCreatedPipeline.set(pipeline));
+    private PipelineCreate handler;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        handler = new PipelineCreate(this.repository(), pipeline -> lastCreatedPipeline.set(pipeline));
+    }
 
     @Test
     public void givenTriggerIsWellFormatted__whenPosted__thenPipelineCreated() throws Exception {

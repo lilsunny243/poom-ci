@@ -3,7 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.ValueList;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogspatchresponse.Status201;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.types.AppendedLogLine;
@@ -20,11 +20,13 @@ import static org.junit.Assert.assertThat;
 
 public class StageLogsAppendTest extends AbstractPoomCITest {
 
-    private StageLogsAppend handler = new StageLogsAppend(this.repository());
+    private StageLogsAppend handler;
 
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
+        handler = new StageLogsAppend(this.repository());
         this.repository().stageRepository().create(PipelineStage.builder()
                 .pipelineId("a-pipeline")
                 .stage(stage -> stage
@@ -42,17 +44,9 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 )
                 .build());
 
+        LogFileStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
         for (long i = 0; i < 500; i++) {
-            this.repository().logRepository().repository(
-                    new PoomCIRepository.StageLogKey("a-pipeline", Stage.StageType.MAIN, "a-running-stage")
-            ).create(StageLog.builder()
-                    .pipelineId("a-pipeline")
-                    .stageName("a-running-stage")
-                    .stageType(Stage.StageType.MAIN)
-                    .log(LogLine.builder()
-                            .line(i).content("content of log line " + i)
-                            .build())
-                    .build());
+            segment.append("content of log line " + i);
         }
     }
 
@@ -81,9 +75,9 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
 
     @Test
     public void givenStageExists__whenAppendingOneLog__thenLineIsStoredAndAssignedLastIndex() throws Exception {
-        PoomCIRepository.StageLogKey stageLogKey = new PoomCIRepository.StageLogKey("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
+        LogFileStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
 
-        long logCount = this.repository().logRepository().repository(stageLogKey).all(0, 0).total();
+        long logCount = segment.all(0, 0).total();
         Status201 response = this.handler.apply(PipelineStageLogsPatchRequest.builder()
                 .pipelineId("a-pipeline")
                 .stageName("a-running-stage")
@@ -92,10 +86,10 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .build())
                 .opt().status201()
                 .orElseThrow(() -> new AssertionError("should have a 201"));
-        StageLog lastLog = this.repository().logRepository().repository(stageLogKey).all(500, 500).valueList().get(0);
+        StageLog lastLog = segment.all(500, 500).valueList().get(0);
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
-        assertThat(this.repository().logRepository().repository(stageLogKey).all(0, 0).total(), is(logCount + 1));
+        assertThat(segment.all(0, 0).total(), is(logCount + 1));
         assertThat(lastLog.pipelineId(), is("a-pipeline"));
         assertThat(lastLog.stageName(), is("a-running-stage"));
         assertThat(lastLog.stageType(), is(Stage.StageType.MAIN));
@@ -104,9 +98,9 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
 
     @Test
     public void givenStageExists__whenAppendingManyLogs__thenLinesAreStoredAndAssignedLastIndex() throws Exception {
-        PoomCIRepository.StageLogKey stageLogKey = new PoomCIRepository.StageLogKey("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
+        LogFileStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
 
-        long logCount = this.repository().logRepository().repository(stageLogKey).all(0, 0).total();
+        long logCount = segment.all(0, 0).total();
         ValueList.Builder<AppendedLogLine> listBuilder = new ValueList.Builder<AppendedLogLine>();
         for (int i = 1; i <= 10; i++) {
             listBuilder.with(AppendedLogLine.builder().content("added " + i).build());
@@ -121,10 +115,10 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .opt().status201()
                 .orElseThrow(() -> new AssertionError("should have a 201"));
 
-        List<StageLog> lastLogs = this.repository().logRepository().repository(stageLogKey).all(500, 600).valueList();
+        List<StageLog> lastLogs = segment.all(500, 600).valueList();
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
-        assertThat(this.repository().logRepository().repository(stageLogKey).all(0, 0).total(), is(logCount + 10));
+        assertThat(segment.all(0, 0).total(), is(logCount + 10));
 
         assertThat(lastLogs.size(), is(10));
 
