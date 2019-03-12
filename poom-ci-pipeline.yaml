@@ -5,7 +5,7 @@ stages:
       - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
       - git clone -b $FLEXIO_SCRIPTS_BRANCH $FLEXIO_SCRIPTS $WORKSPACE/flexio-ci-scripts && export PATH=$PATH:$WORKSPACE/flexio-ci-scripts/bin
       - docker pull $CI_TOOLS_IMAGE
-      - mkdir -p $WORKSPACE/.m2
+      - mkdir -p $M2
       - mkdir -p $WORKSPACE/gnupg
       - $DOCKER gpg --homedir /gnupg --list-keys
       - $DOCKER_CMD -v $WORKSPACE/gnupg:/gnupg -v $WORKSPACE/secrets/codesigning.asc:/codesigning.asc $CI_TOOLS_IMAGE gpg --homedir /gnupg --batch --import /codesigning.asc
@@ -55,6 +55,9 @@ cleanup:
     exec:
       - $MVN -q clean
 
+  - name: m2-repository-clean
+      - rm -rf $M2/repository/org/codingmatters
+      - rm -rf $M2/repository/io/flexio
 
 env:
   - FLEXIO_SCRIPTS: git@github.com:Flexio-corp/flexio-ci-scripts.git
@@ -64,7 +67,8 @@ env:
   - DEPENDENCIES_URL: https://dependencies.ci.flexio.io/dependencies
   - CI_TOOLS_IMAGE: codingmatters/ci-tools:0.0.1-SNAPSHOT
 
-  - DOCKER_VOLUMES: -v $SRC:/src -v $WORKSPACE/.m2:/m2 -v $WORKSPACE/secrets/settings.xml:/settings.xml -v $WORKSPACE/gnupg:/gnupg
+  - M2: /tmp/m2
+  - DOCKER_VOLUMES: -v $SRC:/src -v $M2:/m2 -v $WORKSPACE/secrets/settings.xml:/settings.xml -v $WORKSPACE/gnupg:/gnupg
   - DOCKER_ENV: --env REPOSITORY_ID="$REPOSITORY_ID" --env REPOSITORY="$REPOSITORY" --env CHECKOUT_SPEC="$CHECKOUT_SPEC"
   - DOCKER_CMD: docker run --user $(id -u):$(id -g) --rm
   - DOCKER: $DOCKER_CMD $DOCKER_ENV $DOCKER_VOLUMES $CI_TOOLS_IMAGE
