@@ -35,7 +35,7 @@ mediaType: application/json
                body: Error
 
       put:
-         body: Repository
+         body: FullRepository
          responses:
             200:
                body: Repository
@@ -141,6 +141,20 @@ types:
       properties:
          spec: string
          version: string
+
+   FullRepository:
+      type: object
+      properties:
+         id: string
+         name: string
+         checkoutSpec: string
+         dependencies:
+            type: array
+            items: Module
+         produces:
+            type: array
+            items: Module
+
 
    Error:
       type: object

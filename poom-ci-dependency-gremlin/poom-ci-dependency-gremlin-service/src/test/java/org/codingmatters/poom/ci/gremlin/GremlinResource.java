@@ -47,6 +47,7 @@ public class GremlinResource extends ExternalResource {
         IllegalStateException lastException = null;
         while((! ready) && connectTried < connectMaxTry) {
             try {
+                g.E().drop().iterate();
                 g.V().drop().iterate();
                 ready = true;
             } catch (IllegalStateException e) {
@@ -64,6 +65,7 @@ public class GremlinResource extends ExternalResource {
     @Override
     protected void after() {
         GraphTraversalSource g = AnonymousTraversalSource.traversal().withRemote(remoteConnection);
+        g.E().drop().iterate();
         g.V().drop().iterate();
         super.after();
     }

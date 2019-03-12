@@ -14,6 +14,10 @@
     <artifactId>poom-ci-dependency-gremlin-service</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>org.codingmatters.poom.ci</groupId>
+            <artifactId>poom-ci-dependency-api</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.tinkerpop</groupId>
