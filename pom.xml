@@ -71,7 +71,6 @@
 
         <module>poom-ci-dependency-api-spec</module>
         <module>poom-ci-dependency-api</module>
-        <!--<module>poom-ci-dependency-service</module>-->
         <module>poom-ci-dependency-graph</module>
         <module>poom-ci-dependency-client</module>
         <module>poom-ci-dependency-gremlin</module>
@@ -96,7 +95,7 @@
             <dependency>
                 <groupId>org.codingmatters.poom</groupId>
                 <artifactId>poomjobs</artifactId>
-                <version>1.1.0</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -104,7 +103,7 @@
             <dependency>
                 <groupId>io.flexio.commons</groupId>
                 <artifactId>flexio-commons</artifactId>
-                <version>1.1.0</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
