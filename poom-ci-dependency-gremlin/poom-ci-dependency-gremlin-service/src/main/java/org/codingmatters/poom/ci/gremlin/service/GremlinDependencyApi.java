@@ -28,6 +28,7 @@ public class GremlinDependencyApi {
                 .repositoryJustNextDownstreamRepositoriesGetHandler(new ListNextDownstreams(this.connection))
 
                 .repositoryPutHandler(new CreateOrUpdateRepository(this.connection))
+                .repositoryDeleteHandler(new DeleteRepository(this.connection))
 
                 .build();
     }

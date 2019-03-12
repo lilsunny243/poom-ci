@@ -11,7 +11,6 @@ public class CreateOrUpdateRepositoryQuery {
     }
 
     public void update(String repositoryId, String name, String checkoutSpec) {
-
         if(this.g.V().hasLabel("repository").has("repository-id", repositoryId).hasNext()) {
             this.g.V().hasLabel("repository").has("repository-id", repositoryId)
                     .property("name", name)

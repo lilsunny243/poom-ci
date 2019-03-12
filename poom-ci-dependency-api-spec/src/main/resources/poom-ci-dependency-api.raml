@@ -54,18 +54,6 @@ mediaType: application/json
 
       /produces:
          displayName: RepositoryModules
-         post:
-            body: Module[]
-            responses:
-               201:
-                  headers:
-                     Location: string
-               400:
-                  body: Error
-               404:
-                  body: Error
-               500:
-                  body: Error
          get:
             responses:
                200:
@@ -79,18 +67,6 @@ mediaType: application/json
 
       /depends-on:
          displayName: RepositoryDependencies
-         post:
-            body: Module[]
-            responses:
-               201:
-                  headers:
-                     Location: string
-               400:
-                  body: Error
-               404:
-                  body: Error
-               500:
-                  body: Error
          get:
             responses:
                200:
