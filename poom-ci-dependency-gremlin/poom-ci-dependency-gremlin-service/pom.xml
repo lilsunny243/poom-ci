@@ -16,7 +16,7 @@
 
     <properties>
         <docker.image.namespace>${codingmatters.docker.namespace}</docker.image.namespace>
-        <service.class.name>org.codingmatters.poom.ci.pipeline.api.service.PoomCIPipelineService</service.class.name>
+        <service.class.name>org.codingmatters.poom.ci.gremlin.service.GremlinDependencyService</service.class.name>
     </properties>
 
     <dependencies>
