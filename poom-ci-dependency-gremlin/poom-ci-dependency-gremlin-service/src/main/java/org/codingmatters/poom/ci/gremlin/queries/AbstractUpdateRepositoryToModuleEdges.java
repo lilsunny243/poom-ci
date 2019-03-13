@@ -44,7 +44,7 @@ public abstract class AbstractUpdateRepositoryToModuleEdges {
                 module = this.g.V().hasLabel("module").has("spec", moduleSpec.spec).has("version", moduleSpec.version).next();
             }
 
-            if(! this.g.V(repo).outE(this.edgeLabel).where(__.inV().is(module)).hasNext()) {
+            if(! this.g.V(repo).outE(this.edgeLabel).where(__.inV().hasLabel("module").hasId(module.id())).hasNext()) {
                 Edge e = g.V(repo).addE(this.edgeLabel).to(module).next();
             }
         }

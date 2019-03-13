@@ -33,6 +33,11 @@
             <groupId>org.apache.tinkerpop</groupId>
             <artifactId>gremlin-driver</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.janusgraph</groupId>
+            <artifactId>janusgraph-core</artifactId>
+            <version>0.3.1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.codingmatters.rest</groupId>

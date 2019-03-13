@@ -2,18 +2,27 @@ package org.codingmatters.poom.ci.gremlin.service;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Undertow;
+import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
+import org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0;
+import org.apache.tinkerpop.gremlin.structure.io.gryo.GryoMapper;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
+import org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistry;
 
 public class GremlinDependencyService {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(GremlinDependencyService.class);
 
     public static void main(String[] args) {
+        Cluster cluster = Cluster.build()
+                .addContactPoint(Env.mandatory("GREMLIN_HOST").asString())
+                .port(Env.optional("GREMLIN_PORT").orElse(new Env.Var("8182")).asInteger())
+                .serializer(new GryoMessageSerializerV3d0(GryoMapper.build().addRegistry(JanusGraphIoRegistry.getInstance())))
+                .create();
+
         DriverRemoteConnection connection = DriverRemoteConnection.using(
-                Env.mandatory("GREMLIN_HOST").asString(),
-                Env.optional("GREMLIN_PORT").orElse(new Env.Var("8182")).asInteger(),
+                cluster,
                 Env.optional("GREMLIN_GRAPH").orElse(new Env.Var("g")).asString()
         );
         GremlinDependencyService service = new GremlinDependencyService(

@@ -5,6 +5,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 public class TestGraph {
     static public void setup(GraphTraversalSource g) {
+//        g.tx().open();
         Vertex repo1 = g.addV("repository")
                 .property("repository-id", "orga-repo1-branch")
                 .property("name", "orga/repo1")
@@ -118,5 +119,7 @@ public class TestGraph {
         g.V(repo11).addE("depends-on").to(module10).next();
         g.V(repo12).addE("depends-on").to(module11).next();
         g.V(repo13).addE("depends-on").to(module12).next();
+
+//        g.tx().commit();
     }
 }

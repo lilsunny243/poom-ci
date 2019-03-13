@@ -2,10 +2,14 @@ package org.codingmatters.poom.ci.gremlin;
 
 import io.flexio.docker.DockerResource;
 import org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import java.util.List;
 
 
 public class GremlinExploreTest {
@@ -37,9 +41,9 @@ public class GremlinExploreTest {
 //        System.out.println("#################################################################################");
 
 
-//        GraphTraversalSource g = AnonymousTraversalSource.traversal().withRemote(this.gremlin.remoteConnection());
-//        Vertex repo1 = g.V().hasLabel("repository").has("repository-id", "orga1-repo1-branch1").next();
-//        System.out.printf("repo1 : %s", repo1);
+        GraphTraversalSource g = AnonymousTraversalSource.traversal().withRemote(this.gremlin.remoteConnection());
+        List<Vertex> repos = g.V().hasLabel("repository").toList();
+        System.out.printf("repos : %s\n", repos);
 
 
 //        GraphTraversalSource g = AnonymousTraversalSource.traversal().withRemote(this.gremlin.remoteConnection());
