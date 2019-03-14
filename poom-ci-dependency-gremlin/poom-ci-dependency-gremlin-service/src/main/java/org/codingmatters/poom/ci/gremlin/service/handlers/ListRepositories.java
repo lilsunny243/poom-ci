@@ -23,7 +23,7 @@ public class ListRepositories implements Function<RepositoriesGetRequest, Reposi
 
     @Override
     public RepositoriesGetResponse apply(RepositoriesGetRequest request) {
-        List<Repository> results = new RepositoryQuery<Repository>(AnonymousTraversalSource.traversal().withRemote(this.connection), Mappers::repository)
+        List<Repository> results = new RepositoryQuery<>(AnonymousTraversalSource.traversal().withRemote(this.connection), Mappers::repository)
                 .all();
 
         return RepositoriesGetResponse.builder()

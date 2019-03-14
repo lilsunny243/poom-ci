@@ -9,10 +9,21 @@ import java.util.Map;
 
 public class Mappers {
     public static Repository repository(Map<String, List<VertexProperty>> map) {
-        return null;
+        return Repository.builder()
+                .id(singlePropertyValue(map, "repository-id"))
+                .checkoutSpec(singlePropertyValue(map, "checkout-spec"))
+                .name(singlePropertyValue(map, "name"))
+                .build();
     }
 
     public static Module module(Map<String, List<VertexProperty>> map) {
-        return null;
+        return Module.builder()
+                .spec(singlePropertyValue(map, "spec"))
+                .version(singlePropertyValue(map, "version"))
+                .build();
+    }
+
+    private static String singlePropertyValue(Map<String, List<VertexProperty>> map, String prop) {
+        return map.get(prop) != null && ! map.get(prop).isEmpty() ? (String) map.get(prop).get(0).value() : null;
     }
 }
