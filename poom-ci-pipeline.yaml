@@ -69,8 +69,8 @@ env:
   - CI_TOOLS_IMAGE: codingmatters/ci-tools:0.0.1-SNAPSHOT
 
   - M2: /tmp/m2
-  - DOCKER_VOLUMES: -v $SRC:/src -v $M2:/m2 -v $WORKSPACE/secrets/settings.xml:/settings.xml -v $WORKSPACE/gnupg:/gnupg
-  - DOCKER_ENV: --env REPOSITORY_ID="$REPOSITORY_ID" --env REPOSITORY="$REPOSITORY" --env CHECKOUT_SPEC="$CHECKOUT_SPEC"
+  - DOCKER_VOLUMES: -v $SRC:/src -v $M2:/m2 -v $WORKSPACE/secrets/settings.xml:/settings.xml -v $WORKSPACE/gnupg:/gnupg -v $WORKSPACE/flexio-ci-scripts:/flexio-ci-scripts
+  - DOCKER_ENV: --env REPOSITORY_ID="$REPOSITORY_ID" --env REPOSITORY="$REPOSITORY" --env CHECKOUT_SPEC="$CHECKOUT_SPEC" --env M2_LOCAL_REPO="/m2"
   - DOCKER_CMD: docker run --user $(id -u):$(id -g) --rm
   - DOCKER: $DOCKER_CMD $DOCKER_ENV $DOCKER_VOLUMES $CI_TOOLS_IMAGE
 
@@ -80,8 +80,8 @@ env:
   - MVN: $DOCKER mvn -Dmaven.repo.local=/m2 --settings /settings.xml $MVN_OPTS
   - MVN_DEPLOY: $MVN deploy -DskipTests -Pattach-source-and-javadocs,sign-artifacts -Dgpg.passphrase=$GPG_PASS -Dgpg.homedir=/gnupg
 
-  - UPLOAD_PROJECT_METADATA: docker run --rm --env REPOSITORY_ID="$REPOSITORY_ID" --env REPOSITORY="$REPOSITORY" --env CHECKOUT_SPEC="$CHECKOUT_SPEC" -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 -v $WORKSPACE/secrets/settings.xml:/root/.m2/settings.xml $CI_TOOLS_IMAGE /usr/local/bin/upload-project-metadata.sh $DEPENDENCIES_URL /src
-  - TRIGGER_DOWNSTREAM: docker run --rm --env REPOSITORY_ID="$REPOSITORY_ID" --env REPOSITORY="$REPOSITORY" --env CHECKOUT_SPEC="$CHECKOUT_SPEC" -v $SRC:/src -v $WORKSPACE/.m2:/root/.m2 -v $WORKSPACE/secrets/settings.xml:/root/.m2/settings.xml $CI_TOOLS_IMAGE /usr/local/bin/trigger-downstream.sh $PIPELINES_URL $DEPENDENCIES_URL $REPOSITORY_ID "$REPOSITORY" "$CHECKOUT_SPEC"
+  - UPLOAD_PROJECT_METADATA: $DOCKER /flexio-ci-scripts/bin/upload-project-metadata.sh $DEPENDENCIES_URL /src
+  - TRIGGER_DOWNSTREAM: $DOCKER /flexio-ci-scripts/bin/trigger-downstream.sh $PIPELINES_URL $DEPENDENCIES_URL $REPOSITORY_ID "$REPOSITORY" "$CHECKOUT_SPEC"
 
   - NOTIFY: curl -G "https://my.flexio.io/channelApi/flexHttpInOut/59d3a0105d443519843d0496/5adf40aededdbb452368cfca" --data-urlencode "repository=$REPOSITORY" --data-urlencode "branch=$BRANCH" --data-urlencode "pipeline-id=$PIPELINE_ID"
   - DOCKER_BUILD: $WORKSPACE/flexio-ci-scripts/bin/docker-compose-build.sh
