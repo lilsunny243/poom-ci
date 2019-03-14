@@ -32,7 +32,7 @@ public class GremlinDependencyService {
         );
         service.start();
 
-        log.info("poom-ci pipeline api service running");
+        log.info("poom-ci dependency api service [gremlin impl] running");
         while (true) {
             try {
                 Thread.sleep(1000);
@@ -40,9 +40,9 @@ public class GremlinDependencyService {
                 break;
             }
         }
-        log.info("poom-ci pipeline api service stopping...");
+        log.info("poom-ci dependency api service [gremlin impl] stopping...");
         service.stop();
-        log.info("poom-ci pipeline api service stopped.");
+        log.info("poom-ci dependency api service [gremlin impl] stopped.");
     }
 
     private final GremlinDependencyApi api;
