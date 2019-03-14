@@ -34,13 +34,13 @@ stages:
       - branch in (master, develop)
 
 onSuccess:
-#  - name: metadata-management
-#    exec:
-#      - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
-#      - $UPLOAD_PROJECT_METADATA
+  - name: metadata-management
+    exec:
+      - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
+      - $UPLOAD_PROJECT_METADATA
 #      - $TRIGGER_DOWNSTREAM
-#    onlyWhen:
-#      - branch in (master, develop)
+    onlyWhen:
+      - branch in (master, develop)
   - name: notify-flexio
     exec:
       - $NOTIFY --data-urlencode "status=0" --data-urlencode "current-stage="
@@ -65,7 +65,7 @@ env:
   - FLEXIO_SCRIPTS_BRANCH: master
 
   - PIPELINES_URL: https://pipelines.ci.flexio.io/pipelines
-  - DEPENDENCIES_URL: https://dependencies.ci.flexio.io/dependencies
+  - DEPENDENCIES_URL: https://dependencies.ci.flexio.io/poomci-dependency-api
   - CI_TOOLS_IMAGE: codingmatters/ci-tools:0.0.1-SNAPSHOT
 
   - M2: /tmp/m2
