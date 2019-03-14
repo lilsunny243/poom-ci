@@ -81,7 +81,7 @@ env:
   - MVN_DEPLOY: $MVN deploy -DskipTests -Pattach-source-and-javadocs,sign-artifacts -Dgpg.passphrase=$GPG_PASS -Dgpg.homedir=/gnupg
 
   - UPLOAD_PROJECT_METADATA: $DOCKER /flexio-ci-scripts/bin/upload-project-metadata.sh $DEPENDENCIES_URL /src
-  - TRIGGER_DOWNSTREAM: $DOCKER /flexio-ci-scripts/bin/trigger-downstream.sh $PIPELINES_URL $DEPENDENCIES_URL $REPOSITORY_ID "$REPOSITORY" "$CHECKOUT_SPEC"
+  - TRIGGER_DOWNSTREAM: $DOCKER /usr/local/bin/trigger-downstream.sh $PIPELINES_URL $DEPENDENCIES_URL $REPOSITORY_ID "$REPOSITORY" "$CHECKOUT_SPEC"
 
   - NOTIFY: curl -G "https://my.flexio.io/channelApi/flexHttpInOut/59d3a0105d443519843d0496/5adf40aededdbb452368cfca" --data-urlencode "repository=$REPOSITORY" --data-urlencode "branch=$BRANCH" --data-urlencode "pipeline-id=$PIPELINE_ID"
   - DOCKER_BUILD: $WORKSPACE/flexio-ci-scripts/bin/docker-compose-build.sh
