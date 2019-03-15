@@ -16,7 +16,7 @@ public class NextDownstreamsQuery<T> extends VertexQuery<T> {
     private final TransitiveDownstreamQuery<String> transitiveDownstreams;
 
     public NextDownstreamsQuery(GraphTraversalSource graph, Function<Map<String, List<VertexProperty>>, T> vertexMapper) {
-        super(graph, vertexMapper, "repository-id", "name", "checkoutSpec");
+        super(graph, vertexMapper, "repository-id", "name", "checkout-spec");
         this.downstreams = new DownstreamQuery<>(graph, map -> (String) map.get("repository-id").get(0).value());
         this.transitiveDownstreams = new TransitiveDownstreamQuery<>(graph, map -> (String) map.get("repository-id").get(0).value());
     }

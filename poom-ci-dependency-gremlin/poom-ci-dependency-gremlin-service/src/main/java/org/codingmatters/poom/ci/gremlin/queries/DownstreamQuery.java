@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 public class DownstreamQuery<T> extends VertexQuery<T> {
     public DownstreamQuery(GraphTraversalSource graph, Function<Map<String, List<VertexProperty>>, T> vertexMapper) {
-        super(graph, vertexMapper, "repository-id", "name", "checkoutSpec");
+        super(graph, vertexMapper, "repository-id", "name", "checkout-spec");
     }
 
     public List<T> forRepository(String repositoryId) {
