@@ -4,6 +4,8 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.structure.VertexProperty;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -16,11 +18,11 @@ public class DownstreamQuery<T> extends VertexQuery<T> {
     public List<T> forRepository(String repositoryId) {
         Vertex repo = this.graph().V().hasLabel("repository").has("repository-id", repositoryId).next();
 
-        return this.processTraversal(
+        return new LinkedList<>(new HashSet<>(this.processTraversal(
                 this.graph().V(repo.id())
                         .out("produces").hasLabel("module")
                         .in("depends-on").hasLabel("repository").as("downstream")
                         .select("downstream")
-        );
+        )));
     }
 }

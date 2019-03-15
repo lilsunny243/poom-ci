@@ -1,0 +1,314 @@
+[
+   {
+      "spec" : "com.googlecode.juniversalchardet:juniversalchardet",
+      "version" : "1.0.3"
+   },
+   {
+      "spec" : "com.github.fge:btf",
+      "version" : "1.2"
+   },
+   {
+      "version" : "1.2.5",
+      "spec" : "com.github.fge:json-schema-core"
+   },
+   {
+      "spec" : "com.googlecode.libphonenumber:libphonenumber",
+      "version" : "6.2"
+   },
+   {
+      "version" : "2.2.6",
+      "spec" : "com.github.fge:json-schema-validator"
+   },
+   {
+      "version" : "2.8.5",
+      "spec" : "com.fasterxml.jackson.core:jackson-databind"
+   },
+   {
+      "version" : "2.8.5",
+      "spec" : "com.fasterxml.jackson.core:jackson-core"
+   },
+   {
+      "version" : "3.0.0",
+      "spec" : "com.google.code.findbugs:annotations"
+   },
+   {
+      "version" : "2.8.5",
+      "spec" : "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
+   },
+   {
+      "version" : "2.8.5",
+      "spec" : "com.fasterxml.jackson.module:jackson-module-jsonSchema"
+   },
+   {
+      "spec" : "com.squareup:javapoet",
+      "version" : "1.7.0"
+   },
+   {
+      "version" : "18.0",
+      "spec" : "com.google.guava:guava"
+   },
+   {
+      "version" : "1.8",
+      "spec" : "com.github.fge:jackson-coreutils"
+   },
+   {
+      "spec" : "net.sf.jopt-simple:jopt-simple",
+      "version" : "4.6"
+   },
+   {
+      "version" : "1.4.3",
+      "spec" : "javax.mail:mailapi"
+   },
+   {
+      "spec" : "com.github.fge:uri-template",
+      "version" : "0.9"
+   },
+   {
+      "spec" : "com.github.fge:msg-simple",
+      "version" : "1.1"
+   },
+   {
+      "spec" : "commons-lang:commons-lang",
+      "version" : "2.6"
+   },
+   {
+      "spec" : "com.google.code.findbugs:jsr305",
+      "version" : "3.0.0"
+   },
+   {
+      "spec" : "org.apache.ws.xmlschema:xmlschema-core",
+      "version" : "2.2.1"
+   },
+   {
+      "version" : "2.4",
+      "spec" : "commons-io:commons-io"
+   },
+   {
+      "version" : "2.3",
+      "spec" : "joda-time:joda-time"
+   },
+   {
+      "version" : "2.8.5",
+      "spec" : "com.fasterxml.jackson.core:jackson-annotations"
+   },
+   {
+      "spec" : "javax.enterprise:cdi-api",
+      "version" : "1.0"
+   },
+   {
+      "spec" : "org.hamcrest:hamcrest-all",
+      "version" : "1.3"
+   },
+   {
+      "version" : "1.21",
+      "spec" : "org.codehaus.plexus:plexus-interpolation"
+   },
+   {
+      "spec" : "org.raml:yagi",
+      "version" : "1.0.8"
+   },
+   {
+      "spec" : "javax.validation:validation-api",
+      "version" : "1.1.0.Final"
+   },
+   {
+      "version" : "1.1",
+      "spec" : "javax.activation:activation"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-doc"
+   },
+   {
+      "spec" : "org.yaml:snakeyaml",
+      "version" : "1.17"
+   },
+   {
+      "version" : "1.0.2.v20150114",
+      "spec" : "org.eclipse.aether:aether-api"
+   },
+   {
+      "version" : "4.12",
+      "spec" : "junit:junit"
+   },
+   {
+      "spec" : "org.hamcrest:hamcrest-core",
+      "version" : "1.3"
+   },
+   {
+      "version" : "4.0",
+      "spec" : "com.google.inject:guice:jar"
+   },
+   {
+      "spec" : "org.apache.maven.plugin-testing:maven-plugin-testing-harness",
+      "version" : "3.3.0"
+   },
+   {
+      "spec" : "org.apache.maven:maven-aether-provider",
+      "version" : "3.3.9"
+   },
+   {
+      "spec" : "org.apache.maven:maven-settings",
+      "version" : "3.3.9"
+   },
+   {
+      "version" : "1.7R4",
+      "spec" : "org.mozilla:rhino"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-php"
+   },
+   {
+      "version" : "3.3",
+      "spec" : "org.apache.maven.plugin-tools:maven-plugin-annotations"
+   },
+   {
+      "version" : "3.3.9",
+      "spec" : "org.apache.maven:maven-model-builder"
+   },
+   {
+      "version" : "1.7.25",
+      "spec" : "org.slf4j:slf4j-api"
+   },
+   {
+      "version" : "1.0.2.v20150114",
+      "spec" : "org.eclipse.aether:aether-spi"
+   },
+   {
+      "spec" : "org.apache.maven.wagon:wagon-provider-api",
+      "version" : "2.10"
+   },
+   {
+      "spec" : "org.codehaus.plexus:plexus-utils",
+      "version" : "3.0.22"
+   },
+   {
+      "spec" : "org.eclipse.aether:aether-util",
+      "version" : "1.0.2.v20150114"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation-commons"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation"
+   },
+   {
+      "version" : "0.3.2",
+      "spec" : "org.eclipse.sisu:org.eclipse.sisu.plexus"
+   },
+   {
+      "spec" : "org.eclipse.aether:aether-impl",
+      "version" : "1.0.2.v20150114"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-spec",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "spec" : "javax.inject:javax.inject",
+      "version" : "1"
+   },
+   {
+      "version" : "1.1-alpha-2",
+      "spec" : "classworlds:classworlds"
+   },
+   {
+      "version" : "3.3.9",
+      "spec" : "org.apache.maven:maven-settings-builder"
+   },
+   {
+      "version" : "3.3.9",
+      "spec" : "org.apache.maven:maven-repository-metadata"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.tests:codingmatters-reflect-unit"
+   },
+   {
+      "version" : "1.4",
+      "spec" : "org.sonatype.plexus:plexus-cipher"
+   },
+   {
+      "version" : "3.4",
+      "spec" : "org.apache.commons:commons-lang3"
+   },
+   {
+      "version" : "3.3.9",
+      "spec" : "org.apache.maven:maven-artifact"
+   },
+   {
+      "spec" : "org.apache.maven:maven-compat",
+      "version" : "3.3.9"
+   },
+   {
+      "spec" : "org.raml:raml-parser-2",
+      "version" : "1.0.8"
+   },
+   {
+      "spec" : "org.apache.maven:maven-model",
+      "version" : "3.3.9"
+   },
+   {
+      "version" : "3.3.9",
+      "spec" : "org.apache.maven:maven-plugin-api"
+   },
+   {
+      "spec" : "org.codehaus.plexus:plexus-container-default",
+      "version" : "1.0-alpha-9-stable-1"
+   },
+   {
+      "spec" : "org.codehaus.plexus:plexus-io",
+      "version" : "2.0.4"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-json"
+   },
+   {
+      "spec" : "aopalliance:aopalliance",
+      "version" : "1.0"
+   },
+   {
+      "version" : "0.3.2",
+      "spec" : "org.eclipse.sisu:org.eclipse.sisu.inject"
+   },
+   {
+      "spec" : "commons-io:commons-io",
+      "version" : "2.2"
+   },
+   {
+      "spec" : "javax.annotation:jsr250-api",
+      "version" : "1.0"
+   },
+   {
+      "spec" : "net.sourceforge.plantuml:plantuml",
+      "version" : "1.2018.1"
+   },
+   {
+      "version" : "3.3.9",
+      "spec" : "org.apache.maven:maven-builder-support"
+   },
+   {
+      "spec" : "org.apache.maven:maven-core",
+      "version" : "3.3.9"
+   },
+   {
+      "version" : "2.2",
+      "spec" : "org.codehaus.plexus:plexus-archiver"
+   },
+   {
+      "spec" : "org.codehaus.plexus:plexus-classworlds",
+      "version" : "2.5.2"
+   },
+   {
+      "version" : "1.6",
+      "spec" : "org.codehaus.plexus:plexus-component-annotations"
+   },
+   {
+      "spec" : "org.sonatype.plexus:plexus-sec-dispatcher",
+      "version" : "1.3"
+   }
+]

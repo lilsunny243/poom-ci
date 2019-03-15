@@ -1,0 +1,47 @@
+[
+   {
+      "name" : "flexiooss/codingmatters-rest",
+      "id" : "flexiooss-codingmatters-rest-develop",
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-rest.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-reflect-unit.git|develop",
+      "id" : "flexiooss-codingmatters-reflect-unit-develop",
+      "name" : "flexiooss/codingmatters-reflect-unit"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/poomjobs.git|develop",
+      "id" : "flexiooss-poomjobs-develop",
+      "name" : "flexiooss/poomjobs"
+   },
+   {
+      "name" : "flexiooss/poom-ci",
+      "id" : "flexiooss-poom-ci-develop",
+      "checkoutSpec" : "git|git@github.com:flexiooss/poom-ci.git|develop"
+   },
+   {
+      "name" : "flexiooss/codingmatters-value-objects",
+      "id" : "flexiooss-codingmatters-value-objects-develop",
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-value-objects.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-parent.git|develop",
+      "name" : "flexiooss/codingmatters-parent",
+      "id" : "flexiooss-codingmatters-parent-develop"
+   },
+   {
+      "name" : "flexiooss/flexio-commons",
+      "id" : "flexiooss-flexio-commons-develop",
+      "checkoutSpec" : "git|git@github.com:flexiooss/flexio-commons.git|develop"
+   },
+   {
+      "id" : "flexiooss-codingmatters-external-dependencies-bom-develop",
+      "name" : "flexiooss/codingmatters-external-dependencies-bom",
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-external-dependencies-bom.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/poom-services.git|develop",
+      "id" : "flexiooss-poom-services-develop",
+      "name" : "flexiooss/poom-services"
+   }
+]

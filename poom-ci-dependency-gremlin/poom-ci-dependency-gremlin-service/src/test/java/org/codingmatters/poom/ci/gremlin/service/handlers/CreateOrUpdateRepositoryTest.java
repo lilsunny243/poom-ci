@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import io.flexio.docker.DockerResource;
 import org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource;
 import org.codingmatters.poom.ci.dependency.api.RepositoryPutRequest;
-import org.codingmatters.poom.ci.dependency.api.RepositoryPutResponse;
 import org.codingmatters.poom.ci.dependency.api.types.FullRepository;
 import org.codingmatters.poom.ci.dependency.api.types.Module;
 import org.codingmatters.poom.ci.dependency.api.types.Repository;
@@ -37,7 +36,7 @@ public class CreateOrUpdateRepositoryTest {
 
     @Test
     public void givenDependencyGraphIsEmpty__whenPuttingFullRepository__thenGraphIsLoaded() throws Exception {
-        RepositoryPutResponse response = new CreateOrUpdateRepository(this.gremlin.remoteConnection()).apply(RepositoryPutRequest.builder()
+        new CreateOrUpdateRepository(this.gremlin.remoteConnection()).apply(RepositoryPutRequest.builder()
                 .repositoryId("REPOID")
                 .payload(this.fromJson("full-repository.json"))
                 .build());
@@ -55,10 +54,68 @@ public class CreateOrUpdateRepositoryTest {
         );
 
         DependenciesQuery<Module> deps = new DependenciesQuery<>(AnonymousTraversalSource.traversal().withRemote(this.gremlin.remoteConnection()), Mappers::module);
-        assertThat(deps.forRepository("REPOID"), hasSize(133));
+        assertThat(deps.forRepository("REPOID"), hasSize(120));
 
         ProducedByQuery<Module> produced = new ProducedByQuery<>(AnonymousTraversalSource.traversal().withRemote(this.gremlin.remoteConnection()), Mappers::module);
         assertThat(produced.forRepository("REPOID"), hasSize(23));
+    }
+
+    @Test
+    public void givenDependencyIsProduced__whenCreatingRepository__thenProducedDependencyIsNotStoredAsADependency() throws Exception {
+        new CreateOrUpdateRepository(this.gremlin.remoteConnection()).apply(RepositoryPutRequest.builder()
+                .repositoryId("REPOID")
+                .payload(repo -> repo
+                        .id("REPOID")
+                        .name("REPONAME")
+                        .checkoutSpec("REPOSPEC")
+                        .dependencies(module -> module.spec("group:module").version("1"))
+                        .produces(module -> module.spec("group:module").version("1"))
+                )
+                .build());
+
+        DependenciesQuery<Module> deps = new DependenciesQuery<>(AnonymousTraversalSource.traversal().withRemote(this.gremlin.remoteConnection()), Mappers::module);
+        assertThat(deps.forRepository("REPOID"), hasSize(0));
+
+        ProducedByQuery<Module> produced = new ProducedByQuery<>(AnonymousTraversalSource.traversal().withRemote(this.gremlin.remoteConnection()), Mappers::module);
+        assertThat(produced.forRepository("REPOID"), hasSize(1));
+    }
+
+    @Test
+    public void givenDependencyIsDuplicated__whenCreatingRepository__thenDependencyIsStoredOnce() throws Exception {
+        new CreateOrUpdateRepository(this.gremlin.remoteConnection()).apply(RepositoryPutRequest.builder()
+                .repositoryId("REPOID")
+                .payload(repo -> repo
+                        .id("REPOID")
+                        .name("REPONAME")
+                        .checkoutSpec("REPOSPEC")
+                        .dependencies(
+                                module -> module.spec("group:module").version("1"),
+                                module -> module.spec("group:module").version("1")
+                        )
+                )
+                .build());
+
+        DependenciesQuery<Module> deps = new DependenciesQuery<>(AnonymousTraversalSource.traversal().withRemote(this.gremlin.remoteConnection()), Mappers::module);
+        assertThat(deps.forRepository("REPOID"), hasSize(1));
+    }
+
+    @Test
+    public void givenProducedIsDuplicated__whenCreatingRepository__thenProducedIsStoredOnce() throws Exception {
+        new CreateOrUpdateRepository(this.gremlin.remoteConnection()).apply(RepositoryPutRequest.builder()
+                .repositoryId("REPOID")
+                .payload(repo -> repo
+                        .id("REPOID")
+                        .name("REPONAME")
+                        .checkoutSpec("REPOSPEC")
+                        .produces(
+                                module -> module.spec("group:module").version("1"),
+                                module -> module.spec("group:module").version("1")
+                        )
+                )
+                .build());
+
+        ProducedByQuery<Module> produced = new ProducedByQuery<>(AnonymousTraversalSource.traversal().withRemote(this.gremlin.remoteConnection()), Mappers::module);
+        assertThat(produced.forRepository("REPOID"), hasSize(1));
     }
 
     private FullRepository fromJson(String resource) throws IOException {
