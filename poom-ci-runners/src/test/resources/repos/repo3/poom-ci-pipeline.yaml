@@ -1,0 +1,7 @@
+---
+from:
+  - url: repo1
+    branch: master
+
+stages:
+  - name: st3

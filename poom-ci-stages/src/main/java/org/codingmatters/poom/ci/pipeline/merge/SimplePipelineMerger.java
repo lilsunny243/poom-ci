@@ -2,11 +2,13 @@ package org.codingmatters.poom.ci.pipeline.merge;
 
 import org.codingmatters.poom.ci.pipeline.PipelineMerger;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
+import org.codingmatters.poom.ci.pipeline.descriptors.Secret;
 import org.codingmatters.poom.ci.pipeline.descriptors.Stage;
 import org.codingmatters.poom.ci.pipeline.descriptors.ValueList;
 import org.codingmatters.value.objects.values.ObjectValue;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class SimplePipelineMerger implements PipelineMerger {
         result.onError(this.mergeStages(pipeline.onError(), into.onError()));
 
         result.env(this.mergeEnv(pipeline.env(), into.env()));
+        result.secrets(this.mergeSecrets(pipeline.secrets(), into.secrets()));
 
         return result.build();
     }
@@ -63,8 +66,6 @@ public class SimplePipelineMerger implements PipelineMerger {
                 .withAfter(null);
     }
 
-
-
     private ObjectValue[] mergeEnv(ValueList<ObjectValue> env, ValueList<ObjectValue> into) {
         List<ObjectValue> result = new LinkedList<>();
         if(into != null) {
@@ -80,7 +81,36 @@ public class SimplePipelineMerger implements PipelineMerger {
         if(into == null && result.isEmpty()) {
             return null;
         } else {
-            return result.toArray(new ObjectValue[result.size()]);
+            return result.toArray(new ObjectValue[0]);
+        }
+    }
+
+    private Secret[] mergeSecrets(ValueList<Secret> secrets, ValueList<Secret> into) {
+        List<Secret> result = new LinkedList<>();
+
+        HashMap<String, Integer> secretIndex = new HashMap<>();
+
+        if(into != null) {
+            for (Secret secret : into) {
+                result.add(secret);
+                secretIndex.put(secret.name(), result.size() - 1);
+            }
+        }
+        if(secrets != null) {
+            for (Secret secret : secrets) {
+                if(secretIndex.containsKey(secret.name())) {
+                    result.set(secretIndex.get(secret.name()), secret);
+                } else {
+                    result.add(secret);
+                    secretIndex.put(secret.name(), result.size() - 1);
+                }
+            }
+        }
+
+        if(into == null && result.isEmpty()) {
+            return null;
+        } else {
+            return result.toArray(new Secret[0]);
         }
     }
 }

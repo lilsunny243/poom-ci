@@ -1,11 +1,14 @@
 package org.codingmatters.poom.ci.pipeline;
 
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
+import org.codingmatters.poom.ci.pipeline.descriptors.Secret;
+import org.codingmatters.poom.ci.pipeline.descriptors.ValueList;
 import org.codingmatters.poom.ci.pipeline.merge.SimplePipelineMerger;
 import org.codingmatters.value.objects.values.ObjectValue;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class PipelineMergerTest {
@@ -195,6 +198,104 @@ public class PipelineMergerTest {
                                 ObjectValue.builder().property("e", v -> v.stringValue("v2")).build()
                         )
                         .build())
+        );
+    }
+
+    @Test
+    public void givenPipelineWithNoSecret__whenMergingWithPipelineWithNoSecret__thenMergedHasNoSecrets() throws Exception {
+        assertThat(
+                new SimplePipelineMerger().merge(
+                        Pipeline.builder().build(),
+                        Pipeline.builder().build()
+                ).secrets(),
+                is(nullValue())
+        );
+    }
+
+    @Test
+    public void givenPipelineWithNoSecret__whenMergingWithPipelineHavingSecrets__thenMergedHasThoseSecrets() throws Exception {
+        assertThat(
+                new SimplePipelineMerger().merge(
+                        Pipeline.builder()
+                                .secrets(
+                                        Secret.builder().name("new secret 1").build(),
+                                        Secret.builder().name("new secret 2").build()
+                                )
+                                .build(),
+                        Pipeline.builder()
+                                .build()
+                ).secrets(),
+                is(new ValueList.Builder<Secret>().with(
+                        Secret.builder().name("new secret 1").build(),
+                        Secret.builder().name("new secret 2").build()
+                ).build())
+        );
+    }
+
+    @Test
+    public void givenPipelineWithSomeSecret__whenMergingWithPipelineWithNoSecret__thenMergedHasThoseSecrets() throws Exception {
+        assertThat(
+                new SimplePipelineMerger().merge(
+                        Pipeline.builder()
+                                .build(),
+                        Pipeline.builder()
+                                .secrets(
+                                        Secret.builder().name("secret 1").build(),
+                                        Secret.builder().name("secret 2").build()
+                                )
+                                .build()
+                ).secrets(),
+                is(new ValueList.Builder<Secret>().with(
+                        Secret.builder().name("secret 1").build(),
+                        Secret.builder().name("secret 2").build()
+                ).build())
+        );
+    }
+
+    @Test
+    public void givenPipelineWithSomeSecret__whenMergingWithPipelineHavingSecrets__thenMergedHasAllSecrets() throws Exception {
+        assertThat(
+                new SimplePipelineMerger().merge(
+                        Pipeline.builder()
+                                .secrets(
+                                        Secret.builder().name("new secret 1").build(),
+                                        Secret.builder().name("new secret 2").build()
+                                )
+                                .build(),
+                        Pipeline.builder()
+                                .secrets(
+                                        Secret.builder().name("secret 1").build(),
+                                        Secret.builder().name("secret 2").build()
+                                )
+                                .build()
+                ).secrets(),
+                is(new ValueList.Builder<Secret>().with(
+                        Secret.builder().name("secret 1").build(),
+                        Secret.builder().name("secret 2").build(),
+                        Secret.builder().name("new secret 1").build(),
+                        Secret.builder().name("new secret 2").build()
+                ).build())
+        );
+    }
+
+    @Test
+    public void givenPipelineWithSomeSecret__whenMergingWithPipelineHavingSameSecretName__thenMergedOneOverridenSecret() throws Exception {
+        assertThat(
+                new SimplePipelineMerger().merge(
+                        Pipeline.builder()
+                                .secrets(
+                                        Secret.builder().name("secret").content("new content").build()
+                                )
+                                .build(),
+                        Pipeline.builder()
+                                .secrets(
+                                        Secret.builder().name("secret").content("original content").build()
+                                )
+                                .build()
+                ).secrets(),
+                is(new ValueList.Builder<Secret>().with(
+                        Secret.builder().name("secret").content("new content").build()
+                ).build())
         );
     }
 }

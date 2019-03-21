@@ -2,8 +2,8 @@
 pipeline:
   $conforms-to: [org.codingmatters.poom.ci.pipeline.StageProvider]
 
-  buildFrom:
-    $list: string
+  from:
+    $list: $repositorySpec
 
   stages:
     $list: $stage
@@ -43,3 +43,7 @@ secret:
   content: string
   as:
     $enum: var, file
+
+repositorySpec:
+  url: string
+  branch: string
