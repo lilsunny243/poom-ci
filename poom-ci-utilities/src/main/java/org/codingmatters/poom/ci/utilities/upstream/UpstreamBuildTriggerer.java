@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UpstreamBuildTriggerer {
+
+    public static final int TRIES = 5;
+
     public static void main(String[] args) {
         if(args.length < 5) {
             throw new RuntimeException("usage : <pipeline base url> <dependencies base url> <repository id> <repository name> <checkout spec>");
@@ -50,10 +53,10 @@ public class UpstreamBuildTriggerer {
 
         ValueList<Repository> downstreamRepositories;
         try {
-            downstreamRepositories = dependencyAPIClient.repositories().repository().repositoryDownstreamRepositories().repositoryJustNextDownstreamRepositories()
+            downstreamRepositories = retry(() -> dependencyAPIClient.repositories().repository().repositoryDownstreamRepositories().repositoryJustNextDownstreamRepositories()
                     .get(req -> req.repositoryId(upstream.id()))
                     .opt().status200().payload()
-                    .orElseThrow(() -> new RuntimeException("failed getting just next downstream repositories for " + upstream.id() + ". unexpected response from dependecy service"));
+                    .orElseThrow(() -> new RuntimeException("failed getting just next downstream repositories for " + upstream.id() + ". unexpected response from dependecy service")));
         } catch (IOException e) {
             throw new RuntimeException("failed getting just next downstream repositories for " + upstream.id(), e);
         }
@@ -75,11 +78,33 @@ public class UpstreamBuildTriggerer {
                         .downstream(downstream)
                         .build();
                 System.out.println("triggering downstream " + downstream);
-                pipelineAPIClient.triggers().upstreamBuildTriggers().post(req -> req.payload(upstreamBuild)).opt().status201().orElseThrow(() -> new RuntimeException("failed triggering downstream build"));
+                retry(() -> pipelineAPIClient.triggers().upstreamBuildTriggers().post(req -> req.payload(upstreamBuild)).opt().status201().orElseThrow(() -> new RuntimeException("failed triggering downstream build")));
                 System.out.println("done triggering downstream " + downstream);
             } catch (IOException e) {
                 throw new RuntimeException("failed connecting to pipeline api at " + pipelineApiUrl, e);
             }
         }
+    }
+
+    static private <T> T retry(Tryable<T> tryable) throws IOException {
+        int remainingTries = TRIES;
+        IOException lastException;
+        do {
+            remainingTries--;
+            try {
+                return tryable.tryThat();
+            } catch (IOException e) {
+                lastException = e;
+                try {
+                    Thread.sleep(2 * 1000);
+                } catch (InterruptedException e1) {}
+            }
+        } while(remainingTries > 0);
+
+        throw new IOException(TRIES + " failures, returning last", lastException);
+    }
+
+    interface Tryable<T> {
+        T tryThat() throws IOException;
     }
 }
