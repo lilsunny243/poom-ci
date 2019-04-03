@@ -1,8 +1,14 @@
 version: '3'
 
 services:
-
   poom-verdaccio:
     build: .
     image: ${codingmatters.docker.namespace}/poom-verdaccio:${project.version}
-
+#    ports:
+#      - "4873:4873"
+#    volumes:
+#      - "./conf:/verdaccio/conf"
+#
+#volumes:
+#  verdaccio:
+#    driver: local
