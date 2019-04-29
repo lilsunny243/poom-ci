@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Undertow;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
-import org.codingmatters.poom.client.PoomjobsJobRegistryAPIRequesterClient;
+import org.codingmatters.poomjobs.client.PoomjobsJobRegistryAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
