@@ -7,7 +7,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepositor
 import org.codingmatters.poom.ci.pipeline.api.service.repository.StageLogSegmentedRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
-import org.codingmatters.poom.client.PoomjobsJobRegistryAPIRequesterClient;
+import org.codingmatters.poomjobs.client.PoomjobsJobRegistryAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;

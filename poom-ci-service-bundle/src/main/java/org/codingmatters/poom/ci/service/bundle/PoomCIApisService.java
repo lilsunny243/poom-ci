@@ -2,7 +2,7 @@ package org.codingmatters.poom.ci.service.bundle;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Undertow;
-import org.codingmatters.poom.client.PoomjobsRunnerRegistryAPIHandlersClient;
+import org.codingmatters.poomjobs.client.PoomjobsRunnerRegistryAPIHandlersClient;
 import org.codingmatters.poom.poomjobs.domain.jobs.repositories.JobRepository;
 import org.codingmatters.poom.poomjobs.domain.runners.repositories.RunnerRepository;
 import org.codingmatters.poom.poomjobs.domain.values.jobs.JobQuery;

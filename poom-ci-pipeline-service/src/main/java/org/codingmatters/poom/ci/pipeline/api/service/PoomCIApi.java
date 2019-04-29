@@ -7,7 +7,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.handlers.*;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
-import org.codingmatters.poom.client.PoomjobsJobRegistryAPIClient;
+import org.codingmatters.poomjobs.client.PoomjobsJobRegistryAPIClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poomjobs.api.JobCollectionPostResponse;
 import org.codingmatters.rest.api.Processor;
