@@ -20,6 +20,9 @@ import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class GithubWebhookService {
 
@@ -27,6 +30,7 @@ public class GithubWebhookService {
 
     static public final String GITHUB_SECRET_TOKEN = "GITHUB_SECRET_TOKEN";
     static public final String PIPELINE_API_URL = "PIPELINE_API_URL";
+    static private final String PREFIX_IGNORE = "PREFIX_IGNORE";
 
     private final String token;
     private final PathHandler handlers;
@@ -37,11 +41,14 @@ public class GithubWebhookService {
     private final PoomCIPipelineAPIClient pipelineClient;
     private final String host;
 
+    private static List<String> prefixToTignore;
+
     public static void main(String[] args) {
         String host = Env.mandatory(Env.SERVICE_HOST).asString();
         int port = Env.mandatory(Env.SERVICE_PORT).asInteger();
         String token = Env.mandatory(GITHUB_SECRET_TOKEN).asString();
         String pipelineUrl = Env.mandatory(PIPELINE_API_URL).asString();
+        prefixToTignore = Env.optional(PREFIX_IGNORE).orElse(Env.Var.value("")).asList(",");
 
         JsonFactory jsonFactory = new JsonFactory();
         PoomCIPipelineAPIClient pipelineClient = new PoomCIPipelineAPIRequesterClient(
@@ -124,7 +131,7 @@ public class GithubWebhookService {
 
     private GithubWebhookAPIHandlers webhookHandlers() {
         return new GithubWebhookAPIHandlers.Builder()
-                .webhookPostHandler(new GithubWebhook(this.pipelineClient))
+                .webhookPostHandler(new GithubWebhook(this.pipelineClient, prefixToTignore))
                 .build();
     }
 
