@@ -48,7 +48,7 @@ public class GithubWebhookService {
         int port = Env.mandatory(Env.SERVICE_PORT).asInteger();
         String token = Env.mandatory(GITHUB_SECRET_TOKEN).asString();
         String pipelineUrl = Env.mandatory(PIPELINE_API_URL).asString();
-        prefixToTignore = Env.optional(PREFIX_IGNORE).orElse(Env.Var.value("")).asList(",");
+        prefixToTignore = Env.optional(PREFIX_IGNORE).orElse(Env.Var.value("")).asList(";");
 
         JsonFactory jsonFactory = new JsonFactory();
         PoomCIPipelineAPIClient pipelineClient = new PoomCIPipelineAPIRequesterClient(
