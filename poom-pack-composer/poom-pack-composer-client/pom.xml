@@ -47,12 +47,13 @@
                         <id>client</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>generate-all-clients</goal>
+                            <goal>generate-client-side</goal>
                         </goals>
                         <configuration>
-                            <root-package>${project.parent.groupId}</root-package>
+                            <destination-package>${project.parent.groupId}.client</destination-package>
                             <api-spec-resource>${project.parent.artifactId}.raml</api-spec-resource>
-                            <vendor>flexio-oss</vendor>
+                            <types-package>${project.parent.groupId}.api.types</types-package>
+                            <api-package>${project.parent.groupId}.api</api-package>
                         </configuration>
                     </execution>
                 </executions>

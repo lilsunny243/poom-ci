@@ -48,12 +48,13 @@
                         <id>client</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>generate-all-clients</goal>
+                            <goal>generate-client-side</goal>
                         </goals>
                         <configuration>
-                            <root-package>${project.parent.groupId}.dependency</root-package>
+                            <destination-package>${project.parent.groupId}.dependency.client</destination-package>
                             <api-spec-resource>poom-ci-dependency-api.raml</api-spec-resource>
-                            <vendor>flexio-oss</vendor>
+                            <types-package>${project.groupId}.dependency.api.types</types-package>
+                            <api-package>${project.groupId}.dependency.api</api-package>
                         </configuration>
                     </execution>
                 </executions>

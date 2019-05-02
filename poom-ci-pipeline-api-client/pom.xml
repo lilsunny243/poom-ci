@@ -52,12 +52,13 @@
                         <id>client</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>generate-all-clients</goal>
+                            <goal>generate-client-side</goal>
                         </goals>
                         <configuration>
-                            <root-package>${project.parent.groupId}.pipeline</root-package>
+                            <destination-package>${project.parent.groupId}.pipeline.client</destination-package>
                             <api-spec-resource>${project.parent.artifactId}-pipeline-api.raml</api-spec-resource>
-                            <vendor>flexio-oss</vendor>
+                            <types-package>${project.parent.groupId}.pipeline.api.types</types-package>
+                            <api-package>${project.parent.groupId}.pipeline.api</api-package>
                         </configuration>
                     </execution>
                 </executions>
