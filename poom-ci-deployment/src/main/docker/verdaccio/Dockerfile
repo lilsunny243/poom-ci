@@ -1,8 +1,7 @@
 FROM verdaccio/verdaccio
 
-USER verdaccio
-COPY --chown=verdaccio config.yaml /verdaccio/conf/config.yaml
-COPY --chown=verdaccio .htpasswd /verdaccio/conf/.htpasswd
-#
-#RUN chown -R verdaccio /verdaccio/conf
-#RUN chmod 777 /verdaccio/conf/.htpasswd
+ADD config.yaml /verdaccio/conf/config.yaml
+ADD .htpasswd /verdaccio/conf/.htpasswd
+
+RUN chmod a+r /verdaccio/conf/config.yaml
+RUN chmod a+r /verdaccio/conf/.htpasswd
