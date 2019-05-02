@@ -1,8 +1,0 @@
-version: '3'
-
-services:
-
-  poom-verdaccio:
-    build: .
-    image: ${codingmatters.docker.namespace}/poom-verdaccio:${project.version}
-
