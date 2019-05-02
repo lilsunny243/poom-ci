@@ -102,7 +102,7 @@
             <dependency>
                 <groupId>io.flexio.commons</groupId>
                 <artifactId>flexio-commons</artifactId>
-                <version>1.2.0-SNAPSHOT</version>
+                <version>1.4.0</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -224,7 +224,7 @@
                 <plugin>
                     <groupId>io.flexio.io</groupId>
                     <artifactId>flexio-mongo-io-maven-plugin</artifactId>
-                    <version>1.2.0-SNAPSHOT</version>
+                    <version>1.4.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>

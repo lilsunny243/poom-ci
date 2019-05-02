@@ -53,6 +53,11 @@
             <artifactId>cdm-rest-tests-support</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.codingmatters.poom.ci</groupId>
+            <artifactId>poom-ci-runners</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 
