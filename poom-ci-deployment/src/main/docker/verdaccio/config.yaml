@@ -3,17 +3,16 @@ storage: /verdaccio/storage
 auth:
   htpasswd:
     file: /verdaccio/conf/.htpasswd
-    max_users: 1
 
 packages:
-  '@flexio-oss/*':
+  '@flexio-services/*':
     access: $all
-    publish: flexio-ci
-    unpublish: admin
-  '**':
-    access: $authenticated
-    publish: flexio-ci
-    unpublish: admin
+    publish: $authenticated
+    unpublish: $authenticated
+  '*/*':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
 
 logs:
   - {type: file, path: verdaccio.log, level: info}
@@ -23,9 +22,3 @@ web:
   title: Verdaccio
   gravatar: true
   sort_packages: asc
-
-middlewares:
-  profile-api:
-    password_hash: sha1
-    password_policy: (?=.{8,})(?=.*?[^\w\s])(?=.*?[0-9])(?=.*?[A-Z]).*?[a-z].*
-    # len 8 mini, at least 1 special char, 1 digit, 1 upper case and 1 lower case

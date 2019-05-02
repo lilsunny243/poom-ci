@@ -13,8 +13,8 @@
             <directory>${basedir}/src/main/docker</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
-                <include>verdaccio/*</include>
-                <!--<include>**/.*</include>-->
+                <include>**/*</include>
+                <include>**/.*</include>
             </includes>
             <filtered>true</filtered>
         </fileSet>
