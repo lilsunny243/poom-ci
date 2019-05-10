@@ -24,6 +24,14 @@ stages:
     onlyWhen:
       - branch in (master, develop)
 
+  - name: deploy-clients
+    timeout: 60
+    exec:
+      - $NOTIFY --data-urlencode "status=2" --data-urlencode "current-stage=$STAGE"
+      - $CLIENT_DEPLOY $SRC $JS_REGISTRY_USERNAME $JS_REGISTRY_PASSWORD $POOM_PACK_API_KEY
+    onlyWhen:
+      - branch in (master, develop)
+
   - name: build-an-deploy-docker-images
     timeout: 16
     exec:
@@ -86,6 +94,9 @@ env:
   - NOTIFY: curl -G "https://my.flexio.io/channelApi/flexHttpInOut/59d3a0105d443519843d0496/5adf40aededdbb452368cfca" --data-urlencode "repository=$REPOSITORY" --data-urlencode "branch=$BRANCH" --data-urlencode "pipeline-id=$PIPELINE_ID"
   - DOCKER_BUILD: $WORKSPACE/flexio-ci-scripts/bin/docker-compose-build.sh
 
+  - CLIENT_DEPLOY: python $WORKSPACE/flexio-ci-scripts/bin/deploy-clients.py
+  - JS_REGISTRY_USERNAME: flexio-ci
+
 secrets:
   - name: settings.xml
     content: $SRC/.poom-ci-pipeline/settings-oss.xml.enc
@@ -95,4 +106,10 @@ secrets:
     as: file
   - name: GPG_PASS
     content: $SRC/.poom-ci-pipeline/gpg.pass.enc
+    as: var
+  - name: JS_REGISTRY_PASSWORD
+    content: $SRC/.poom-ci-pipeline/verdaccio.pass.enc
+    as: var
+  - name: POOM_PACK_API_KEY
+    content: $SRC/.poom-ci-pipeline/poom-pack.apikey.enc
     as: var
