@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/flexio-flow/flexio-flow.sh "$@"
+
