@@ -20,15 +20,6 @@
         </fileSet>
         <fileSet>
             <directory>${basedir}/src/main/scripts</directory>
-            <outputDirectory>/ci-mvn-tools/</outputDirectory>
-            <includes>
-                <include>**/*</include>
-                <include>**/.*</include>
-            </includes>
-            <filtered>true</filtered>
-        </fileSet>
-        <fileSet>
-            <directory>${basedir}/src/main/scripts</directory>
             <outputDirectory>/ci-extproc-mvn-tools/</outputDirectory>
             <includes>
                 <include>**/*</include>
@@ -39,13 +30,6 @@
     </fileSets>
 
     <dependencySets>
-        <dependencySet>
-            <outputDirectory>/ci-mvn-tools/</outputDirectory>
-            <includes>
-                <include>org.codingmatters.poom.ci:poom-ci-utilities:jar:uber</include>
-            </includes>
-            <outputFileNameMapping>${artifact.artifactId}.jar</outputFileNameMapping>
-        </dependencySet>
         <dependencySet>
             <outputDirectory>/ci-extproc-mvn-tools/</outputDirectory>
             <includes>
