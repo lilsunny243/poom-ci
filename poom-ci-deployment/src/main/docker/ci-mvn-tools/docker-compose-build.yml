@@ -1,7 +1,0 @@
-version: '3'
-
-services:
-
-  ci-mvn-tools:
-    build: .
-    image: ${codingmatters.docker.namespace}/ci-tools:${project.version}
