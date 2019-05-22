@@ -1,6 +1,8 @@
 package org.codingmatters.poom.ci.runners.pipeline;
 
 import org.codingmatters.poom.ci.pipeline.api.PipelineGetResponse;
+import org.codingmatters.poom.ci.pipeline.api.PipelinePatchRequest;
+import org.codingmatters.poom.ci.pipeline.api.PipelinePatchResponse;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTermination;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.api.types.StageTermination;
@@ -81,9 +83,23 @@ public class PipelineJobProcessor implements JobProcessor {
     private PipelineContext initializeContext() throws JobProcessingException, NotAPipelineContextException {
         String pipelineId = this.job.arguments().get(0);
         log.audit().info("starting pipeline {} execution", pipelineId);
+        this.updatePipelineStatusToRunning(pipelineId);
 
         PipelineTrigger trigger = this.retrievePipelineTrigger(pipelineId);
         return this.createContext(pipelineId, trigger);
+    }
+
+    private void updatePipelineStatusToRunning(String pipelineId) throws JobProcessingException {
+        try {
+            PipelinePatchResponse response = this.pipelineAPIClient.pipelines().pipeline().patch(PipelinePatchRequest.builder()
+                    .pipelineId(pipelineId).payload(PipelineTermination.builder().run(PipelineTermination.Run.RUNNING).build())
+                    .build());
+            if(! response.opt().status200().isPresent()) {
+                throw new JobProcessingException("failed updating pipeline status to running, response was : " + response);
+            }
+        } catch (IOException e) {
+            throw new JobProcessingException("failed updating pipeline status to running, cannot access pipeline service", e);
+        }
     }
 
     private PipelineTrigger retrievePipelineTrigger(String pipelineId) throws JobProcessingException {

@@ -115,6 +115,8 @@ types:
    PipelineTermination:
       type: object
       properties:
+         run:
+            enum: [RUNNING, DONE]
          exit:
             enum: [SUCCESS, FAILURE]
 

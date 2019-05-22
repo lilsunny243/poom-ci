@@ -160,9 +160,11 @@ public class PipelineJobProcessorTest {
         assertThat(this.stagePatchCalls.get(1).stageName(), is("stage2"));
         assertThat(this.stagePostCalls.get(1).stageType(), is(Stage.StageType.MAIN.name()));
 
-        assertThat(this.pipelinePatchCalls, hasSize(1));
+        assertThat(this.pipelinePatchCalls, hasSize(2));
         assertThat(this.pipelinePatchCalls.get(0).pipelineId(), is("pipeline-id"));
-        assertThat(this.pipelinePatchCalls.get(0).payload(), is(PipelineTermination.builder().exit(PipelineTermination.Exit.SUCCESS).build()));
+        assertThat(this.pipelinePatchCalls.get(0).payload(), is(PipelineTermination.builder().run(PipelineTermination.Run.RUNNING).build()));
+        assertThat(this.pipelinePatchCalls.get(1).pipelineId(), is("pipeline-id"));
+        assertThat(this.pipelinePatchCalls.get(1).payload(), is(PipelineTermination.builder().exit(PipelineTermination.Exit.SUCCESS).build()));
 
         assertThat(this.logsPatchCalls, hasSize(6));
 
