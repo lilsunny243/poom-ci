@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelinePatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelinePatchResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
@@ -17,7 +18,7 @@ import java.util.function.Function;
 public class PipelineUpdate implements Function<PipelinePatchRequest, PipelinePatchResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(PipelineUpdate.class);
 
-    private final Repository<Pipeline, String> pipelineRepository;
+    private final Repository<Pipeline, PipelineQuery> pipelineRepository;
 
     public PipelineUpdate(PoomCIRepository repository) {
         this.pipelineRepository = repository.pipelineRepository();

@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStagesPostRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStagesPostResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineQuery;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 public class StageCreate implements Function<PipelineStagesPostRequest, PipelineStagesPostResponse> {
     static private CategorizedLogger log = CategorizedLogger.getLogger(StageCreate.class);
 
-    private final Repository<Pipeline, String> pipelineRepository;
+    private final Repository<Pipeline, PipelineQuery> pipelineRepository;
     private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
 
     public StageCreate(PoomCIRepository repository) {

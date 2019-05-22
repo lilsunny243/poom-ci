@@ -1,6 +1,7 @@
 package org.codingmatters.poom.ci.pipeline.api.service.repository;
 
 import org.codingmatters.poom.ci.pipeline.api.service.repository.impl.InMemoryPoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineQuery;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.UpstreamBuildQuery;
@@ -18,7 +19,7 @@ public interface PoomCIRepository {
         return new InMemoryPoomCIRepository(logStorage);
     }
 
-    Repository<Pipeline, String> pipelineRepository();
+    Repository<Pipeline, PipelineQuery> pipelineRepository();
     Repository<GithubPushEvent, String> githubPushEventRepository();
     Repository<PipelineStage, PipelineStageQuery> stageRepository();
     LogFileStore logStore();
