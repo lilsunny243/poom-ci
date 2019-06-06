@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service;
 import com.fasterxml.jackson.core.JsonFactory;
 import org.codingmatters.poom.ci.pipeline.api.GithubTriggersPostRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelinesPostRequest;
+import org.codingmatters.poom.ci.pipeline.api.PipelinesPostResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.handlers.AbstractPoomCITest;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poomjobs.client.PoomjobsJobRegistryAPIClient;
@@ -44,11 +45,12 @@ public class PoomCIApiTest extends AbstractPoomCITest {
 
     @Test
     public void whenPipelineIsPosted__thenJobIsPosted() {
-        String pipelineId = this.api.handlers().pipelinesPostHandler().apply(PipelinesPostRequest.builder()
-                .payload(trigger -> trigger.type(PipelineTrigger.Type.GITHUB_PUSH).triggerId("trigger-id"))
-                .build())
+        PipelinesPostResponse response = this.api.handlers().pipelinesPostHandler().apply(PipelinesPostRequest.builder()
+                .payload(trigger -> trigger.name("pipeline").type(PipelineTrigger.Type.GITHUB_PUSH).triggerId("trigger-id"))
+                .build());
+        String pipelineId = response
                 .opt().status201().xEntityId()
-                .orElseThrow(() -> new AssertionError("pipeline post failed"));
+                .orElseThrow(() -> new AssertionError("pipeline post failed : " + response));
 
         assertThat(lastJobPost.get().accountId(), is("poom-ci"));
         assertThat(lastJobPost.get().payload().category(), is("poom-ci"));

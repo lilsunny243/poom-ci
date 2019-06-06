@@ -2,11 +2,13 @@ package org.codingmatters.poom.ci.pipeline.api.service.repository.impl;
 
 import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineQuery;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.UpstreamBuildQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
+import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
@@ -19,17 +21,35 @@ import java.util.stream.Stream;
 
 public class InMemoryPoomCIRepository implements PoomCIRepository {
 
-    private final InMemoryRepository<Pipeline, String> pipelineRepository = new InMemoryRepository<Pipeline, String>() {
+    private final InMemoryRepository<Pipeline, PipelineQuery> pipelineRepository = new InMemoryRepository<Pipeline, PipelineQuery>() {
         @Override
-        public PagedEntityList<Pipeline> search(String query, long startIndex, long endIndex) throws RepositoryException {
-            return null;
+        public PagedEntityList<Pipeline> search(PipelineQuery query, long startIndex, long endIndex) throws RepositoryException {
+            Stream<Entity<Pipeline>> filtered = this.stream();
+            if(query.opt().triggerName().isPresent()) {
+                filtered = filtered.filter(entity -> query.triggerName().equals(entity.value().opt().trigger().name().orElse(null)));
+            }
+            if(query.opt().triggerRunStatus().isPresent()) {
+                Status.Run queried = runStatus(query);
+                filtered = filtered.filter(entity -> queried == null ? entity.value().opt().status().run().isPresent() :
+                        queried.equals(entity.value().opt().status().run().orElse(null)));
+            }
+            return this.paged(filtered, startIndex, endIndex);
+        }
+
+        private Status.Run runStatus(PipelineQuery query) {
+            Status.Run queried = null;
+            try {
+                queried = Status.Run.valueOf(query.triggerRunStatus());
+            } catch (IllegalArgumentException e) {}
+            return queried;
         }
     };
 
     private final InMemoryRepository<GithubPushEvent, String> githubPushEventRepository = new InMemoryRepository<GithubPushEvent, String>() {
         @Override
         public PagedEntityList<GithubPushEvent> search(String query, long startIndex, long endIndex) throws RepositoryException {
-            return null;
+            Stream<Entity<GithubPushEvent>> filtered = this.stream();
+            return this.paged(filtered, startIndex, endIndex);
         }
     };
 
@@ -79,7 +99,7 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
 
 
     @Override
-    public Repository<Pipeline, String> pipelineRepository() {
+    public Repository<Pipeline, PipelineQuery> pipelineRepository() {
         return pipelineRepository;
     }
 

@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineGetResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
@@ -15,7 +16,7 @@ import java.util.function.Function;
 public class PipelineGet implements Function<PipelineGetRequest, PipelineGetResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(PipelineGet.class);
 
-    private final Repository<Pipeline, String> pipelineRepository;
+    private final Repository<Pipeline, PipelineQuery> pipelineRepository;
 
     public PipelineGet(PoomCIRepository repository) {
         this.pipelineRepository = repository.pipelineRepository();

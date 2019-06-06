@@ -27,3 +27,7 @@ stageLogQuery:
 upstreamBuildQuery:
   withDownstreamId: string
   withConsumed: bool
+
+pipelineQuery:
+  triggerName: string
+  triggerRunStatus: string
