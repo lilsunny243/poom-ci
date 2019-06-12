@@ -1,0 +1,542 @@
+[
+   {
+      "version" : "1.2.3",
+      "spec" : "ch.qos.logback:logback-core"
+   },
+   {
+      "version" : "4.0.2",
+      "spec" : "io.dropwizard.metrics:metrics-jvm"
+   },
+   {
+      "version" : "1.3.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-js"
+   },
+   {
+      "spec" : "ch.qos.logback.contrib:logback-json-classic",
+      "version" : "0.1.5"
+   },
+   {
+      "version" : "1.3.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-spec"
+   },
+   {
+      "spec" : "ch.qos.logback.contrib:logback-jackson",
+      "version" : "0.1.5"
+   },
+   {
+      "version" : "1.3.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-doc"
+   },
+   {
+      "spec" : "net.sf.cssbox:cssbox",
+      "version" : "4.14"
+   },
+   {
+      "version" : "4271ddac93",
+      "spec" : "com.github.heremaps:oksse"
+   },
+   {
+      "version" : "3.8.2",
+      "spec" : "org.mongodb:mongodb-driver"
+   },
+   {
+      "spec" : "com.squareup.okhttp3:okhttp",
+      "version" : "3.10.0"
+   },
+   {
+      "version" : "1.7.0",
+      "spec" : "com.squareup:javapoet"
+   },
+   {
+      "version" : "3.4.0",
+      "spec" : "org.apache.tinkerpop:gremlin-driver"
+   },
+   {
+      "version" : "3.2.1",
+      "spec" : "org.apache.maven.plugins:maven-shade-plugin"
+   },
+   {
+      "spec" : "ch.qos.logback:logback-classic",
+      "version" : "1.2.3"
+   },
+   {
+      "version" : "3.4.0",
+      "spec" : "org.apache.tinkerpop:tinkergraph-gremlin"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.module:jackson-module-jsonSchema",
+      "version" : "2.9.8"
+   },
+   {
+      "spec" : "org.codehaus.mojo:build-helper-maven-plugin",
+      "version" : "3.0.0"
+   },
+   {
+      "spec" : "io.undertow:undertow-core",
+      "version" : "2.0.9.Final"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.module:jackson-module-paranamer",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.module:jackson-module-scala_2.10"
+   },
+   {
+      "version" : "1.6.0",
+      "spec" : "org.codehaus.mojo:exec-maven-plugin"
+   },
+   {
+      "spec" : "org.hamcrest:hamcrest-all",
+      "version" : "1.3"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.dataformat:jackson-dataformat-smile"
+   },
+   {
+      "version" : "3.1.0",
+      "spec" : "org.apache.maven.plugins:maven-clean-plugin"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.jaxrs:jackson-jaxrs-yaml-provider",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "1.1",
+      "spec" : "javax.activation:activation"
+   },
+   {
+      "version" : "3.0.0-M1",
+      "spec" : "org.apache.maven.plugins:maven-deploy-plugin"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.dataformat:jackson-dataformat-xml"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.module:jackson-module-scala_2.12",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "2.22.0",
+      "spec" : "org.apache.maven.plugins:maven-surefire-plugin"
+   },
+   {
+      "version" : "4.7.1",
+      "spec" : "org.antlr:antlr4-runtime"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-hibernate3"
+   },
+   {
+      "spec" : "com.atlassian.commonmark:commonmark",
+      "version" : "0.11.0"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "4.12",
+      "spec" : "junit:junit"
+   },
+   {
+      "version" : "2.5.3",
+      "spec" : "org.apache.maven.plugins:maven-release-plugin"
+   },
+   {
+      "spec" : "org.hamcrest:hamcrest-core",
+      "version" : "1.3"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.dataformat:jackson-dataformat-ion"
+   },
+   {
+      "version" : "3.3.0",
+      "spec" : "org.apache.maven.plugin-testing:maven-plugin-testing-harness"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.module:jackson-module-jaxb-annotations",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
+   },
+   {
+      "version" : "3.3",
+      "spec" : "org.apache.maven.plugin-tools:maven-plugin-annotations"
+   },
+   {
+      "spec" : "org.slf4j:slf4j-api",
+      "version" : "1.7.25"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.jaxrs:jackson-jaxrs-xml-provider"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.jr:jackson-jr-retrofit2"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.jaxrs:jackson-jaxrs-base"
+   },
+   {
+      "spec" : "org.apache.maven.plugins:maven-gpg-plugin",
+      "version" : "1.6"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.module:jackson-module-afterburner",
+      "version" : "2.9.8"
+   },
+   {
+      "spec" : "org.mongodb:mongodb-driver-core",
+      "version" : "3.8.2"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "org.codehaus.mojo:exec-maven-plugin"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-joda"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.module:jackson-module-parameter-names",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "3.1.0",
+      "spec" : "org.apache.maven.plugins:maven-resources-plugin"
+   },
+   {
+      "spec" : "org.apache.maven:maven-artifact",
+      "version" : "3.3.9"
+   },
+   {
+      "version" : "3.8.2",
+      "spec" : "org.mongodb:bson"
+   },
+   {
+      "spec" : "org.apache.maven:maven-compat",
+      "version" : "3.3.9"
+   },
+   {
+      "version" : "1.0.8",
+      "spec" : "org.raml:raml-parser-2"
+   },
+   {
+      "spec" : "org.apache.maven:maven-plugin-api",
+      "version" : "3.3.9"
+   },
+   {
+      "spec" : "net.sourceforge.plantuml:plantuml",
+      "version" : "1.2018.1"
+   },
+   {
+      "spec" : "org.apache.maven:maven-core",
+      "version" : "3.3.9"
+   },
+   {
+      "spec" : "org.hsqldb:hsqldb",
+      "version" : "2.4.0"
+   },
+   {
+      "version" : "9.1.18",
+      "spec" : "org.xhtmlrenderer:flying-saucer-core"
+   },
+   {
+      "version" : "1.2.0",
+      "spec" : "org.codingmatters:codingmatters-parent"
+   },
+   {
+      "version" : "3.8.0",
+      "spec" : "org.apache.maven.plugins:maven-compiler-plugin"
+   },
+   {
+      "version" : "3.0.0-M3",
+      "spec" : "org.apache.maven.plugins:maven-surefire-plugin"
+   },
+   {
+      "spec" : "io.dropwizard.metrics:metrics-core",
+      "version" : "4.0.2"
+   },
+   {
+      "version" : "3.3.0",
+      "spec" : "com.auth0:java-jwt"
+   },
+   {
+      "spec" : "io.reformanda.semper:dependencyversion-maven-plugin",
+      "version" : "1.0.1"
+   },
+   {
+      "version" : "1.59",
+      "spec" : "org.bouncycastle:bcprov-jdk15on"
+   },
+   {
+      "spec" : "net.sf.jtidy:jtidy",
+      "version" : "r938"
+   },
+   {
+      "version" : "3.11.0",
+      "spec" : "org.apache.maven.plugins:maven-pmd-plugin"
+   },
+   {
+      "version" : "3.6.0",
+      "spec" : "org.apache.maven.plugins:maven-plugin-plugin"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation",
+      "version" : "1.3.0"
+   },
+   {
+      "version" : "3.0.1",
+      "spec" : "org.apache.maven.plugins:maven-source-plugin"
+   },
+   {
+      "version" : "3.7.1",
+      "spec" : "org.apache.maven.plugins:maven-site-plugin"
+   },
+   {
+      "version" : "4.7.2",
+      "spec" : "org.antlr:antlr4-maven-plugin"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-json",
+      "version" : "1.3.0"
+   },
+   {
+      "version" : "3.0.1",
+      "spec" : "org.apache.maven.plugins:maven-javadoc-plugin"
+   },
+   {
+      "spec" : "org.apache.poi:poi-ooxml",
+      "version" : "4.0.0"
+   },
+   {
+      "spec" : "org.apache.maven.plugins:maven-install-plugin",
+      "version" : "3.0.0-M1"
+   },
+   {
+      "spec" : "io.undertow:undertow-servlet",
+      "version" : "2.0.9.Final"
+   },
+   {
+      "spec" : "org.apache.poi:poi",
+      "version" : "4.0.0"
+   },
+   {
+      "version" : "1.3",
+      "spec" : "org.apache.maven.plugins:maven-antrun-plugin"
+   },
+   {
+      "version" : "2.0.8",
+      "spec" : "org.apache.pdfbox:pdfbox"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-jsr353",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "3.0.0-M2",
+      "spec" : "org.apache.maven.plugins:maven-enforcer-plugin"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-pcollections"
+   },
+   {
+      "spec" : "org.slf4j:slf4j-simple",
+      "version" : "1.7.25"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.module:jackson-module-mrbean"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.jaxrs:jackson-jaxrs-smile-provider",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "3.1.1",
+      "spec" : "org.apache.maven.plugins:maven-assembly-plugin"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.module:jackson-module-kotlin"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.jr:jackson-jr-stree",
+      "version" : "2.9.8"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.module:jackson-module-osgi",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.jaxrs:jackson-jaxrs-cbor-provider"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.dataformat:jackson-dataformat-avro"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.core:jackson-annotations",
+      "version" : "2.9.0"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-json-org"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.module:jackson-module-scala_2.11",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.core:jackson-databind"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.core:jackson-core",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "1.6.8",
+      "spec" : "org.sonatype.plugins:nexus-staging-maven-plugin"
+   },
+   {
+      "version" : "9.1.18",
+      "spec" : "org.xhtmlrenderer:flying-saucer-pdf-openpdf"
+   },
+   {
+      "version" : "3.1.1",
+      "spec" : "org.apache.maven.plugins:maven-dependency-plugin"
+   },
+   {
+      "spec" : "commons-io:commons-io",
+      "version" : "2.6"
+   },
+   {
+      "spec" : "org.codingmatters.tests:codingmatters-reflect-unit",
+      "version" : "1.8.0"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-maven-plugin",
+      "version" : "1.3.0"
+   },
+   {
+      "version" : "1.3.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation-main"
+   },
+   {
+      "spec" : "org.apache.maven.plugins:maven-surefire-plugin",
+      "version" : "2.12.4"
+   },
+   {
+      "version" : "1.3.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-values"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation-commons",
+      "version" : "1.3.0"
+   },
+   {
+      "version" : "1.3.0",
+      "spec" : "org.codingmatters.value.objects:codingmatters-value-objects"
+   },
+   {
+      "spec" : "org.jsoup:jsoup",
+      "version" : "1.11.3"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.module:jackson-module-guice"
+   },
+   {
+      "spec" : "com.sun.mail:javax.mail",
+      "version" : "1.6.2"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.dataformat:jackson-dataformat-protobuf"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.dataformat:jackson-dataformat-properties",
+      "version" : "2.9.8"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-jaxrs",
+      "version" : "2.9.8"
+   },
+   {
+      "spec" : "xml-apis:xml-apis",
+      "version" : "1.4.01"
+   },
+   {
+      "spec" : "com.github.librepdf:openpdf",
+      "version" : "1.2.5"
+   },
+   {
+      "version" : "1.6",
+      "spec" : "org.apache.commons:commons-csv"
+   },
+   {
+      "version" : "1.3.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-yaml-parser"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.jr:jackson-jr-objects"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
+   },
+   {
+      "spec" : "com.fasterxml.jackson.datatype:jackson-datatype-guava",
+      "version" : "2.9.8"
+   },
+   {
+      "version" : "2.9.8",
+      "spec" : "com.fasterxml.jackson.jr:jackson-jr-all"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-php",
+      "version" : "1.3.0"
+   },
+   {
+      "version" : "1.3.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-demo"
+   }
+]

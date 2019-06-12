@@ -1,0 +1,250 @@
+[
+   {
+      "spec" : "io.flexio.services.auth:flexio-auth",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.resources:flexio-resources-client"
+   },
+   {
+      "spec" : "io.flexio.services.config:flexio-config-client",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.callback:flexio-services-callback-api-spec",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.config:flexio-config-api-spec"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.notifications:flexio-notifications"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-accounts-client",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.callback:flexio-services-callback-api",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.config:flexio-config-api",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.connectors:flexio-connector"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-accounts-service",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.jobs:flexio-jobs-service",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.connectors:flexio-connector-client",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.notifications:flexio-notifications-service",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-services-test-support",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.auth:flexio-auth-api"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.api.gateway:flexio-api-gateway-api"
+   },
+   {
+      "spec" : "io.flexio.services.jobs:flexio-jobs",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services:flexio-accounts-api-spec"
+   },
+   {
+      "spec" : "io.flexio.services.connectors:flexio-connector-service",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.connectors:flexio-test-connector"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.registry:flexio-service-registry-client-providers"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.registry:flexio-service-registry-client"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services:flexio-services-api-support"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.resources:flexio-resources-service"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-accounts-bulk-user-creation",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.config:flexio-config-service"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.notifications:flexio-notifications-api-spec"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.api.gateway:flexio-api-gateway-client"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.connectors:flexio-connectors"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.auth:flexio-auth-api-spec"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.config:flexio-config"
+   },
+   {
+      "spec" : "io.flexio.services.api.gateway:flexio-api-gateway",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.api.gateway:flexio-api-gateway-api-spec"
+   },
+   {
+      "spec" : "io.flexio.services.notifications:flexio-notifications-client",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.registry.test:flexio-service-registry-test-api"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-services-registry-support-test",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.connectors:flexio-connector-api-spec"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.registry.test:flexio-service-registry-test-client"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.connectors:flexio-connector-api"
+   },
+   {
+      "spec" : "io.flexio.services.registry:flexio-service-registry-test-harness",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.registry:flexio-service-registry-api-spec"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.resources:flexio-resources"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.callback:flexio-services-callback-client"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.auth:flexio-auth-service"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.registry.test:flexio-service-registry-test"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services:flexio-services"
+   },
+   {
+      "spec" : "io.flexio.services.notifications:flexio-notifications-api",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.callback:flexio-services-callback"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-accounts-api",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services:flexio-accounts"
+   },
+   {
+      "spec" : "io.flexio.services.registry:flexio-service-registry-api",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.resources:flexio-resources-api-spec",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services:flexio-services-commons"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.registry:flexio-service-registry-service"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.auth:flexio-auth-client"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.registry:flexio-services-registry-support"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.registry.test:flexio-service-registry-test-api-spec"
+   },
+   {
+      "spec" : "io.flexio.services.api.gateway:flexio-api-legacy-gateway",
+      "version" : "1.7.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.resources:flexio-resources-api"
+   },
+   {
+      "version" : "1.7.0-SNAPSHOT",
+      "spec" : "io.flexio.services.registry:flexio-service-registry"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-services-support",
+      "version" : "1.7.0-SNAPSHOT"
+   }
+]

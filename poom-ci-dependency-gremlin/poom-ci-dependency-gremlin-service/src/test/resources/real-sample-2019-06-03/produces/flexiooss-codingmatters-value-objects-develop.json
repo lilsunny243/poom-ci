@@ -1,0 +1,54 @@
+[
+   {
+      "version" : "1.3.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation-commons"
+   },
+   {
+      "version" : "1.3.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-demo"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-spec",
+      "version" : "1.3.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.3.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-js"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-json",
+      "version" : "1.3.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation-main",
+      "version" : "1.3.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-yaml-parser",
+      "version" : "1.3.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-php",
+      "version" : "1.3.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.3.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-values"
+   },
+   {
+      "version" : "1.3.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-maven-plugin"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-doc",
+      "version" : "1.3.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:codingmatters-value-objects",
+      "version" : "1.3.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.3.0-SNAPSHOT",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation"
+   }
+]

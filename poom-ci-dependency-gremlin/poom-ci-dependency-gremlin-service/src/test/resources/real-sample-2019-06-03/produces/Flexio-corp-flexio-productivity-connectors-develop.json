@@ -1,0 +1,30 @@
+[
+   {
+      "spec" : "io.flexio.services.connectors.productivity:flexio-productivity-connectors",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.connectors.productivity:flexio-spreadsheet-connector",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.services.connectors.productivity.google:flexio-google-calendar-connector"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.services.connectors.productivity.google:flexio-google-sheets-connector"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.services.connectors.productivity:flexio-productivity-connectors-test-support"
+   },
+   {
+      "spec" : "io.flexio.services.connectors.productivity.google:flexio-google-productivity-connectors",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.connectors.productivity:flexio-generic-productivity-connectors",
+      "version" : "1.6.0-SNAPSHOT"
+   }
+]

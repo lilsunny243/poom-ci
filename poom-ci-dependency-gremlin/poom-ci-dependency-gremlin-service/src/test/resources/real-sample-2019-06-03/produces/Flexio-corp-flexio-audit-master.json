@@ -1,0 +1,34 @@
+[
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.audit:flexio-audit-api"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.audit:flexio-audit-runner"
+   },
+   {
+      "spec" : "io.flexio.services.audit:flexio-audit",
+      "version" : "1.5.0"
+   },
+   {
+      "spec" : "io.flexio.services.audit:flexio-audit-logposter",
+      "version" : "1.5.0"
+   },
+   {
+      "spec" : "io.flexio.services.audit:flexio-audit-load",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.audit:flexio-audit-service"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.audit:flexio-audit-client"
+   },
+   {
+      "spec" : "io.flexio.services.audit:flexio-audit-api-spec",
+      "version" : "1.5.0"
+   }
+]

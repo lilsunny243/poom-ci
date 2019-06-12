@@ -1,0 +1,22 @@
+[
+   {
+      "spec" : "io.flexio.services.data.protection:flexio-data-protection-api",
+      "version" : "1.0.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.data.protection:flexio-data-protection",
+      "version" : "1.0.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.data.protection:flexio-data-protection-service",
+      "version" : "1.0.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.0.0-SNAPSHOT",
+      "spec" : "io.flexio.services.data.protection:flexio-data-protection-client"
+   },
+   {
+      "spec" : "io.flexio.services.data.protection:flexio-data-protection-api-spec",
+      "version" : "1.0.0-SNAPSHOT"
+   }
+]

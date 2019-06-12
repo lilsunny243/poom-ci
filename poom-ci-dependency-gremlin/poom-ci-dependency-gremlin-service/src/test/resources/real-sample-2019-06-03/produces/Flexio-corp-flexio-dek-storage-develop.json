@@ -1,0 +1,26 @@
+[
+   {
+      "spec" : "io.flexio.services.dek.storage:flexio-dek-storage",
+      "version" : "1.1.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.1.0-SNAPSHOT",
+      "spec" : "io.flexio.services.dek.storage:flexio-dek-storage-api"
+   },
+   {
+      "version" : "1.1.0-SNAPSHOT",
+      "spec" : "io.flexio.services.dek.storage:flexio-dek-data-cypherer"
+   },
+   {
+      "version" : "1.1.0-SNAPSHOT",
+      "spec" : "io.flexio.services.dek.storage:flexio-dek-storage-client"
+   },
+   {
+      "version" : "1.1.0-SNAPSHOT",
+      "spec" : "io.flexio.services.dek.storage:flexio-dek-storage-api-spec"
+   },
+   {
+      "version" : "1.1.0-SNAPSHOT",
+      "spec" : "io.flexio.services.dek.storage:flexio-dek-storage-service"
+   }
+]
