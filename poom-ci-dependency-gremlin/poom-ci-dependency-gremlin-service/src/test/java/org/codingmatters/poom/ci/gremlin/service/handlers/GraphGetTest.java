@@ -34,7 +34,7 @@ public class GraphGetTest {
      * @throws Exception
      */
     @Test
-    public void given__when__then() throws Exception {
+    public void givenTreeDependencyGraph__whenGettingGraph__thenGraphReturned() throws Exception {
         RealGraphLoader.load("repo-graph-simple-tree", this.gremlin);
 
         RepositoryGraph actualGraph = new GraphGet(gremlin.remoteConnection()).apply(RepositoryGraphGetRequest.builder().build()).opt().status200().orElseThrow(() -> new AssertionError("failed getting graph")).payload();

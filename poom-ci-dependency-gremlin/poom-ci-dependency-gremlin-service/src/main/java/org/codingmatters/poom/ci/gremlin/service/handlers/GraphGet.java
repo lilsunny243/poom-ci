@@ -33,14 +33,17 @@ public class GraphGet implements Function<RepositoryGraphGetRequest, RepositoryG
 
     @Override
     public RepositoryGraphGetResponse apply(RepositoryGraphGetRequest repositoryGraphGetRequest) {
+        RepositoryGraph.Builder graphBuilder = RepositoryGraph.builder();
+
+        GraphTraversalSource graph = AnonymousTraversalSource.traversal().withRemote(this.connection);
+
+        graphBuilder.roots(this.roots(graph));
+        graphBuilder.repositories(new RepositoryQuery<>(graph, Mappers::repository).all());
+        graphBuilder.relations(this.relations(graph));
 
         return RepositoryGraphGetResponse.builder()
                 .status200(Status200.builder()
-                        .payload(RepositoryGraph.builder()
-                                .roots(this.roots(AnonymousTraversalSource.traversal().withRemote(this.connection)))
-                                .repositories(new RepositoryQuery<>(AnonymousTraversalSource.traversal().withRemote(this.connection), Mappers::repository).all())
-                                .relations(this.relations(AnonymousTraversalSource.traversal().withRemote(this.connection)))
-                                .build())
+                        .payload(graphBuilder.build())
                         .build())
                 .build();
     }
