@@ -17,8 +17,6 @@ public class GremlinResource extends ExternalResource {
                 .with(
                         "gremlin",
                         container -> container
-//                                .image("tinkerpop/gremlin-server:3.4.0")
-//                                .image("localhost:5000/gremlin-server-janus-berkeleyje:0.3.1")
                                 .image("codingmatters/gremlin-server-janus-berkeleyje:0.3.1")
                 ).started()
                 .finallyStarted();

@@ -12,6 +12,7 @@ import org.codingmatters.poom.ci.dependency.api.types.ValueList;
 import org.codingmatters.poom.ci.dependency.api.types.json.FullRepositoryReader;
 import org.codingmatters.poom.ci.dependency.api.types.json.ModuleReader;
 import org.codingmatters.poom.ci.gremlin.GremlinResource;
+import org.codingmatters.poom.ci.gremlin.RealGraphLoader;
 import org.codingmatters.poom.ci.gremlin.queries.DownstreamQuery;
 import org.codingmatters.poom.ci.gremlin.queries.NextDownstreamsQuery;
 import org.codingmatters.poom.ci.gremlin.queries.RepositoryQuery;
@@ -21,7 +22,9 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.rules.TemporaryFolder;
+import org.junit.rules.TestRule;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,47 +36,21 @@ import static org.junit.Assert.assertThat;
 
 public class RealGraphTest {
 
-    @ClassRule
     static public final DockerResource docker = GremlinResource.withGremlinContainer(DockerResource.client());
-
-    @Rule
-    public TemporaryFolder tmp = new TemporaryFolder();
+    static public final GremlinResource gremlin = new GremlinResource(docker);
 
     @ClassRule
-    static public GremlinResource gremlin = new GremlinResource(docker);
-
-    static private final JsonFactory jsonFactory = new JsonFactory();
+    static public TestRule chain= RuleChain
+            .outerRule(docker)
+            .around(gremlin);
 
     @BeforeClass
     static public void loadGraph() throws Exception {
-        String sample = "real-sample-2019-03-15";
-        FullRepository[] repositories = readRepos(sample + "/repositories.json");
-        for (int i = 0; i < repositories.length; i++) {
-            FullRepository repository = repositories[i];
-            repository = repository.withDependencies(new ValueList.Builder<>().with(readModules(sample + "/depends-on/" + repository.id() + ".json")).build());
-            repository = repository.withProduces(new ValueList.Builder<>().with(readModules(sample + "/produces/" + repository.id() + ".json")).build());
-            repositories[i] = repository;
-        }
-        for (FullRepository repository : repositories) {
-            new CreateOrUpdateRepository(gremlin.remoteConnection()).apply(RepositoryPutRequest.builder()
-                    .repositoryId(repository.id())
-                    .payload(repository)
-                    .build()).opt().status200().orElseThrow(() -> new AssertionError("failed to create repository " + repository));
-        }
-
+        RealGraphLoader.load("real-sample-2019-03-15", gremlin);
     }
 
-    private static FullRepository[] readRepos(String resource) throws IOException {
-        try(JsonParser parser = jsonFactory.createParser(Thread.currentThread().getContextClassLoader().getResourceAsStream(resource))) {
-            return new FullRepositoryReader().readArray(parser);
-        }
-    }
-
-    private static Module[] readModules(String resource) throws IOException {
-        try(JsonParser parser = jsonFactory.createParser(Thread.currentThread().getContextClassLoader().getResourceAsStream(resource))) {
-            return new ModuleReader().readArray(parser);
-        }
-    }
+    @Rule
+    public TemporaryFolder tmp = new TemporaryFolder();
 
     @Test
     public void givenGraphLoaded__whenListingRepositories__thenTheres9() throws Exception {

@@ -104,19 +104,28 @@ mediaType: application/json
                   500:
                      body: Error
 
+/graph:
+  displayName: repository graph
+  get:
+    responses:
+      200:
+        body: RepositoryGraph
 
 types:
+
    Repository:
       type: object
       properties:
          id: string
          name: string
          checkoutSpec: string
+
    Module:
       type: object
       properties:
          spec: string
          version: string
+
 
    FullRepository:
       type: object
@@ -130,6 +139,29 @@ types:
          produces:
             type: array
             items: Module
+
+
+   RepositoryGraph:
+      type: object
+      properties:
+         id: string
+         roots:
+            type: array
+            items: string
+         repositories:
+            type: array
+            items: Repository
+         relations:
+            type: array
+            items: RepositoryRelation
+
+
+   RepositoryRelation:
+     type: object
+     properties:
+       upstreamRepository: string
+       dependency: Module
+       downstreamRepository: string
 
 
    Error:

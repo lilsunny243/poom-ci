@@ -1,0 +1,17 @@
+[
+  {
+    "checkoutSpec" : "git|git@github.com:org/repo-a.git|develop",
+    "id" : "org-repo-a-develop",
+    "name" : "org/repo-a.git"
+  },
+  {
+    "checkoutSpec" : "git|git@github.com:org/repo-b.git|develop",
+    "id" : "org-repo-b-develop",
+    "name" : "org/repo-b.git"
+  },
+  {
+    "checkoutSpec" : "git|git@github.com:org/repo-c.git|develop",
+    "id" : "org-repo-c-develop",
+    "name" : "org/repo-c.git"
+  }
+]

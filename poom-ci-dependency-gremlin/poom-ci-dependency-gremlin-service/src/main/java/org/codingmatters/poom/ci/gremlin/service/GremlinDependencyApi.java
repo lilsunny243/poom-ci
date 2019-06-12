@@ -31,6 +31,8 @@ public class GremlinDependencyApi {
                 .repositoryPutHandler(new CreateOrUpdateRepository(this.connection))
                 .repositoryDeleteHandler(new DeleteRepository(this.connection))
 
+                .repositoryGraphGetHandler(new GraphGet(this.connection))
+
                 .build();
     }
 

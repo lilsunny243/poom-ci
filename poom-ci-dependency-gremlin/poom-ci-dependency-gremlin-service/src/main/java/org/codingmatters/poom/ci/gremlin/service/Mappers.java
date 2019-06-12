@@ -23,7 +23,7 @@ public class Mappers {
                 .build();
     }
 
-    private static String singlePropertyValue(Map<String, List<VertexProperty>> map, String prop) {
+    public static String singlePropertyValue(Map<String, List<VertexProperty>> map, String prop) {
         return map.get(prop) != null && ! map.get(prop).isEmpty() ? (String) map.get(prop).get(0).value() : null;
     }
 }
