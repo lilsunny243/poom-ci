@@ -11,11 +11,14 @@ import org.codingmatters.poom.ci.dependency.api.types.json.FullRepositoryReader;
 import org.codingmatters.poom.ci.dependency.api.types.json.ModuleReader;
 import org.codingmatters.poom.ci.gremlin.service.GremlinDependencyService;
 import org.codingmatters.poom.ci.gremlin.service.handlers.CreateOrUpdateRepository;
+import org.codingmatters.poom.services.logging.CategorizedLogger;
 
 import java.io.IOException;
 import java.util.function.Supplier;
 
 public class RealGraphLoader {
+    static private final CategorizedLogger log = CategorizedLogger.getLogger(RealGraphLoader.class);
+
     static private final JsonFactory jsonFactory = new JsonFactory();
 
     public static void main(String[] args) {
@@ -41,10 +44,12 @@ public class RealGraphLoader {
             repositories[i] = repository;
         }
         for (FullRepository repository : repositories) {
+            long start = System.currentTimeMillis();
             new CreateOrUpdateRepository(connectionSupplier).apply(RepositoryPutRequest.builder()
                     .repositoryId(repository.id())
                     .payload(repository)
                     .build()).opt().status200().orElseThrow(() -> new AssertionError("failed to create repository " + repository));
+            log.info("repo {} : {}ms", repository.id(), (System.currentTimeMillis() - start));
         }
     }
 
