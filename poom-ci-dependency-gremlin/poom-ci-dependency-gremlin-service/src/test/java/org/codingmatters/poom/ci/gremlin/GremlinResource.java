@@ -4,11 +4,18 @@ import io.flexio.docker.DockerResource;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0;
+import org.apache.tinkerpop.gremlin.process.remote.RemoteConnection;
+import org.apache.tinkerpop.gremlin.process.remote.RemoteConnectionException;
+import org.apache.tinkerpop.gremlin.process.remote.traversal.RemoteTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource;
+import org.apache.tinkerpop.gremlin.process.traversal.Bytecode;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.io.gryo.GryoMapper;
 import org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistry;
 import org.junit.rules.ExternalResource;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public class GremlinResource extends ExternalResource {
 
@@ -79,5 +86,18 @@ public class GremlinResource extends ExternalResource {
         g.E().drop().iterate();
         g.V().drop().iterate();
         super.after();
+    }
+
+    public Supplier<RemoteConnection> remoteConnectionSupplier() {
+        return () -> new RemoteConnection() {
+            @Override
+            public <E> CompletableFuture<RemoteTraversal<?, E>> submitAsync(Bytecode bytecode) throws RemoteConnectionException {
+                return remoteConnection.submitAsync(bytecode);
+            }
+
+            @Override
+            public void close() throws Exception {
+            }
+        };
     }
 }

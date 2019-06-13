@@ -36,7 +36,7 @@ public class CreateOrUpdateRepositoryTest {
 
     @Test
     public void givenDependencyGraphIsEmpty__whenPuttingFullRepository__thenGraphIsLoaded() throws Exception {
-        new CreateOrUpdateRepository(this.gremlin.remoteConnection()).apply(RepositoryPutRequest.builder()
+        new CreateOrUpdateRepository(this.gremlin.remoteConnectionSupplier()).apply(RepositoryPutRequest.builder()
                 .repositoryId("REPOID")
                 .payload(this.fromJson("full-repository.json"))
                 .build());
@@ -62,7 +62,7 @@ public class CreateOrUpdateRepositoryTest {
 
     @Test
     public void givenDependencyIsProduced__whenCreatingRepository__thenProducedDependencyIsNotStoredAsADependency() throws Exception {
-        new CreateOrUpdateRepository(this.gremlin.remoteConnection()).apply(RepositoryPutRequest.builder()
+        new CreateOrUpdateRepository(this.gremlin.remoteConnectionSupplier()).apply(RepositoryPutRequest.builder()
                 .repositoryId("REPOID")
                 .payload(repo -> repo
                         .id("REPOID")
@@ -82,7 +82,7 @@ public class CreateOrUpdateRepositoryTest {
 
     @Test
     public void givenDependencyIsDuplicated__whenCreatingRepository__thenDependencyIsStoredOnce() throws Exception {
-        new CreateOrUpdateRepository(this.gremlin.remoteConnection()).apply(RepositoryPutRequest.builder()
+        new CreateOrUpdateRepository(this.gremlin.remoteConnectionSupplier()).apply(RepositoryPutRequest.builder()
                 .repositoryId("REPOID")
                 .payload(repo -> repo
                         .id("REPOID")
@@ -101,7 +101,7 @@ public class CreateOrUpdateRepositoryTest {
 
     @Test
     public void givenProducedIsDuplicated__whenCreatingRepository__thenProducedIsStoredOnce() throws Exception {
-        new CreateOrUpdateRepository(this.gremlin.remoteConnection()).apply(RepositoryPutRequest.builder()
+        new CreateOrUpdateRepository(this.gremlin.remoteConnectionSupplier()).apply(RepositoryPutRequest.builder()
                 .repositoryId("REPOID")
                 .payload(repo -> repo
                         .id("REPOID")

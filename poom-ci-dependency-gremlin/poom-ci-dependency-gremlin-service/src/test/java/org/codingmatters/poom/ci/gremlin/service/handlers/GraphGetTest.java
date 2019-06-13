@@ -37,7 +37,7 @@ public class GraphGetTest {
     public void givenTreeDependencyGraph__whenGettingGraph__thenGraphReturned() throws Exception {
         RealGraphLoader.load("repo-graph-simple-tree", this.gremlin);
 
-        RepositoryGraph actualGraph = new GraphGet(gremlin.remoteConnection()).apply(RepositoryGraphGetRequest.builder().build()).opt().status200().orElseThrow(() -> new AssertionError("failed getting graph")).payload();
+        RepositoryGraph actualGraph = new GraphGet(gremlin.remoteConnectionSupplier()).apply(RepositoryGraphGetRequest.builder().build()).opt().status200().orElseThrow(() -> new AssertionError("failed getting graph")).payload();
 
         assertThat(actualGraph.repositories(), containsInAnyOrder(
                 Repository.builder().id("org-repo-a-develop").name("org/repo-a.git").checkoutSpec("git|git@github.com:org/repo-a.git|develop").build(),

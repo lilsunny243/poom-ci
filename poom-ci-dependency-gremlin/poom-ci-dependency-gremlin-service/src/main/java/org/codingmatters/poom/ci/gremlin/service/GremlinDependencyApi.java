@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.gremlin.service;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
+import org.apache.tinkerpop.gremlin.process.remote.RemoteConnection;
 import org.codingmatters.poom.ci.dependency.api.PoomCIDependencyAPIDescriptor;
 import org.codingmatters.poom.ci.dependency.api.PoomCIDependencyAPIHandlers;
 import org.codingmatters.poom.ci.dependency.api.service.PoomCIDependencyAPIProcessor;
@@ -9,29 +10,32 @@ import org.codingmatters.poom.ci.gremlin.service.handlers.*;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.rest.api.Processor;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 public class GremlinDependencyApi {
     static private CategorizedLogger log = CategorizedLogger.getLogger(GremlinDependencyApi.class);
 
     private final JsonFactory jsonFactory;
-    private final DriverRemoteConnection connection;
+    private final Supplier<RemoteConnection> connectionSupplier;
     private PoomCIDependencyAPIHandlers handlers;
 
-    public GremlinDependencyApi(JsonFactory jsonFactory, DriverRemoteConnection connection) {
+    public GremlinDependencyApi(JsonFactory jsonFactory, Supplier<RemoteConnection> connectionSupplier) {
         this.jsonFactory = jsonFactory;
-        this.connection = connection;
+        this.connectionSupplier = connectionSupplier;
 
         this.handlers = new PoomCIDependencyAPIHandlers.Builder()
-                .repositoriesGetHandler(new ListRepositories(this.connection))
-                .repositoryGetHandler(new GetRepository(this.connection))
-                .repositoryModulesGetHandler(new ListModules(this.connection))
-                .repositoryDependenciesGetHandler(new ListDependencies(this.connection))
-                .repositoryDownstreamRepositoriesGetHandler(new ListDownstreams(this.connection))
-                .repositoryJustNextDownstreamRepositoriesGetHandler(new ListNextDownstreams(this.connection))
+                .repositoriesGetHandler(new ListRepositories(this.connectionSupplier))
+                .repositoryGetHandler(new GetRepository(this.connectionSupplier))
+                .repositoryModulesGetHandler(new ListModules(this.connectionSupplier))
+                .repositoryDependenciesGetHandler(new ListDependencies(this.connectionSupplier))
+                .repositoryDownstreamRepositoriesGetHandler(new ListDownstreams(this.connectionSupplier))
+                .repositoryJustNextDownstreamRepositoriesGetHandler(new ListNextDownstreams(this.connectionSupplier))
 
-                .repositoryPutHandler(new CreateOrUpdateRepository(this.connection))
-                .repositoryDeleteHandler(new DeleteRepository(this.connection))
+                .repositoryPutHandler(new CreateOrUpdateRepository(this.connectionSupplier))
+                .repositoryDeleteHandler(new DeleteRepository(this.connectionSupplier))
 
-                .repositoryGraphGetHandler(new GraphGet(this.connection))
+                .repositoryGraphGetHandler(new GraphGet(this.connectionSupplier))
 
                 .build();
     }
