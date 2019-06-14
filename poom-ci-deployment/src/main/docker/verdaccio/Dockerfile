@@ -5,4 +5,7 @@ RUN npm install commander semver lodash express async request http-errors body-p
 
 COPY --chown=verdaccio:root config.yaml /verdaccio/conf/config.yaml
 COPY --chown=verdaccio:root .htpasswd /verdaccio/conf/.htpasswd
+
+RUN chown -R verdaccio:root /verdaccio/conf
+
 USER verdaccio
