@@ -107,6 +107,8 @@ mediaType: application/json
 /graph:
   displayName: repository graph
   get:
+    queryParameters:
+      root: string
     responses:
       200:
         body: RepositoryGraph
