@@ -1,6 +1,5 @@
 package org.codingmatters.poom.ci.gremlin.service.handlers;
 
-import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.process.remote.RemoteConnection;
 import org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
@@ -13,15 +12,12 @@ import org.codingmatters.poom.ci.dependency.api.RepositoryGraphGetResponse;
 import org.codingmatters.poom.ci.dependency.api.repositorygraphgetresponse.Status200;
 import org.codingmatters.poom.ci.dependency.api.types.Error;
 import org.codingmatters.poom.ci.dependency.api.types.Module;
-import org.codingmatters.poom.ci.dependency.api.types.Repository;
 import org.codingmatters.poom.ci.dependency.api.types.RepositoryGraph;
 import org.codingmatters.poom.ci.dependency.api.types.RepositoryRelation;
 import org.codingmatters.poom.ci.gremlin.queries.RepositoryQuery;
 import org.codingmatters.poom.ci.gremlin.service.Mappers;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
-import org.codingmatters.value.objects.values.ObjectValue;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -38,13 +34,13 @@ public class GraphGet implements Function<RepositoryGraphGetRequest, RepositoryG
     }
 
     @Override
-    public RepositoryGraphGetResponse apply(RepositoryGraphGetRequest repositoryGraphGetRequest) {
+    public RepositoryGraphGetResponse apply(RepositoryGraphGetRequest request) {
         try(RemoteConnection connection = this.connectionSupplier.get()) {
             RepositoryGraph.Builder graphBuilder = RepositoryGraph.builder();
 
             GraphTraversalSource graph = AnonymousTraversalSource.traversal().withRemote(connection);
 
-            graphBuilder.roots(this.roots(graph));
+            graphBuilder.roots(this.roots(graph, request));
             graphBuilder.repositories(new RepositoryQuery<>(graph, Mappers::repository).all());
             graphBuilder.relations(this.relations(graph));
 
@@ -66,17 +62,21 @@ public class GraphGet implements Function<RepositoryGraphGetRequest, RepositoryG
      * B -produces-> M <-depends-on- A
      *
      * @param graph
+     * @param request
      * @return
      */
-    private List<String> roots(GraphTraversalSource graph) {
+    private List<String> roots(GraphTraversalSource graph, RepositoryGraphGetRequest request) {
         List<String> result = new LinkedList<>();
-        GraphTraversal<Vertex, Map<String, Object>> query = graph.V().hasLabel("repository")
-                .not(__.out("depends-on").hasLabel("module").in("produces").hasLabel("repository"))
-                .propertyMap("repository-id")
-                ;
-        while(query.hasNext()) {
-            List<VertexProperty> elemnt = (List<VertexProperty>) query.next().get("repository-id");
-            result.add(! elemnt.isEmpty() ? (String) elemnt.get(0).value() : null);
+        if(! request.opt().root().isPresent()) {
+            GraphTraversal<Vertex, Map<String, Object>> query = graph.V().hasLabel("repository")
+                    .not(__.out("depends-on").hasLabel("module").in("produces").hasLabel("repository"))
+                    .propertyMap("repository-id");
+            while (query.hasNext()) {
+                List<VertexProperty> elemnt = (List<VertexProperty>) query.next().get("repository-id");
+                result.add(!elemnt.isEmpty() ? (String) elemnt.get(0).value() : null);
+            }
+        } else {
+            result.add(new RepositoryQuery<>(graph, Mappers::repository).repository(request.root()).get().id());
         }
         return result;
     }
