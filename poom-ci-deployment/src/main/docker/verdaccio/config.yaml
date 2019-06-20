@@ -9,10 +9,13 @@ packages:
   '@flexio-oss/*':
     access: $all
     publish: flexio-ci
-    unpublish: admin
-  '**':
+    unpublish: flexio-ci
+  '@flexio-corp/*':
     access: $authenticated
     publish: flexio-ci
+    unpublish: flexio-ci
+  '**':
+    access: admin
     unpublish: admin
 
 logs:
