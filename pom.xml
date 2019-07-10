@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.codingmatters.poom</groupId>
         <artifactId>poom-services</artifactId>
-        <version>1.5.0</version>
+        <version>1.7.0</version>
     </parent>
 
     <groupId>org.codingmatters.poom.ci</groupId>
