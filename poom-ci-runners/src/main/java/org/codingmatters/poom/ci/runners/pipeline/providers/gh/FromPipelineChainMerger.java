@@ -91,7 +91,13 @@ public class FromPipelineChainMerger implements Closeable {
     }
 
     private boolean excluded(String path) {
-        return path.equals("/poom-ci-pipeline.yaml");
+        return path.equals("/poom-ci-pipeline.yaml")
+                || path.equals("/LICENSE")
+                || path.equals("/README.md")
+                || path.equals("/readme.md")
+                || path.equals("/flexio-flow.yml")
+                || path.equals("/.gitignore")
+                ;
     }
 
     private void copy(File file, File dir) throws IOException {
