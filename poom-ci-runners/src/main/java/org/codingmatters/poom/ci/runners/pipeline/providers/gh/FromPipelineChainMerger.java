@@ -115,7 +115,7 @@ public class FromPipelineChainMerger implements Closeable {
         Pipeline result = this.pipeline;
         for (File checkoutDir : this.checkoutDirs) {
             Pipeline p = this.pipelineDescriptoReader.read(checkoutDir);
-            result = merger.merge(p, result);
+            result = merger.merge(result, p);
         }
         return result;
     }
