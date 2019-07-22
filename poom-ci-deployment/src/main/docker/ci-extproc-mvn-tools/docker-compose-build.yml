@@ -1,7 +1,0 @@
-version: '3'
-
-services:
-
-  ci-extproc-mvn-tools:
-    build: .
-    image: ${codingmatters.docker.namespace}/ci-extproc-mvn-tools:${project.version}

@@ -134,6 +134,24 @@ public class PipelineMergerTest {
         );
     }
 
+//    TODO: Stage merging not implemented !!!!!!!
+//    @Test
+//    public void givenPipelineWithStages__whenSameStageIsMergedWithDifferentTimeout__thenPipelineHasOneStage_andNewTimeoutApplied() throws Exception {
+//        assertThat(
+//                new SimplePipelineMerger().merge(
+//                        Pipeline.builder()
+//                                .stages(stage -> stage.name("S1").timeout(42L))
+//                                .build(),
+//                        Pipeline.builder()
+//                                .stages(stage -> stage.name("S1").timeout(12L))
+//                                .build()
+//                ),
+//                is(Pipeline.builder()
+//                        .stages(stage -> stage.name("S1").timeout(42L))
+//                        .build())
+//        );
+//    }
+
     @Test
     public void givenEmptyPipeline__whenMergingWithAPipelineWithEnv__thenEnvIsAppendend() throws Exception {
         assertThat(
