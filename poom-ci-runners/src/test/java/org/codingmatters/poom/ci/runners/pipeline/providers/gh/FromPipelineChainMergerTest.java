@@ -115,8 +115,8 @@ public class FromPipelineChainMergerTest {
                 actual,
                 is(Pipeline.builder()
                         .stages(
-                                Stage.builder().name("st4").build(),
                                 Stage.builder().name("st2").build(),
+                                Stage.builder().name("st4").build(),
                                 Stage.builder().name("stage0").build()
                         )
                         .build())
@@ -141,8 +141,8 @@ public class FromPipelineChainMergerTest {
                 actual,
                 is(Pipeline.builder()
                         .stages(
-                                Stage.builder().name("st3").build(),
                                 Stage.builder().name("st1").build(),
+                                Stage.builder().name("st3").build(),
                                 Stage.builder().name("stage0").build()
                         )
                         .secrets(

@@ -112,11 +112,13 @@ public class FromPipelineChainMerger implements Closeable {
 
     public Pipeline mergedPipeline() throws NotAPipelineContextException, IOException {
         SimplePipelineMerger merger = new SimplePipelineMerger();
-        Pipeline result = this.pipeline;
+        Pipeline result = Pipeline.builder().build();
         for (File checkoutDir : this.checkoutDirs) {
             Pipeline p = this.pipelineDescriptoReader.read(checkoutDir);
-            result = merger.merge(result, p);
+            result = merger.merge(p, result);
         }
+        result = merger.merge(this.pipeline, result);
+
         return result;
     }
 
