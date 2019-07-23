@@ -11,13 +11,14 @@ public class CreateOrUpdateRepositoryQuery {
     }
 
     public void update(String repositoryId, String name, String checkoutSpec) {
-        if(this.g.V().hasLabel("repository").has("repository-id", repositoryId).hasNext()) {
-            this.g.V().hasLabel("repository").has("repository-id", repositoryId)
+        if(this.g.V().has("kind", "repository").has("repository-id", repositoryId).hasNext()) {
+            this.g.V().has("kind","repository").has("repository-id", repositoryId)
                     .property("name", name)
                     .property("checkout-spec", checkoutSpec)
                     .next();
         } else {
             this.g.addV("repository")
+                    .property("kind", "repository")
                     .property("repository-id", repositoryId)
                     .property("name", name)
                     .property("checkout-spec", checkoutSpec)

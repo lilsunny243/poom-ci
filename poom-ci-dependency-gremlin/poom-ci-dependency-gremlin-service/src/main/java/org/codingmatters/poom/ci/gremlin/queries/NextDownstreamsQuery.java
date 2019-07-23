@@ -33,7 +33,7 @@ public class NextDownstreamsQuery<T> extends VertexQuery<T> {
         }
 
         return this.processTraversal(
-                this.graph().V().hasLabel("repository").has("repository-id", within(all.toArray()))
+                this.graph().V().has("kind", "repository").has("repository-id", within(all.toArray()))
         );
     }
 }

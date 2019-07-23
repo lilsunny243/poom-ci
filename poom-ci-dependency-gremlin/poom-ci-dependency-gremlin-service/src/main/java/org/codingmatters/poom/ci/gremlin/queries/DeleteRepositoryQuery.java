@@ -12,7 +12,7 @@ public class DeleteRepositoryQuery {
     }
 
     public void delete(String repositoryId) {
-        Vertex repo = this.g.V().hasLabel("repository").has("repository-id", repositoryId).next();
+        Vertex repo = this.g.V().has("kind", "repository").has("repository-id", repositoryId).next();
 
         new UpdateRepositoryDependenciesQuery(this.g).update(repositoryId);
         new UpdateRepositoryProducedByQuery(this.g).update(repositoryId);

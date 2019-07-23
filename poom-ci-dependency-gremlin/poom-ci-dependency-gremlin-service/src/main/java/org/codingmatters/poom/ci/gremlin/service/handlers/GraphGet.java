@@ -68,8 +68,8 @@ public class GraphGet implements Function<RepositoryGraphGetRequest, RepositoryG
     private List<String> roots(GraphTraversalSource graph, RepositoryGraphGetRequest request) {
         List<String> result = new LinkedList<>();
         if(! request.opt().root().isPresent()) {
-            GraphTraversal<Vertex, Map<String, Object>> query = graph.V().hasLabel("repository")
-                    .not(__.out("depends-on").hasLabel("module").in("produces").hasLabel("repository"))
+            GraphTraversal<Vertex, Map<String, Object>> query = graph.V().has("kind", "repository")
+                    .not(__.out("depends-on").has("kind", "module").in("produces").has("kind", "repository"))
                     .propertyMap("repository-id");
             while (query.hasNext()) {
                 List<VertexProperty> elemnt = (List<VertexProperty>) query.next().get("repository-id");
@@ -84,9 +84,9 @@ public class GraphGet implements Function<RepositoryGraphGetRequest, RepositoryG
     private List<RepositoryRelation> relations(GraphTraversalSource graph) {
         List<RepositoryRelation> results = new LinkedList<>();
 
-        GraphTraversal<Vertex, Map<String, Object>> query = graph.V().hasLabel("repository").as("upstream")
-                .out("produces").hasLabel("module").as("dependency")
-                .in("depends-on").hasLabel("repository").as("downstream")
+        GraphTraversal<Vertex, Map<String, Object>> query = graph.V().has("kind", "repository").as("upstream")
+                .out("produces").has("kind", "module").as("dependency")
+                .in("depends-on").has("kind", "repository").as("downstream")
 
                 .select("upstream").propertyMap("repository-id").as("upstream")
                 .select("dependency").propertyMap("spec", "version").as("dependency")

@@ -6,53 +6,53 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 public class TestGraph {
     static public void setup(GraphTraversalSource g) {
 //        g.tx().open();
-        Vertex repo1 = g.addV("repository")
+        Vertex repo1 = g.addV("repository").property("kind", "repository")
                 .property("repository-id", "orga-repo1-branch")
                 .property("name", "orga/repo1")
                 .property("checkout-spec", "git|git@github.com:orga/repo1.git|branch")
                 .next();
-        Vertex repo2 = g.addV("repository")
+        Vertex repo2 = g.addV("repository").property("kind", "repository")
                 .property("repository-id", "orga-repo2-branch")
                 .property("name", "orga/repo2")
                 .property("checkout-spec", "git|git@github.com:orga/repo2.git|branch")
                 .next();
-        Vertex repo3 = g.addV("repository")
+        Vertex repo3 = g.addV("repository").property("kind", "repository")
                 .property("repository-id", "orga-repo3-branch")
                 .property("name", "orga/repo3")
                 .property("checkout-spec", "git|git@github.com:orga/repo3.git|branch")
                 .next();
-        Vertex repo4 = g.addV("repository")
+        Vertex repo4 = g.addV("repository").property("kind", "repository")
                 .property("repository-id", "orga-repo4-branch")
                 .property("name", "orga/repo4")
                 .property("checkout-spec", "git|git@github.com:orga/repo4.git|branch")
                 .next();
-        Vertex repo5 = g.addV("repository")
+        Vertex repo5 = g.addV("repository").property("kind", "repository")
                 .property("repository-id", "orga-repo5-branch")
                 .property("name", "orga/repo5")
                 .property("checkout-spec", "git|git@github.com:orga/repo5.git|branch")
                 .next();
 
-        Vertex module1 = g.addV("module")
+        Vertex module1 = g.addV("module").property("kind", "module")
                 .property("spec", "group:module1")
                 .property("version", "1")
                 .next();
-        Vertex module2 = g.addV("module")
+        Vertex module2 = g.addV("module").property("kind", "module")
                 .property("spec", "group:module2")
                 .property("version", "1")
                 .next();
-        Vertex module3 = g.addV("module")
+        Vertex module3 = g.addV("module").property("kind", "module")
                 .property("spec", "group:module3")
                 .property("version", "1")
                 .next();
-        Vertex module4 = g.addV("module")
+        Vertex module4 = g.addV("module").property("kind", "module")
                 .property("spec", "group:module4")
                 .property("version", "1")
                 .next();
-        Vertex module5 = g.addV("module")
+        Vertex module5 = g.addV("module").property("kind", "module")
                 .property("spec", "group:module5")
                 .property("version", "1")
                 .next();
-        Vertex externalModule = g.addV("module")
+        Vertex externalModule = g.addV("module").property("kind", "module")
                 .property("spec", "external:dep")
                 .property("version", "1")
                 .next();
@@ -77,36 +77,36 @@ public class TestGraph {
 
 
 
-        Vertex repo10 = g.addV("repository")
+        Vertex repo10 = g.addV("repository").property("kind", "repository")
                 .property("repository-id", "orga-repo10-branch")
                 .property("name", "orga/repo10")
                 .property("checkout-spec", "git|git@github.com:orga/repo10.git|branch")
                 .next();
-        Vertex repo11 = g.addV("repository")
+        Vertex repo11 = g.addV("repository").property("kind", "repository")
                 .property("repository-id", "orga-repo11-branch")
                 .property("name", "orga/repo11")
                 .property("checkout-spec", "git|git@github.com:orga/repo11.git|branch")
                 .next();
-        Vertex repo12 = g.addV("repository")
+        Vertex repo12 = g.addV("repository").property("kind", "repository")
                 .property("repository-id", "orga-repo12-branch")
                 .property("name", "orga/repo12")
                 .property("checkout-spec", "git|git@github.com:orga/repo12.git|branch")
                 .next();
-        Vertex repo13 = g.addV("repository")
+        Vertex repo13 = g.addV("repository").property("kind", "repository")
                 .property("repository-id", "orga-repo13-branch")
                 .property("name", "orga/repo13")
                 .property("checkout-spec", "git|git@github.com:orga/repo13.git|branch")
                 .next();
 
-        Vertex module10 = g.addV("module")
+        Vertex module10 = g.addV("module").property("kind", "module")
                 .property("spec", "group:module10")
                 .property("version", "1")
                 .next();
-        Vertex module11 = g.addV("module")
+        Vertex module11 = g.addV("module").property("kind", "module")
                 .property("spec", "group:module11")
                 .property("version", "1")
                 .next();
-        Vertex module12 = g.addV("module")
+        Vertex module12 = g.addV("module").property("kind", "module")
                 .property("spec", "group:module12")
                 .property("version", "1")
                 .next();

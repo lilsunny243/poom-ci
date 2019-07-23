@@ -26,7 +26,7 @@ public class TransitiveDownstreamQuery<T> extends VertexQuery<T> {
         this.addTransitive(downstreamRepositoryIds, all);
 
         return this.processTraversal(
-                this.graph().V().hasLabel("repository").has("repository-id", within(all.toArray()))
+                this.graph().V().has("kind", "repository").has("repository-id", within(all.toArray()))
         );
     }
 

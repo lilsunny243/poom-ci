@@ -24,7 +24,7 @@ public abstract class AbstractUpdateRepositoryToModuleEdges {
     }
 
     public void update(String repositoryId, Schema.ModuleSpec ... moduleSpecs) {
-        Vertex repo = this.g.V().has("repository", "repository-id", repositoryId).next();
+        Vertex repo = this.g.V().has("kind", "repository").has("repository-id", repositoryId).next();
 
         this.clearEdges(repo);
         this.setupEdges(repo, moduleSpecs);
@@ -35,14 +35,17 @@ public abstract class AbstractUpdateRepositoryToModuleEdges {
         if(moduleSpecs != null && moduleSpecs.length > 0) {
             GraphTraversal traversal = this.g.V(repo.id());
             for (Schema.ModuleSpec moduleSpec : moduleSpecs) {
-                GraphTraversal<Vertex, Vertex> moduleQuery = this.g.V().hasLabel("module").has("spec", moduleSpec.spec).has("version", moduleSpec.version);
+                GraphTraversal<Vertex, Vertex> moduleQuery = this.g.V().has("kind", "module").has("spec", moduleSpec.spec).has("version", moduleSpec.version);
                 if (!moduleQuery.hasNext()) {
                     this.g.addV("module")
+                            .property("kind", "module")
                             .property("spec", moduleSpec.spec)
                             .property("version", moduleSpec.version).next();
                 }
                 traversal.addE(this.edgeLabel)
-                        .to(__.V().hasLabel("module").has("spec", moduleSpec.spec).has("version", moduleSpec.version))
+                        .to(__.V().has("kind", "module")
+                                .has("spec", moduleSpec.spec)
+                                .has("version", moduleSpec.version))
                         .outV()
                 ;
             }
