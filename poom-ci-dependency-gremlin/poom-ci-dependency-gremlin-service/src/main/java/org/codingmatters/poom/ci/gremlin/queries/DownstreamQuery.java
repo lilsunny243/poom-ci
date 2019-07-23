@@ -14,7 +14,7 @@ public class DownstreamQuery<T> extends VertexQuery<T> {
     }
 
     public List<T> forRepository(String repositoryId) {
-        Vertex repo = this.graph().V().hasLabel("repository").has("repository-id", repositoryId).next();
+        Vertex repo = this.graph().V().has("kind", "repository").has("repository-id", repositoryId).next();
 
         return new LinkedList<>(new HashSet<>(this.processTraversal(
                 this.graph().V(repo.id())
