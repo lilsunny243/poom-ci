@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.codingmatters.poom</groupId>
         <artifactId>poom-services</artifactId>
-        <version>1.9.0</version>
+        <version>1.12.0</version>
     </parent>
 
     <groupId>org.codingmatters.poom.ci</groupId>
@@ -42,21 +42,18 @@
 
     <repositories>
         <repository>
-            <id>oss-staging</id>
-            <url>https://oss.sonatype.org/content/groups/staging</url>
-            <releases><enabled>true</enabled></releases>
+            <id>codingmatters-snapshots</id>
+            <url>http://maven.ci.flexio.io:8080/repository/codingmatters-snapshots/</url>
+            <releases><enabled>false</enabled></releases>
             <snapshots><enabled>true</enabled></snapshots>
         </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>oss-staging</id>
-            <url>https://oss.sonatype.org/content/groups/staging</url>
+        <repository>
+            <id>codingmatters-releases</id>
+            <url>http://maven.ci.flexio.io:8080/repository/codingmatters-releases/</url>
             <releases><enabled>true</enabled></releases>
-            <snapshots><enabled>true</enabled></snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+    </repositories>
 
     <modules>
         <module>poom-ci-triggers</module>
@@ -94,7 +91,7 @@
             <dependency>
                 <groupId>org.codingmatters.poom</groupId>
                 <artifactId>poomjobs</artifactId>
-                <version>1.7.0</version>
+                <version>1.8.0</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -102,7 +99,7 @@
             <dependency>
                 <groupId>io.flexio.commons</groupId>
                 <artifactId>flexio-commons</artifactId>
-                <version>1.8.0</version>
+                <version>1.9.0</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -224,21 +221,9 @@
                 <plugin>
                     <groupId>io.flexio.io</groupId>
                     <artifactId>flexio-mongo-io-maven-plugin</artifactId>
-                    <version>1.5.0-SNAPSHOT</version>
+                    <version>1.9.0-SNAPSHOT</version>
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>
