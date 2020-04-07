@@ -84,6 +84,12 @@ public class OnlyWenExpressionTest {
     }
 
     @Test
+    public void given__when__then() throws Exception {
+        this.visitor.visit(this.parseExpression("branch in (master, develop, 'feature/*')"));
+        assertThat(this.tokens.toString(), this.tokens, contains("branch", "in", "master", "develop", "'feature/*'"));
+    }
+
+    @Test
     public void parseError() {
         parseExpression("not quite parsable");
     }
