@@ -69,7 +69,7 @@
         <module>poom-ci-dependency-api-spec</module>
         <module>poom-ci-dependency-api</module>
         <module>poom-ci-dependency-client</module>
-        <module>poom-ci-dependency-gremlin</module>
+<!--        <module>poom-ci-dependency-gremlin</module>-->
 
         <module>poom-ci-deployment</module>
         <module>poom-ci-service-bundle</module>
