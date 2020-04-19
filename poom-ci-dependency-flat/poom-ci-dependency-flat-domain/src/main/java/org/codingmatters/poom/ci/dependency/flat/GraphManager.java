@@ -10,6 +10,9 @@ import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.domain.repositories.RepositoryIterator;
 import org.codingmatters.poom.servives.domain.entities.Entity;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 public class GraphManager {
 
     public static final int DEFAULT_PAGE_SIZE = 1000;
@@ -106,5 +109,38 @@ public class GraphManager {
 
     private PropertyQuery relatedToRepository(org.codingmatters.poom.ci.dependency.api.types.Repository repository) {
         return PropertyQuery.builder().filter(String.format("repository.id == '%s'", repository.id())).build();
+    }
+
+    public org.codingmatters.poom.ci.dependency.api.types.Repository[] repositories() {
+        return RepositoryIterator.searchStreamed(this.repositories, PropertyQuery.builder().sort("name").build(), this.pageSize)
+                .map(e -> e.value())
+                .collect(Collectors.toList())
+                .toArray(new org.codingmatters.poom.ci.dependency.api.types.Repository[0]);
+    }
+
+    public Optional<org.codingmatters.poom.ci.dependency.api.types.Repository> repository(String id) throws GraphManagerException {
+        try {
+            Entity<org.codingmatters.poom.ci.dependency.api.types.Repository> result = this.repositories.retrieve(id);
+            if(result == null) {
+                return Optional.empty();
+            } else {
+                return Optional.of(result.value());
+            }
+        } catch (RepositoryException e) {
+            throw new GraphManagerException("error getting repo from repository", e);
+        }
+    }
+
+    public void deleteRepository(String id) throws GraphManagerException {
+        try {
+            Entity<org.codingmatters.poom.ci.dependency.api.types.Repository> repo = this.repositories.retrieve(id);
+            if(repo != null) {
+                this.repositories.delete(repo);
+                this.dependsOnRelation.deleteFrom(this.relatedToRepository(repo.value()));
+                this.producesRelation.deleteFrom(this.relatedToRepository(repo.value()));
+            }
+        } catch (RepositoryException e) {
+            throw new GraphManagerException("error deleting repo from repos", e);
+        }
     }
 }

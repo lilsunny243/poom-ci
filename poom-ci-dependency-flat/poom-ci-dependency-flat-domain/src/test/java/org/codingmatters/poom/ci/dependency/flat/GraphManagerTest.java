@@ -12,6 +12,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Optional;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -36,6 +38,7 @@ public class GraphManagerTest {
     private Repository<DependsOnRelation, PropertyQuery> dependsOnRelations = InMemoryRepositoryWithPropertyQuery.validating(DependsOnRelation.class);
 
     private GraphManager manager = new GraphManager(repositories, this.producesRelations, this.dependsOnRelations, TEST_PAGE_SIZE);
+
 
     @Test
     public void givenReposAreEmpty__whenIndexing_andNoDependencies_andNoProduction__thenRepoIsStored_andNoRelationsAreStored() throws Exception {
@@ -192,5 +195,51 @@ public class GraphManagerTest {
 
         assertThat(this.manager.dependenciesOf(MY_REPO), arrayWithSize(count));
         assertThat(this.manager.producedBy(MY_REPO), arrayWithSize(count));
+    }
+
+
+    @Test
+    public void givenReposEmpty__whenListingRepositories__thenEmptyArray() throws Exception {
+        assertThat(this.manager.repositories(), is(emptyArray()));
+    }
+
+    @Test
+    public void givenSomeRepositoriesDefined__whenListingRepositories__thenReposAreListed_andOrderedOnName() throws Exception {
+        this.repositories.createWithId("c", MY_REPO.withName("C"));
+        this.repositories.createWithId("d", MY_REPO.withName("A"));
+        this.repositories.createWithId("b", MY_REPO.withName("B"));
+
+        org.codingmatters.poom.ci.dependency.api.types.Repository[] repositories = this.manager.repositories();
+        System.out.println(repositories);
+        assertThat(repositories, is(arrayContaining(
+                MY_REPO.withName("A"),
+                MY_REPO.withName("B"),
+                MY_REPO.withName("C")
+        )));
+    }
+
+    @Test
+    public void givenRepositoryDoesntExist__whenGettingRepo__thenNoRepoReturned() throws Exception {
+        assertThat(this.manager.repository(MY_REPO.id()).isPresent(), is(false));
+    }
+
+    @Test
+    public void givenRepositoryExists__whenGettingFromId__thenRepositoryReturned() throws Exception {
+        this.repositories.createWithId(MY_REPO.id(), MY_REPO);
+
+        assertThat(this.manager.repository(MY_REPO.id()).get(), is(MY_REPO));
+    }
+
+    @Test
+    public void givenRepositoryExists__whenDeleting__thenRepositoryDeleted() throws Exception {
+        this.repositories.createWithId(MY_REPO.id(), MY_REPO);
+        this.dependsOnRelations.create(DependsOnRelation.builder().repository(MY_REPO).module(MODULE_1).build());
+        this.producesRelations.create(ProducesRelation.builder().repository(MY_REPO).module(MODULE_2).build());
+
+        this.manager.deleteRepository(MY_REPO.id());
+
+        assertThat(this.repositories.all(0L, 0L).total(), is(0L));
+        assertThat(this.dependsOnRelations.all(0L, 0L).total(), is(0L));
+        assertThat(this.producesRelations.all(0L, 0L).total(), is(0L));
     }
 }
