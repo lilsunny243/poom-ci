@@ -33,17 +33,17 @@ public class DownstreamWalker {
         if(! repository.isPresent()) throw new NoSuchRepositoryException("no repository found with id " + repositoryId);
 
         this.alreadySeen.get().clear();
-        this.walkDownstreams(repository.get());
+        this.walk(repository.get());
     }
 
-    public void walkDownstreams(Repository repository) throws NoSuchRepositoryException, GraphManagerException {
+    private void walk(Repository repository) throws NoSuchRepositoryException, GraphManagerException {
         this.alreadySeen.get().add(repository.id());
         for (Repository downstream : this.downstreamProcessor.downstream(repository.id())) {
             if(this.alreadySeen.get().contains(downstream.id())) {
                 this.listener.hasDownstream(repository, downstream, true);
             } else {
                 this.listener.hasDownstream(repository, downstream, false);
-                this.walkDownstreams(downstream);
+                this.walk(downstream);
             }
         }
     }
