@@ -16,10 +16,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.emptyArray;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
-@Ignore
 public class DownstreamProcessorTest {
 
     public static final FullRepository A_REPO = FullRepository.builder().id("a-repo").name("ARepo").checkoutSpec("a/repo").build();
@@ -65,7 +63,7 @@ public class DownstreamProcessorTest {
         this.graphManager.index(A_REPO.withProduces(new ValueList.Builder().with(A_MODULE).build()));
         this.graphManager.index(B_REPO.withDependencies(new ValueList.Builder().with(A_MODULE).build()));
 
-        assertThat(this.processor.downstream(A_REPO.id()), is(this.from(B_REPO)));
+        assertThat(this.processor.downstream(A_REPO.id()), is(arrayContaining(this.from(B_REPO))));
     }
 
     private Repository from(FullRepository fullRepository) {

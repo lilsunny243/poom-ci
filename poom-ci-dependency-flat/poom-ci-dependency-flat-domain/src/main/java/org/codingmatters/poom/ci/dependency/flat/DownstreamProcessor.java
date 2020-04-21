@@ -1,7 +1,9 @@
 package org.codingmatters.poom.ci.dependency.flat;
 
+import org.codingmatters.poom.ci.dependency.api.types.Module;
 import org.codingmatters.poom.ci.dependency.api.types.Repository;
 
+import java.util.LinkedList;
 import java.util.Optional;
 
 public class DownstreamProcessor {
@@ -16,6 +18,15 @@ public class DownstreamProcessor {
         if(! repository.isPresent()) {
             throw new NoSuchRepositoryException("no repository with id " + repositoryId);
         }
-        return new Repository[0];
+
+        LinkedList<Repository> result = new LinkedList<>();
+
+        for (Module module : this.graphManager.producedBy(repository.get())) {
+            for (Repository dependentRepository : this.graphManager.dependentRepositories(module)) {
+                result.add(dependentRepository);
+            }
+        }
+
+        return result.toArray(new Repository[0]);
     }
 }
