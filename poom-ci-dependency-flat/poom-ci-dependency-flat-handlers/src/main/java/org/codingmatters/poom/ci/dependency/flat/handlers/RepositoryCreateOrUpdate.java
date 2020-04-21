@@ -42,6 +42,7 @@ public class RepositoryCreateOrUpdate implements Function<RepositoryPutRequest, 
         try {
             this.graphManager.index(request.payload());
             Repository repository = this.graphManager.repository(request.repositoryId()).get();
+            log.info("indexed repository {}", repository);
             return RepositoryPutResponse.builder().status200(Status200.builder()
                     .payload(repository)
                     .build()).build();
