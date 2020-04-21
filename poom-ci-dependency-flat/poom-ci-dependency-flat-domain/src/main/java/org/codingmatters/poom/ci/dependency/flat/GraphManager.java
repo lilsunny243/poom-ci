@@ -143,4 +143,25 @@ public class GraphManager {
             throw new GraphManagerException("error deleting repo from repos", e);
         }
     }
+
+    public org.codingmatters.poom.ci.dependency.api.types.Repository[] productionRepositories(Module module) throws GraphManagerException {
+        return RepositoryIterator.searchStreamed(this.producesRelation, this.relatedToModule(module), this.pageSize)
+                .map(rel -> rel.value().repository())
+                .toArray(size -> new org.codingmatters.poom.ci.dependency.api.types.Repository[size])
+        ;
+    }
+
+    public org.codingmatters.poom.ci.dependency.api.types.Repository[] dependentRepositories(Module module) throws GraphManagerException {
+        return RepositoryIterator.searchStreamed(this.dependsOnRelation, this.relatedToModule(module), this.pageSize)
+                .map(rel -> rel.value().repository())
+                .toArray(size -> new org.codingmatters.poom.ci.dependency.api.types.Repository[size])
+        ;
+    }
+
+    public PropertyQuery relatedToModule(Module module) {
+        return PropertyQuery.builder().filter(
+                String.format("module.spec == '%s' && module.version == '%s'", module.spec(), module.version())
+        ).build();
+    }
+
 }

@@ -242,4 +242,57 @@ public class GraphManagerTest {
         assertThat(this.dependsOnRelations.all(0L, 0L).total(), is(0L));
         assertThat(this.producesRelations.all(0L, 0L).total(), is(0L));
     }
+
+
+    @Test
+    public void givenRepositoryExists__whenModuleNotProducedByAnyRepository__thenProductionRepositoriesIsEmpty() throws Exception {
+        this.repositories.createWithId(MY_REPO.id(), MY_REPO);
+        this.producesRelations.create(ProducesRelation.builder().repository(MY_REPO).module(MODULE_2).build());
+
+        assertThat(this.manager.productionRepositories(Module.builder().spec("another-module").version("1").build()), is(emptyArray()));
+    }
+
+    @Test
+    public void givenRepositoryExists__whenModuleNotProducedInThisVersion__thenProductionRepositoriesIsEmpty() throws Exception {
+        this.repositories.createWithId(MY_REPO.id(), MY_REPO);
+        this.producesRelations.create(ProducesRelation.builder().repository(MY_REPO).module(MODULE_2).build());
+
+        assertThat(this.manager.productionRepositories(MODULE_2.withVersion("12")), is(emptyArray()));
+    }
+
+    @Test
+    public void givenRepositoryExists__whenModulePrucedByRepository__thenProductionRepositoriesContainsThisRepository() throws Exception {
+        this.repositories.createWithId(MY_REPO.id(), MY_REPO);
+        this.producesRelations.create(ProducesRelation.builder().repository(MY_REPO).module(MODULE_2).build());
+
+        assertThat(this.manager.productionRepositories(MODULE_2), is(arrayContaining(MY_REPO)));
+    }
+
+
+
+
+
+    @Test
+    public void givenRepositoryExists__whenModuleNotDependencyOfAnyRepository__thenDependentRepositoriesIsEmpty() throws Exception {
+        this.repositories.createWithId(MY_REPO.id(), MY_REPO);
+        this.dependsOnRelations.create(DependsOnRelation.builder().repository(MY_REPO).module(MODULE_2).build());
+
+        assertThat(this.manager.dependentRepositories(Module.builder().spec("another-module").version("1").build()), is(emptyArray()));
+    }
+
+    @Test
+    public void givenRepositoryExists__whenModuleNotDependencyOfInThisVersion__thenDependentRepositoriesIsEmpty() throws Exception {
+        this.repositories.createWithId(MY_REPO.id(), MY_REPO);
+        this.dependsOnRelations.create(DependsOnRelation.builder().repository(MY_REPO).module(MODULE_2).build());
+
+        assertThat(this.manager.dependentRepositories(MODULE_2.withVersion("12")), is(emptyArray()));
+    }
+
+    @Test
+    public void givenRepositoryExists__whenModuleDependencyOfRepository__thenDependentRepositoriesContainsThisRepository() throws Exception {
+        this.repositories.createWithId(MY_REPO.id(), MY_REPO);
+        this.dependsOnRelations.create(DependsOnRelation.builder().repository(MY_REPO).module(MODULE_2).build());
+
+        assertThat(this.manager.dependentRepositories(MODULE_2), is(arrayContaining(MY_REPO)));
+    }
 }
