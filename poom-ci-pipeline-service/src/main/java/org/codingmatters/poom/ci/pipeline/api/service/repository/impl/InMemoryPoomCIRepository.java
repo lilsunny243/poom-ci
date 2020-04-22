@@ -25,13 +25,14 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
 
     private final Repository<Pipeline, PropertyQuery> pipelineRepository = InMemoryRepositoryWithPropertyQuery.validating(Pipeline.class);
 
-    private final InMemoryRepository<GithubPushEvent, String> githubPushEventRepository = new InMemoryRepository<GithubPushEvent, String>() {
+    private final Repository<GithubPushEvent, PropertyQuery> githubPushEventRepository = InMemoryRepositoryWithPropertyQuery.validating(GithubPushEvent.class);
+    /* new InMemoryRepository<GithubPushEvent, String>() {
         @Override
         public PagedEntityList<GithubPushEvent> search(String query, long startIndex, long endIndex) throws RepositoryException {
             Stream<Entity<GithubPushEvent>> filtered = this.stream();
             return this.paged(filtered, startIndex, endIndex);
         }
-    };
+    };*/
 
     private final Repository<UpstreamBuild, UpstreamBuildQuery> upstreamBuildRepository = new InMemoryRepository<UpstreamBuild, UpstreamBuildQuery>() {
         @Override
@@ -84,7 +85,7 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
     }
 
     @Override
-    public Repository<GithubPushEvent, String> githubPushEventRepository() {
+    public Repository<GithubPushEvent, PropertyQuery> githubPushEventRepository() {
         return githubPushEventRepository;
     }
 

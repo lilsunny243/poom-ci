@@ -7,6 +7,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.servives.domain.entities.Entity;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class GithubTriggerCreation implements Function<GithubTriggersPostRequest, GithubTriggersPostResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggerCreation.class);
 
-    private final Repository<GithubPushEvent, String> repository;
+    private final Repository<GithubPushEvent, PropertyQuery> repository;
     private final Consumer<PipelineTrigger> triggerCreated;
 
     public GithubTriggerCreation(PoomCIRepository repository, Consumer<PipelineTrigger> triggerCreated) {
