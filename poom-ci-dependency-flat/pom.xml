@@ -17,5 +17,6 @@
     <modules>
         <module>poom-ci-dependency-flat-domain</module>
         <module>poom-ci-dependency-flat-handlers</module>
+        <module>poom-ci-dependency-flat-service</module>
     </modules>
 </project>

@@ -69,6 +69,7 @@
         <module>poom-ci-dependency-api-spec</module>
         <module>poom-ci-dependency-api</module>
         <module>poom-ci-dependency-client</module>
+        <module>poom-ci-dependency-processor</module>
 <!--        <module>poom-ci-dependency-gremlin</module>-->
 
         <module>poom-ci-dependency-flat</module>
@@ -209,8 +210,8 @@
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
-                <artifactId>poom-ci-dependency-service</artifactId>
-                <version>1.2.0-SNAPSHOT</version>
+                <artifactId>poom-ci-dependency-processor</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
