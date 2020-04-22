@@ -10,6 +10,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.date.UTC;
@@ -24,7 +25,7 @@ import java.util.function.Function;
 public class PipelineCreate implements Function<PipelinesPostRequest, PipelinesPostResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(PipelineCreate.class);
 
-    private final Repository<Pipeline, PipelineQuery> pipelineRepository;
+    private final Repository<Pipeline, PropertyQuery> pipelineRepository;
     private final Consumer<Pipeline> pipelineCreationListener;
 
     public PipelineCreate(PoomCIRepository repository, Consumer<Pipeline> pipelineCreationListener) {
@@ -74,9 +75,17 @@ public class PipelineCreate implements Function<PipelinesPostRequest, PipelinesP
     }
 
     private Optional<PipelinesPostResponse> ifAlreadyPending(PipelinesPostRequest request) throws RepositoryException {
-        PagedEntityList<Pipeline> exists = this.pipelineRepository.search(PipelineQuery.builder()
-                .triggerName(request.payload().name())
-                .triggerRunStatus(Status.Run.PENDING.name()).build(), 0, 0);
+        PropertyQuery.Builder query = PropertyQuery.builder()
+                .filter(String.format("trigger.name == '%s' && status.run == '%s'",
+                        request.payload().name(),
+                        Status.Run.PENDING.name()
+                ));
+
+        PagedEntityList<Pipeline> exists = this.pipelineRepository.search(
+//                PipelineQuery.builder()
+//                .triggerName(request.payload().name())
+//                .triggerRunStatus(Status.Run.PENDING.name()).build()
+                query.build() , 0, 0);
         if(exists.total() == 0) {
             return Optional.empty();
         } else {

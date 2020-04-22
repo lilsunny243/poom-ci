@@ -9,6 +9,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 
 import java.util.Objects;
@@ -19,7 +20,7 @@ public interface PoomCIRepository {
         return new InMemoryPoomCIRepository(logStorage);
     }
 
-    Repository<Pipeline, PipelineQuery> pipelineRepository();
+    Repository<Pipeline, PropertyQuery> pipelineRepository();
     Repository<GithubPushEvent, String> githubPushEventRepository();
     Repository<PipelineStage, PipelineStageQuery> stageRepository();
     LogFileStore logStore();

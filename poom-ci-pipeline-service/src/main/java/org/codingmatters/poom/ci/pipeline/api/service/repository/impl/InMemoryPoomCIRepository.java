@@ -12,8 +12,10 @@ import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepository;
+import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepositoryWithPropertyQuery;
 import org.codingmatters.poom.servives.domain.entities.Entity;
 import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
 
@@ -21,29 +23,7 @@ import java.util.stream.Stream;
 
 public class InMemoryPoomCIRepository implements PoomCIRepository {
 
-    private final InMemoryRepository<Pipeline, PipelineQuery> pipelineRepository = new InMemoryRepository<Pipeline, PipelineQuery>() {
-        @Override
-        public PagedEntityList<Pipeline> search(PipelineQuery query, long startIndex, long endIndex) throws RepositoryException {
-            Stream<Entity<Pipeline>> filtered = this.stream();
-            if(query.opt().triggerName().isPresent()) {
-                filtered = filtered.filter(entity -> query.triggerName().equals(entity.value().opt().trigger().name().orElse(null)));
-            }
-            if(query.opt().triggerRunStatus().isPresent()) {
-                Status.Run queried = runStatus(query);
-                filtered = filtered.filter(entity -> queried == null ? entity.value().opt().status().run().isPresent() :
-                        queried.equals(entity.value().opt().status().run().orElse(null)));
-            }
-            return this.paged(filtered, startIndex, endIndex);
-        }
-
-        private Status.Run runStatus(PipelineQuery query) {
-            Status.Run queried = null;
-            try {
-                queried = Status.Run.valueOf(query.triggerRunStatus());
-            } catch (IllegalArgumentException e) {}
-            return queried;
-        }
-    };
+    private final Repository<Pipeline, PropertyQuery> pipelineRepository = InMemoryRepositoryWithPropertyQuery.validating(Pipeline.class);
 
     private final InMemoryRepository<GithubPushEvent, String> githubPushEventRepository = new InMemoryRepository<GithubPushEvent, String>() {
         @Override
@@ -99,7 +79,7 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
 
 
     @Override
-    public Repository<Pipeline, PipelineQuery> pipelineRepository() {
+    public Repository<Pipeline, PropertyQuery> pipelineRepository() {
         return pipelineRepository;
     }
 

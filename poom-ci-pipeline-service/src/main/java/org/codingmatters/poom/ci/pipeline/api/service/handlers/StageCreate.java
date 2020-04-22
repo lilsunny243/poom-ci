@@ -10,6 +10,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.*;
 import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.date.UTC;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 public class StageCreate implements Function<PipelineStagesPostRequest, PipelineStagesPostResponse> {
     static private CategorizedLogger log = CategorizedLogger.getLogger(StageCreate.class);
 
-    private final Repository<Pipeline, PipelineQuery> pipelineRepository;
+    private final Repository<Pipeline, PropertyQuery> pipelineRepository;
     private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
 
     public StageCreate(PoomCIRepository repository) {
