@@ -1,0 +1,54 @@
+[
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-php",
+      "version" : "1.2.0"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation-main",
+      "version" : "1.2.0"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-doc",
+      "version" : "1.2.0"
+   },
+   {
+      "version" : "1.2.0",
+      "spec" : "org.codingmatters.value.objects:codingmatters-value-objects"
+   },
+   {
+      "version" : "1.2.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-maven-plugin"
+   },
+   {
+      "version" : "1.2.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-json"
+   },
+   {
+      "version" : "1.2.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-spec"
+   },
+   {
+      "version" : "1.2.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-js"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-yaml-parser",
+      "version" : "1.2.0"
+   },
+   {
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation-commons",
+      "version" : "1.2.0"
+   },
+   {
+      "version" : "1.2.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-values"
+   },
+   {
+      "version" : "1.2.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-demo"
+   },
+   {
+      "version" : "1.2.0",
+      "spec" : "org.codingmatters.value.objects:cdm-value-objects-generation"
+   }
+]

@@ -1,0 +1,54 @@
+[
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.medias:flexio-medias-api-spec"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-object-storage-client-php",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.medias:flexio-medias-client"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services:flexio-object-storage-service"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.medias:flexio-medias-api"
+   },
+   {
+      "spec" : "io.flexio.services.medias:flexio-medias",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services:flexio-object-storage-api"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-object-storage-client",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services:flexio-object-storage"
+   },
+   {
+      "spec" : "io.flexio.services.medias:flexio-medias-mime-types",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services:flexio-object-storage-file-store"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.medias:flexio-medias-services"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services:flexio-object-storage-api-spec"
+   }
+]

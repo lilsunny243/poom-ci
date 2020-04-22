@@ -1,0 +1,70 @@
+[
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "org.codingmatters.rest:cdm-rest-io"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "org.codingmatters.rest:cdm-rest-proxy-api"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "org.codingmatters.rest:cdm-rest-client-okhttp"
+   },
+   {
+      "spec" : "org.codingmatters.rest:cdm-rest-tests",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "org.codingmatters.rest:codingmatters-rest"
+   },
+   {
+      "spec" : "org.codingmatters.rest:cdm-rest-tests-resources",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.rest:cdm-rest-api-client-generator-js",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.rest:cdm-rest-api-generator",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "org.codingmatters.rest:cdm-rest-api-client-generator-php"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "org.codingmatters.rest:cdm-rest-undertow"
+   },
+   {
+      "spec" : "org.codingmatters.rest:cdm-rest-maven-plugin",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "org.codingmatters.rest:cdm-rest-api"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "org.codingmatters.rest:cdm-rest-raml-parser"
+   },
+   {
+      "spec" : "org.codingmatters.rest:cdm-rest-client-tests-support",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.rest:cdm-rest-tests-support",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "org.codingmatters.rest:cdm-rest-client-api"
+   },
+   {
+      "spec" : "org.codingmatters.rest:cdm-rest-api-doc",
+      "version" : "1.6.0-SNAPSHOT"
+   }
+]

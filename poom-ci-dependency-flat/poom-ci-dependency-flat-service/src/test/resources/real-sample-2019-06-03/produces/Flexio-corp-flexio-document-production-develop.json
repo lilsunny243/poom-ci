@@ -1,0 +1,82 @@
+[
+   {
+      "spec" : "io.flexio.services:flexio-document-model-client",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.document.producer:flexio-document-producer-pdf",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services:document-production-runner"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.document.producer:flexio-document-producer-service"
+   },
+   {
+      "spec" : "io.flexio.services.document.producer:flexio-document-producer-api-spec",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.document.producer:flexio-document-producer"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.document.producer:flexio-document-producer-client"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services:flexio-document-model-api-spec"
+   },
+   {
+      "spec" : "io.flexio.services.document.producer:flexio-document-producer-api",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.document.producer.callback:flexio-document-producer-callback-service",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.document.producer.callback:flexio-document-producer-callback"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-pdf-connector",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services.document.producer.callback:flexio-document-producer-callback-client",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-document-model",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services:flexio-document-model-api"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.document.producer.callback:flexio-document-producer-callback-api-spec"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.document.producer.callback:flexio-document-producer-callback-api"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services:flexio-document-production"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services:flexio-legacy-bundle"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services:flexio-document-model-service"
+   }
+]
