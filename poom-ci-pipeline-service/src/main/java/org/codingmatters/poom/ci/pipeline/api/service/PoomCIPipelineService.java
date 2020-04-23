@@ -4,6 +4,11 @@ import com.fasterxml.jackson.core.JsonFactory;
 import io.undertow.Undertow;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
+import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
+import org.codingmatters.poom.ci.triggers.GithubPushEvent;
+import org.codingmatters.poom.ci.triggers.UpstreamBuild;
+import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepositoryWithPropertyQuery;
 import org.codingmatters.poomjobs.client.PoomjobsJobRegistryAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
@@ -41,7 +46,13 @@ public class PoomCIPipelineService {
 
         File logStorage = new File(Env.mandatory("LOG_STORAGE").asString());
 
-        PoomCIRepository repository = PoomCIRepository.inMemory(new LogFileStore(logStorage));
+        PoomCIRepository repository = new PoomCIRepository(
+                new LogFileStore(logStorage),
+                InMemoryRepositoryWithPropertyQuery.validating(Pipeline.class),
+                InMemoryRepositoryWithPropertyQuery.validating(GithubPushEvent.class),
+                InMemoryRepositoryWithPropertyQuery.validating(UpstreamBuild.class),
+                InMemoryRepositoryWithPropertyQuery.validating(PipelineStage.class)
+        );
         String jobRegistryUrl = Env.mandatory("JOB_REGISTRY_URL").asString();
         return new PoomCIApi(repository, "/pipelines", jsonFactory, new PoomjobsJobRegistryAPIRequesterClient(
                 new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> jobRegistryUrl), jsonFactory, jobRegistryUrl)
