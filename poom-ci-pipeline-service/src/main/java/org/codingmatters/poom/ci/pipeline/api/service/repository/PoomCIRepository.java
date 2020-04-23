@@ -22,7 +22,7 @@ public interface PoomCIRepository {
 
     Repository<Pipeline, PropertyQuery> pipelineRepository();
     Repository<GithubPushEvent, PropertyQuery> githubPushEventRepository();
-    Repository<PipelineStage, PipelineStageQuery> stageRepository();
+    Repository<PipelineStage, PropertyQuery> stageRepository();
     LogFileStore logStore();
     Repository<UpstreamBuild, UpstreamBuildQuery> upstreamBuildRepository();
 

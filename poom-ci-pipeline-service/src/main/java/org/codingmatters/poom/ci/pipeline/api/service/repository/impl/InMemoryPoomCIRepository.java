@@ -26,13 +26,6 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
     private final Repository<Pipeline, PropertyQuery> pipelineRepository = InMemoryRepositoryWithPropertyQuery.validating(Pipeline.class);
 
     private final Repository<GithubPushEvent, PropertyQuery> githubPushEventRepository = InMemoryRepositoryWithPropertyQuery.validating(GithubPushEvent.class);
-    /* new InMemoryRepository<GithubPushEvent, String>() {
-        @Override
-        public PagedEntityList<GithubPushEvent> search(String query, long startIndex, long endIndex) throws RepositoryException {
-            Stream<Entity<GithubPushEvent>> filtered = this.stream();
-            return this.paged(filtered, startIndex, endIndex);
-        }
-    };*/
 
     private final Repository<UpstreamBuild, UpstreamBuildQuery> upstreamBuildRepository = new InMemoryRepository<UpstreamBuild, UpstreamBuildQuery>() {
         @Override
@@ -48,7 +41,8 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
         }
     };
 
-    private final InMemoryRepository<PipelineStage, PipelineStageQuery> stageRepository = new InMemoryRepository<PipelineStage, PipelineStageQuery>() {
+    private final Repository<PipelineStage, PropertyQuery> stageRepository = InMemoryRepositoryWithPropertyQuery.validating(PipelineStage.class);
+            /*new InMemoryRepository<PipelineStage, PipelineStageQuery>() {
         @Override
         public PagedEntityList<PipelineStage> search(PipelineStageQuery query, long startIndex, long endIndex) throws RepositoryException {
             Stream<Entity<PipelineStage>> filtered = this.stream();
@@ -70,7 +64,7 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
             }
             return this.paged(filtered, startIndex, endIndex);
         }
-    };
+    };*/
 
     private final LogFileStore logStore;
 
@@ -90,7 +84,7 @@ public class InMemoryPoomCIRepository implements PoomCIRepository {
     }
 
     @Override
-    public Repository<PipelineStage, PipelineStageQuery> stageRepository() {
+    public Repository<PipelineStage, PropertyQuery> stageRepository() {
         return stageRepository;
     }
 

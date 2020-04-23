@@ -26,7 +26,7 @@ public class StageCreate implements Function<PipelineStagesPostRequest, Pipeline
     static private CategorizedLogger log = CategorizedLogger.getLogger(StageCreate.class);
 
     private final Repository<Pipeline, PropertyQuery> pipelineRepository;
-    private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
+    private final Repository<PipelineStage, PropertyQuery> stageRepository;
 
     public StageCreate(PoomCIRepository repository) {
         this.pipelineRepository = repository.pipelineRepository();
@@ -145,18 +145,20 @@ public class StageCreate implements Function<PipelineStagesPostRequest, Pipeline
     }
 
     private boolean aStageIsAlreadyRunning(PipelineStagesPostRequest request) throws RepositoryException {
-        return this.stageRepository.search(PipelineStageQuery.builder()
-                .withPipelineId(request.pipelineId())
-                .withRunningStatus(PipelineStageQuery.WithRunningStatus.RUNNING)
+        return this.stageRepository.search(PropertyQuery.builder().filter(String.format(
+                "pipelineId == '%s' && stage.status.run == '%s'",
+                request.pipelineId(),
+                PipelineStageQuery.WithRunningStatus.RUNNING.name()))
                 .build(), 0, 0).total() > 0;
     }
 
     private boolean stageAlreadyExists(PipelineStagesPostRequest request) throws RepositoryException {
-        return this.stageRepository.search(PipelineStageQuery.builder()
-                .withPipelineId(request.pipelineId())
-                .withType(request.stageType().toUpperCase())
-                .withName(request.payload().name())
-                .build(), 0, 0).total() > 0;
+        return this.stageRepository.search(PropertyQuery.builder().filter(String.format(
+                "pipelineId == '%s' && stage.stageType == '%s' && stage.name == '%s'",
+                request.pipelineId(),
+                request.stageType().toUpperCase(),
+                request.payload().name()
+        )).build(), 0, 0).total() > 0;
     }
 
     private boolean pipelineIsRunning(Entity<Pipeline> pipeline) {

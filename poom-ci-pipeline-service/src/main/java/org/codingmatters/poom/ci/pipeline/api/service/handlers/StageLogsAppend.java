@@ -12,6 +12,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, PipelineStageLogsPatchResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(StageLogsAppend.class);
 
-    private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
+    private final Repository<PipelineStage, PropertyQuery> stageRepository;
     private final LogFileStore logStore;
 
     public StageLogsAppend(PoomCIRepository repository) {
@@ -79,7 +80,15 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
                     .build());
         }
 
-        PagedEntityList<PipelineStage> stageSearch = this.stageRepository.search(PipelineStageQuery.builder().withPipelineId(request.pipelineId()).withName(request.stageName()).build(), 0, 0);
+        PagedEntityList<PipelineStage> stageSearch = this.stageRepository.search(
+                PropertyQuery.builder()
+                        .filter(String.format(
+                                "pipelineId == '%s' && stage.name == '%s'",
+                                request.pipelineId(),
+                                request.stageName()
+                                ))
+                        .build(),
+                0, 0);
         if(stageSearch.total() == 0) {
             invalid = Optional.of(PipelineStageLogsPatchResponse.builder()
                     .status404(status -> status.payload(error -> error
