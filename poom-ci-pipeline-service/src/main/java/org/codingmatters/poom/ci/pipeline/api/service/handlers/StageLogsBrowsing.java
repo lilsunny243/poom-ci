@@ -3,7 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsGetResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.helpers.StageHelper;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class StageLogsBrowsing implements Function<PipelineStageLogsGetRequest, PipelineStageLogsGetResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(StageLogsBrowsing.class);
 
-    private final LogFileStore logStore;
+    private final LogStore logStore;
 
     public StageLogsBrowsing(PoomCIRepository repository) {
         this.logStore = repository.logStore();
@@ -40,7 +40,7 @@ public class StageLogsBrowsing implements Function<PipelineStageLogsGetRequest, 
                     .build();
         }
 
-        LogFileStore.Segment segment = this.logStore.segment(request.pipelineId(), Stage.StageType.valueOf(request.stageType().toUpperCase()), request.stageName());
+        LogStore.Segment segment = this.logStore.segment(request.pipelineId(), Stage.StageType.valueOf(request.stageType().toUpperCase()), request.stageName());
 
         Rfc7233Pager<StageLog, StageLogQuery> pager = Rfc7233Pager.forRequestedRange(request.range())
                 .unit("LogLine")

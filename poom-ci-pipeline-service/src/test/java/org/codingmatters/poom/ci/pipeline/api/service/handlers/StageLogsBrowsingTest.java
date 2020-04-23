@@ -4,7 +4,7 @@ import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.ValueList;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogsgetresponse.Status200;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogsgetresponse.Status206;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
@@ -23,7 +23,7 @@ public class StageLogsBrowsingTest extends AbstractPoomCITest {
     public void setUp() throws Exception {
         super.setUp();
         handler = new StageLogsBrowsing(this.repository());
-        LogFileStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-stage");
+        LogStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-stage");
         PoomCIRepository.StageLogKey key = new PoomCIRepository.StageLogKey("a-pipeline", Stage.StageType.MAIN, "a-stage");
         for (long i = 0; i < 500; i++) {
             segment.append("content of log line " + i);

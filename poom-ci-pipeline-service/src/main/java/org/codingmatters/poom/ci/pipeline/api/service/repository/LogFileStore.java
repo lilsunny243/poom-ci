@@ -6,7 +6,6 @@ import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
-import org.codingmatters.poom.services.domain.repositories.EntityLister;
 import org.codingmatters.poom.servives.domain.entities.Entity;
 import org.codingmatters.poom.servives.domain.entities.MutableEntity;
 import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
@@ -14,7 +13,7 @@ import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
 import java.io.*;
 import java.util.LinkedList;
 
-public class LogFileStore {
+public class LogFileStore implements LogStore {
     private final File dir;
 
     public LogFileStore(File dir) {
@@ -22,21 +21,22 @@ public class LogFileStore {
         this.dir.mkdirs();
     }
 
+    @Override
     public Segment segment(String pipelineId, Stage.StageType stageType, String stageName) {
-        return new Segment(pipelineId, stageType, stageName, this.dir);
+        return new FileSegment(pipelineId, stageType, stageName, this.dir);
     }
 
     static private String normalize(String level) {
         return level.replaceAll("\\s", "_").toLowerCase();
     }
 
-    static public class Segment implements EntityLister<StageLog, StageLogQuery> {
+    static public class FileSegment implements Segment {
         private final File file;
         private final String pipelineId;
         private final Stage.StageType stageType;
         private final String stageName;
 
-        public Segment(String pipelineId, Stage.StageType stageType, String stageName, File dir) {
+        public FileSegment(String pipelineId, Stage.StageType stageType, String stageName, File dir) {
             this.pipelineId = pipelineId;
             this.stageType = stageType;
             this.stageName = stageName;
@@ -94,4 +94,6 @@ public class LogFileStore {
             return all(startIndex, endIndex);
         }
     }
+
+
 }

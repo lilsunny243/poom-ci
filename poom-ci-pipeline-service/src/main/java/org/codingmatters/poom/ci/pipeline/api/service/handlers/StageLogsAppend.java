@@ -3,10 +3,9 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.helpers.StageHelper;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.AppendedLogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
@@ -28,7 +27,7 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
     static private final CategorizedLogger log = CategorizedLogger.getLogger(StageLogsAppend.class);
 
     private final Repository<PipelineStage, PropertyQuery> stageRepository;
-    private final LogFileStore logStore;
+    private final LogStore logStore;
 
     public StageLogsAppend(PoomCIRepository repository) {
         this.stageRepository = repository.stageRepository();

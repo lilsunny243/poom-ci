@@ -7,7 +7,6 @@ import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
-import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepositoryWithPropertyQuery;
 
 import java.util.Objects;
 
@@ -18,10 +17,10 @@ public class PoomCIRepository {
     private final Repository<UpstreamBuild, PropertyQuery> upstreamBuildRepository;
     private final Repository<PipelineStage, PropertyQuery> stageRepository;
 
-    private final LogFileStore logStore;
+    private final LogStore logStore;
 
     public PoomCIRepository(
-            LogFileStore logStore,
+            LogStore logStore,
             Repository<Pipeline, PropertyQuery> pipelineRepository,
             Repository<GithubPushEvent, PropertyQuery> githubPushEventRepository,
             Repository<UpstreamBuild, PropertyQuery> upstreamBuildRepository,
@@ -47,7 +46,7 @@ public class PoomCIRepository {
         return stageRepository;
     }
 
-    public LogFileStore logStore() {
+    public LogStore logStore() {
         return logStore;
     }
 

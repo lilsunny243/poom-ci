@@ -3,7 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.ValueList;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogspatchresponse.Status201;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.types.AppendedLogLine;
@@ -44,7 +44,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 )
                 .build());
 
-        LogFileStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
+        LogStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
         for (long i = 0; i < 500; i++) {
             segment.append("content of log line " + i);
         }
@@ -75,7 +75,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
 
     @Test
     public void givenStageExists__whenAppendingOneLog__thenLineIsStoredAndAssignedLastIndex() throws Exception {
-        LogFileStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
+        LogStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
 
         long logCount = segment.all(0, 0).total();
         Status201 response = this.handler.apply(PipelineStageLogsPatchRequest.builder()
@@ -98,7 +98,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
 
     @Test
     public void givenStageExists__whenAppendingManyLogs__thenLinesAreStoredAndAssignedLastIndex() throws Exception {
-        LogFileStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
+        LogStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
 
         long logCount = segment.all(0, 0).total();
         ValueList.Builder<AppendedLogLine> listBuilder = new ValueList.Builder<AppendedLogLine>();
