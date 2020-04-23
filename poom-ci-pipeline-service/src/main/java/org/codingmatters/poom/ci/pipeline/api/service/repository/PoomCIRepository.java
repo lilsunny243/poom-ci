@@ -24,7 +24,7 @@ public interface PoomCIRepository {
     Repository<GithubPushEvent, PropertyQuery> githubPushEventRepository();
     Repository<PipelineStage, PropertyQuery> stageRepository();
     LogFileStore logStore();
-    Repository<UpstreamBuild, UpstreamBuildQuery> upstreamBuildRepository();
+    Repository<UpstreamBuild, PropertyQuery> upstreamBuildRepository();
 
     class StageLogKey implements SegmentedRepository.Key {
         private final String pipelineId;
