@@ -11,10 +11,12 @@ import static org.junit.Assert.assertThat;
 
 public class StagesBrowsingTest extends AbstractPoomCITest {
 
-    private StagesBrowsing handler = new StagesBrowsing(this.repository());
+    private StagesBrowsing handler;
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
+        handler = new StagesBrowsing(this.repository());
         this.createSomeStages("pipeline-0");
         this.createSomeStages("pipeline-1");
     }

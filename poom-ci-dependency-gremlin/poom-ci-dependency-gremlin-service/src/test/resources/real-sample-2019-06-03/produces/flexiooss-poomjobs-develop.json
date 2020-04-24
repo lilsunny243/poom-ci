@@ -1,0 +1,38 @@
+[
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poomjobs-runner"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poomjobs-registries-service"
+   },
+   {
+      "spec" : "org.codingmatters.poom:poomjobs-runner-manager",
+      "version" : "1.4.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poomjobs-service"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poomjobs-api"
+   },
+   {
+      "spec" : "org.codingmatters.poom:poomjobs-domain",
+      "version" : "1.4.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.poom:poomjobs",
+      "version" : "1.4.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poomjobs-api-spec"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poomjobs-clients"
+   }
+]

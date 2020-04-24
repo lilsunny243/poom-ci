@@ -1,0 +1,26 @@
+[
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.services.log:flexio-logs-api-spec"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.services.log:flexio-logs"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.services.log:flexio-logs-client"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.services.log:flexio-logs-service"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.services.log:flexio-process-logs-client"
+   },
+   {
+      "spec" : "io.flexio.services.log:flexio-logs-api",
+      "version" : "1.6.0-SNAPSHOT"
+   }
+]

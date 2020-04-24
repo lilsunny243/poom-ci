@@ -40,6 +40,9 @@ mediaType: application/json
 /pipelines:
    displayName: Pipelines
    get:
+      queryParameters:
+        trigger-name: string
+        trigger-run-status: string
       is: [{collectionPaging: {elementType: Pipeline}}]
    post:
       is: [{collectionElementCreation: {elementTypeCreationData: PipelineTrigger}}]
@@ -101,16 +104,19 @@ types:
             type: object
             properties:
                run:
-                  enum: [RUNNING, DONE]
+                  enum: [PENDING,RUNNING, DONE]
                exit:
                   enum: [SUCCESS, FAILURE]
                triggered: datetime-only
+               started: datetime-only
                finished: datetime-only
          trigger: PipelineTrigger
 
    PipelineTermination:
       type: object
       properties:
+         run:
+            enum: [RUNNING, DONE]
          exit:
             enum: [SUCCESS, FAILURE]
 
@@ -224,6 +230,11 @@ traits:
       responses:
          201:
             description: a resoure is created given the <<elementTypeCreationData>> provided. the created resource uri is returned.
+            headers:
+              Location: string
+              X-entity-id: string
+         200:
+            description: an equivalent resource exists, resource is not created. the existing resource uri is returned.
             headers:
               Location: string
               X-entity-id: string

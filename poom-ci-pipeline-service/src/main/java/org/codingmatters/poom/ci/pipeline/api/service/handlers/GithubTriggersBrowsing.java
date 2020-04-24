@@ -6,6 +6,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepositor
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.paging.Rfc7233Pager;
@@ -15,7 +16,7 @@ import java.util.function.Function;
 public class GithubTriggersBrowsing implements Function<GithubTriggersGetRequest, GithubTriggersGetResponse> {
     static private CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggersBrowsing.class);
 
-    private final Repository<GithubPushEvent, String> repository;
+    private final Repository<GithubPushEvent, PropertyQuery> repository;
 
     public GithubTriggersBrowsing(PoomCIRepository repository) {
         this.repository = repository.githubPushEventRepository();
@@ -23,7 +24,7 @@ public class GithubTriggersBrowsing implements Function<GithubTriggersGetRequest
 
     @Override
     public GithubTriggersGetResponse apply(GithubTriggersGetRequest request) {
-        Rfc7233Pager<GithubPushEvent, String> pager = Rfc7233Pager
+        Rfc7233Pager<GithubPushEvent, PropertyQuery> pager = Rfc7233Pager
                 .forRequestedRange(request.range())
                 .unit("GithubPushEvent")
                 .maxPageSize(100)

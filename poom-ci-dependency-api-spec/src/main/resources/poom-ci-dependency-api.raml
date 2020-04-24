@@ -35,7 +35,7 @@ mediaType: application/json
                body: Error
 
       put:
-         body: Repository
+         body: FullRepository
          responses:
             200:
                body: Repository
@@ -54,18 +54,6 @@ mediaType: application/json
 
       /produces:
          displayName: RepositoryModules
-         post:
-            body: Module[]
-            responses:
-               201:
-                  headers:
-                     Location: string
-               400:
-                  body: Error
-               404:
-                  body: Error
-               500:
-                  body: Error
          get:
             responses:
                200:
@@ -79,18 +67,6 @@ mediaType: application/json
 
       /depends-on:
          displayName: RepositoryDependencies
-         post:
-            body: Module[]
-            responses:
-               201:
-                  headers:
-                     Location: string
-               400:
-                  body: Error
-               404:
-                  body: Error
-               500:
-                  body: Error
          get:
             responses:
                200:
@@ -128,19 +104,73 @@ mediaType: application/json
                   500:
                      body: Error
 
+/graph:
+  displayName: repository graph
+  get:
+    queryParameters:
+      root: string
+    responses:
+      200:
+        body: RepositoryGraph
+      400:
+         body: Error
+      404:
+         body: Error
+      500:
+        body: Error
 
 types:
+
    Repository:
       type: object
       properties:
          id: string
          name: string
          checkoutSpec: string
+
    Module:
       type: object
       properties:
          spec: string
          version: string
+
+
+   FullRepository:
+      type: object
+      properties:
+         id: string
+         name: string
+         checkoutSpec: string
+         dependencies:
+            type: array
+            items: Module
+         produces:
+            type: array
+            items: Module
+
+
+   RepositoryGraph:
+      type: object
+      properties:
+         id: string
+         roots:
+            type: array
+            items: string
+         repositories:
+            type: array
+            items: Repository
+         relations:
+            type: array
+            items: RepositoryRelation
+
+
+   RepositoryRelation:
+     type: object
+     properties:
+       upstreamRepository: string
+       dependency: Module
+       downstreamRepository: string
+
 
    Error:
       type: object

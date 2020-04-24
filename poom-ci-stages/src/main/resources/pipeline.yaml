@@ -1,6 +1,10 @@
 ---
 pipeline:
   $conforms-to: [org.codingmatters.poom.ci.pipeline.StageProvider]
+
+  from:
+    $list: $repositorySpec
+
   stages:
     $list: $stage
 
@@ -22,6 +26,8 @@ pipeline:
 stage:
   name: string
   timeout: long
+  before: string
+  after: string
   onlyWhen:
     $list: string
   exec:
@@ -37,3 +43,7 @@ secret:
   content: string
   as:
     $enum: var, file
+
+repositorySpec:
+  url: string
+  branch: string

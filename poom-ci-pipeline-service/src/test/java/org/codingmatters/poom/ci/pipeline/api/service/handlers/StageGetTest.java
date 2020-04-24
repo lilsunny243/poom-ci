@@ -14,10 +14,12 @@ import static org.junit.Assert.assertThat;
 
 public class StageGetTest extends AbstractPoomCITest {
 
-    private StageGet handler = new StageGet(this.repository());
+    private StageGet handler;
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
+        handler = new StageGet(this.repository());
         for (int i = 0; i < 500; i++) {
             String id = "" + i;
             this.repository().stageRepository().create(PipelineStage.builder()

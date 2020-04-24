@@ -1,0 +1,34 @@
+[
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.legacy:flexio-legacy-test"
+   },
+   {
+      "spec" : "io.flexio.services.legacy:flexio-legacy-api",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.legacy:flexio-legacy"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.resources:flexio-resources-service-legacy"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.auth:flexio-auth-service-legacy"
+   },
+   {
+      "spec" : "io.flexio.services.legacy:flexio-legacy-client",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.services:flexio-accounts-service-legacy",
+      "version" : "1.5.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.5.0-SNAPSHOT",
+      "spec" : "io.flexio.services.legacy:flexio-legacy-api-spec"
+   }
+]

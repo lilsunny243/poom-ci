@@ -1,5 +1,6 @@
 package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
+import org.codingmatters.poom.ci.pipeline.api.PipelineStagePatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStagesGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStagesGetResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.helpers.StageHelper;
@@ -9,6 +10,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.paging.Rfc7233Pager;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 public class StagesBrowsing implements Function<PipelineStagesGetRequest, PipelineStagesGetResponse> {
     static private CategorizedLogger log = CategorizedLogger.getLogger(StagesBrowsing.class);
 
-    private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
+    private final Repository<PipelineStage, PropertyQuery> stageRepository;
 
     public StagesBrowsing(PoomCIRepository repository) {
         this.stageRepository = repository.stageRepository();
@@ -29,7 +31,7 @@ public class StagesBrowsing implements Function<PipelineStagesGetRequest, Pipeli
     @Override
     public PipelineStagesGetResponse apply(PipelineStagesGetRequest request) {
 
-        Rfc7233Pager<PipelineStage, PipelineStageQuery> pager = Rfc7233Pager
+        Rfc7233Pager<PipelineStage, PropertyQuery> pager = Rfc7233Pager
                 .forRequestedRange(request.range())
                 .unit("Stage")
                 .maxPageSize(500)
@@ -46,10 +48,7 @@ public class StagesBrowsing implements Function<PipelineStagesGetRequest, Pipeli
         }
 
         try {
-            Rfc7233Pager.Page<PipelineStage> page = pager.page(PipelineStageQuery.builder()
-                    .withPipelineId(request.pipelineId())
-                    .withType(request.stageType())
-                    .build());
+            Rfc7233Pager.Page<PipelineStage> page = pager.page(this.parseQuery(request));
             if(! page.isValid()) {
                 return PipelineStagesGetResponse.builder()
                         .status416(status -> status.payload(error -> error
@@ -92,5 +91,28 @@ public class StagesBrowsing implements Function<PipelineStagesGetRequest, Pipeli
 
     private List<Stage> asStageList(Rfc7233Pager.Page<PipelineStage> page) {
         return page.list().valueList().stream().map(pipelineStage -> pipelineStage.stage()).collect(Collectors.toList());
+    }
+
+    private PropertyQuery parseQuery(PipelineStagesGetRequest request) {
+        boolean hasFilter = false;
+        StringBuilder query = new StringBuilder();
+
+        if(request.opt().pipelineId().isPresent()) {
+            query.append(String.format("pipelineId == '%s'", request.pipelineId()));
+            hasFilter = true;
+        }
+        if(request.opt().stageType().isPresent()) {
+            if(hasFilter) {
+                query.append(" && ");
+            }
+            query.append(String.format("stage.stageType == '%s'", request.stageType().toUpperCase()));
+            hasFilter = true;
+        }
+
+        if(hasFilter) {
+            return PropertyQuery.builder().filter(query.toString()).build();
+        } else {
+            return PropertyQuery.builder().build();
+        }
     }
 }

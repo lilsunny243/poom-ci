@@ -1,0 +1,62 @@
+[
+   {
+      "spec" : "org.codingmatters.poom:poom-services-report-api-spec",
+      "version" : "1.4.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.poom:poom-services-report-api",
+      "version" : "1.4.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poom-services-report"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poom-services-production-support"
+   },
+   {
+      "spec" : "org.codingmatters.poom:poom-services-report-reporter",
+      "version" : "1.4.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poom-services-domain"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poom-services-support"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poom-services-test-support"
+   },
+   {
+      "spec" : "org.codingmatters.poom:poom-services-logging-json-layout",
+      "version" : "1.4.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poom-services"
+   },
+   {
+      "spec" : "org.codingmatters.poom:poom-services-repository-sql",
+      "version" : "1.4.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poom-services-report-service"
+   },
+   {
+      "spec" : "org.codingmatters.poom:poom-services-repository-in-memory",
+      "version" : "1.4.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom:poom-services-logging"
+   },
+   {
+      "spec" : "org.codingmatters.poom:poom-services-repositories",
+      "version" : "1.4.0-SNAPSHOT"
+   }
+]

@@ -1,8 +1,9 @@
 package org.codingmatters.poom.ci.service.bundle;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import io.flexio.services.support.mondo.MongoProvider;
 import io.undertow.Undertow;
-import org.codingmatters.poom.client.PoomjobsRunnerRegistryAPIHandlersClient;
+import org.codingmatters.poomjobs.client.PoomjobsRunnerRegistryAPIHandlersClient;
 import org.codingmatters.poom.poomjobs.domain.jobs.repositories.JobRepository;
 import org.codingmatters.poom.poomjobs.domain.runners.repositories.RunnerRepository;
 import org.codingmatters.poom.poomjobs.domain.values.jobs.JobQuery;
@@ -64,12 +65,29 @@ public class PoomCIApisService {
     }
 
     static public PoomjobsRunnerRegistryAPI runnerRegistryAPI() {
-        Repository<RunnerValue, RunnerQuery> runnerRepository = RunnerRepository.createInMemory();
+        Repository<RunnerValue, RunnerQuery> runnerRepository;
+        if(MongoProvider.isAvailable()) {
+            runnerRepository = RunnerRepository.createMongo(
+                    MongoProvider.fromEnv(),
+                    Env.optional("JOBS_DATABASE").orElse(new Env.Var("ci_jobs")).asString()
+            );
+        } else {
+            runnerRepository = RunnerRepository.createInMemory();
+        }
         return new PoomjobsRunnerRegistryAPI(runnerRepository);
     }
 
     static public PoomjobsJobRegistryAPI jobRegistryAPI(PoomjobsRunnerRegistryAPI runnerRegistryApi, ExecutorService clientPool, JsonFactory jsonFactory, HttpClientWrapper client) {
-        Repository<JobValue, JobQuery> jobRepository = JobRepository.createInMemory();
+        Repository<JobValue, JobQuery> jobRepository;
+        if(MongoProvider.isAvailable()) {
+            jobRepository = JobRepository.createMongo(
+                    MongoProvider.fromEnv(),
+                    Env.optional("JOBS_DATABASE").orElse(new Env.Var("ci_jobs")).asString()
+            );
+        } else {
+            jobRepository = JobRepository.createInMemory();
+        }
+
         PoomjobsRunnerRegistryAPIHandlersClient runnerRegistryClient = new PoomjobsRunnerRegistryAPIHandlersClient(
                 runnerRegistryApi.handlers(),
                 clientPool

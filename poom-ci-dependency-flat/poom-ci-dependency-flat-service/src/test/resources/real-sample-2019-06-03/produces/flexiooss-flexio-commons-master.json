@@ -1,0 +1,50 @@
+[
+   {
+      "spec" : "io.flexio.io:flexio-mongo-io-maven-plugin",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.commons:flexio-commons"
+   },
+   {
+      "spec" : "io.flexio.commons:flexio-mongo-tests",
+      "version" : "1.5.0"
+   },
+   {
+      "spec" : "io.flexio.io:flexio-mongo-io",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.io:flexio-mongo-io-repository"
+   },
+   {
+      "spec" : "io.flexio.commons:flexio-graylog-client",
+      "version" : "1.5.0"
+   },
+   {
+      "spec" : "io.flexio.io:flexio-mongo-io-support",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.commons:flexio-services-archetype"
+   },
+   {
+      "spec" : "io.flexio.io:flexio-mongo-io-values",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.commons:flexio-opentsdb-client"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.io:flexio-mongo-io-generation"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.commons:flexio-docker-client"
+   }
+]

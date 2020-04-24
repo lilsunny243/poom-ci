@@ -28,11 +28,22 @@ public class OnlyWhenExpressionEvaluator extends OnlyWenExpressionBaseVisitor<Bo
     @Override
     public Boolean visitOperator(OnlyWenExpressionParser.OperatorContext ctx) {
         if(ctx.IS() != null) {
-            this.operation = () -> this.variableValue.equals(this.operandValue.get(0));
+            this.operation = () -> this.singleMatch(this.variableValue, this.operandValue.get(0));
         } else if(ctx.IN() != null) {
-            this.operation = () -> this.operandValue.contains(this.variableValue);
+            this.operation = () -> this.oneOfMatch(this.variableValue, this.operandValue);
         }
         return super.visitOperator(ctx);
+    }
+
+    private Boolean singleMatch(String variable, String pattern) {
+        return variable.matches(pattern);
+    }
+
+    private Boolean oneOfMatch(String variable, List<String> patterns) {
+        for (String pattern : patterns) {
+            if(this.singleMatch(variable, pattern)) return true;
+        }
+        return false;
     }
 
     @Override

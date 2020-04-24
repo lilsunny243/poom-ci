@@ -16,6 +16,7 @@ stageLog:
   stageType:
     $enum:
       $type: org.codingmatters.poom.ci.pipeline.api.types.Stage$StageType
+  when: date-time
   log:
     $value-object: org.codingmatters.poom.ci.pipeline.api.types.LogLine
 
@@ -27,3 +28,7 @@ stageLogQuery:
 upstreamBuildQuery:
   withDownstreamId: string
   withConsumed: bool
+
+pipelineQuery:
+  triggerName: string
+  triggerRunStatus: string

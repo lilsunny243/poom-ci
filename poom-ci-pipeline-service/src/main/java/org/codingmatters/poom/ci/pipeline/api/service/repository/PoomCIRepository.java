@@ -1,28 +1,60 @@
 package org.codingmatters.poom.ci.pipeline.api.service.repository;
 
-import org.codingmatters.poom.ci.pipeline.api.service.repository.impl.InMemoryPoomCIRepository;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.*;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 
 import java.util.Objects;
 
-public interface PoomCIRepository {
+public class PoomCIRepository {
 
-    static PoomCIRepository inMemory(SegmentedRepository<StageLogKey, StageLog, StageLogQuery> logRepository) {
-        return new InMemoryPoomCIRepository(logRepository);
+    private final Repository<Pipeline, PropertyQuery> pipelineRepository;
+    private final Repository<GithubPushEvent, PropertyQuery> githubPushEventRepository;
+    private final Repository<UpstreamBuild, PropertyQuery> upstreamBuildRepository;
+    private final Repository<PipelineStage, PropertyQuery> stageRepository;
+
+    private final LogStore logStore;
+
+    public PoomCIRepository(
+            LogStore logStore,
+            Repository<Pipeline, PropertyQuery> pipelineRepository,
+            Repository<GithubPushEvent, PropertyQuery> githubPushEventRepository,
+            Repository<UpstreamBuild, PropertyQuery> upstreamBuildRepository,
+            Repository<PipelineStage, PropertyQuery> stageRepository
+    ) {
+        this.logStore = logStore;
+        this.pipelineRepository = pipelineRepository;
+        this.githubPushEventRepository = githubPushEventRepository;
+        this.upstreamBuildRepository = upstreamBuildRepository;
+        this.stageRepository = stageRepository;
     }
 
-    Repository<Pipeline, String> pipelineRepository();
-    Repository<GithubPushEvent, String> githubPushEventRepository();
-    Repository<PipelineStage, PipelineStageQuery> stageRepository();
-    SegmentedRepository<StageLogKey, StageLog, StageLogQuery> logRepository();
-    Repository<UpstreamBuild, UpstreamBuildQuery> upstreamBuildRepository();
 
-    class StageLogKey implements SegmentedRepository.Key {
+    public Repository<Pipeline, PropertyQuery> pipelineRepository() {
+        return pipelineRepository;
+    }
+
+    public Repository<GithubPushEvent, PropertyQuery> githubPushEventRepository() {
+        return githubPushEventRepository;
+    }
+
+    public Repository<PipelineStage, PropertyQuery> stageRepository() {
+        return stageRepository;
+    }
+
+    public LogStore logStore() {
+        return logStore;
+    }
+
+    public Repository<UpstreamBuild, PropertyQuery> upstreamBuildRepository() {
+        return this.upstreamBuildRepository;
+    }
+
+    static public class StageLogKey implements SegmentedRepository.Key {
         private final String pipelineId;
         private final Stage.StageType stageType;
         private final String stageName;

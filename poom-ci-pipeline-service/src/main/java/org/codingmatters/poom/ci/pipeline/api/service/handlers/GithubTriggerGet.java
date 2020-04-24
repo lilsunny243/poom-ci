@@ -6,6 +6,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepositor
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.servives.domain.entities.Entity;
@@ -15,7 +16,7 @@ import java.util.function.Function;
 public class GithubTriggerGet implements Function<GithubTriggerGetRequest, GithubTriggerGetResponse> {
     static private CategorizedLogger log = CategorizedLogger.getLogger(GithubTriggersBrowsing.class);
 
-    private final Repository<GithubPushEvent, String> repository;
+    private final Repository<GithubPushEvent, PropertyQuery> repository;
 
     public GithubTriggerGet(PoomCIRepository repository) {
         this.repository = repository.githubPushEventRepository();

@@ -4,8 +4,8 @@ import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.ValueList;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogsgetresponse.Status200;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogsgetresponse.Status206;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.junit.Before;
@@ -17,20 +17,16 @@ import static org.junit.Assert.assertThat;
 
 public class StageLogsBrowsingTest extends AbstractPoomCITest {
 
-    private StageLogsBrowsing handler = new StageLogsBrowsing(this.repository());
+    private StageLogsBrowsing handler;
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
+        handler = new StageLogsBrowsing(this.repository());
+        LogStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-stage");
         PoomCIRepository.StageLogKey key = new PoomCIRepository.StageLogKey("a-pipeline", Stage.StageType.MAIN, "a-stage");
         for (long i = 0; i < 500; i++) {
-            this.repository().logRepository().repository(key).create(StageLog.builder()
-                    .pipelineId("a-pipeline")
-                    .stageName("a-stage")
-                    .stageType(Stage.StageType.MAIN)
-                    .log(LogLine.builder()
-                            .line(i + 1).content("content of log line " + i)
-                            .build())
-                    .build());
+            segment.append("content of log line " + i);
         }
     }
 

@@ -1,0 +1,27 @@
+[
+  {
+    "checkoutSpec" : "git|git@github.com:org/repo-a.git|develop",
+    "id" : "org-repo-a-develop",
+    "name" : "org/repo-a.git"
+  },
+  {
+    "checkoutSpec" : "git|git@github.com:org/repo-b.git|develop",
+    "id" : "org-repo-b-develop",
+    "name" : "org/repo-b.git"
+  },
+  {
+    "checkoutSpec" : "git|git@github.com:org/repo-c.git|develop",
+    "id" : "org-repo-c-develop",
+    "name" : "org/repo-c.git"
+  },
+  {
+    "checkoutSpec" : "git|git@github.com:org/repo-d.git|develop",
+    "id" : "org-repo-d-develop",
+    "name" : "org/repo-d.git"
+  },
+  {
+    "checkoutSpec" : "git|git@github.com:org/repo-e.git|develop",
+    "id" : "org-repo-e-develop",
+    "name" : "org/repo-e.git"
+  }
+]

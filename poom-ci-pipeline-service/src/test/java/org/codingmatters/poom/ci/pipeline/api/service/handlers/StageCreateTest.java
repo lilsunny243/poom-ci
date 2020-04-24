@@ -18,12 +18,14 @@ import static org.junit.Assert.assertThat;
 
 public class StageCreateTest extends AbstractPoomCITest {
 
-    private StageCreate handler = new StageCreate(this.repository());
+    private StageCreate handler;
     private String runningPipelineId;
     private String donePipelineId;
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
+        handler = new StageCreate(this.repository());
         Entity<Pipeline> pipeline = this.repository().pipelineRepository().create(Pipeline.builder()
                 .status(status -> status.run(Status.Run.RUNNING))
                 .build());

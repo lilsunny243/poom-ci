@@ -1,0 +1,94 @@
+[
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-ci-pipeline-api-spec",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-ci"
+   },
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-ci-stages",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-ci-dependency-gremlin-service"
+   },
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-ci-triggers",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-ci-pipeline-api"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-pack-composer-api"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-ci-github-webhook"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-ci-pipeline-api-client"
+   },
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-ci-pipeline-service",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-ci-dependency-api"
+   },
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-ci-dependency-api-spec",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-ci-ciphering"
+   },
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-ci-deployment",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-ci-service-bundle",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-ci-dependency-client"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-pack-composer-api-spec"
+   },
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-ci-runners",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-pack-composer-client",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-ci-dependency-gremlin"
+   },
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-ci-utilities",
+      "version" : "1.2.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.2.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.ci:poom-pack-composer"
+   },
+   {
+      "spec" : "org.codingmatters.poom.ci:poom-pack-composer-service",
+      "version" : "1.2.0-SNAPSHOT"
+   }
+]

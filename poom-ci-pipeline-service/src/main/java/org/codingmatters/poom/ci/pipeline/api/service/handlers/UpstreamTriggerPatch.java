@@ -7,6 +7,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.storage.UpstreamBuildQuery
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.servives.domain.entities.Entity;
@@ -17,7 +18,7 @@ public class UpstreamTriggerPatch implements Function<UpstreamBuildTriggerPatchR
 
     static private final CategorizedLogger log = CategorizedLogger.getLogger(UpstreamTriggerPatch.class);
 
-    private final Repository<UpstreamBuild, UpstreamBuildQuery> repository;
+    private final Repository<UpstreamBuild, PropertyQuery> repository;
 
     public UpstreamTriggerPatch(PoomCIRepository repository) {
         this.repository = repository.upstreamBuildRepository();

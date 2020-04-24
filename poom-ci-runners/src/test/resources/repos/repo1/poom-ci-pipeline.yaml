@@ -1,0 +1,8 @@
+---
+stages:
+  - name: st1
+
+secrets:
+  - name: secr
+    content: $SRC/.secrets/secret.file
+    as: file

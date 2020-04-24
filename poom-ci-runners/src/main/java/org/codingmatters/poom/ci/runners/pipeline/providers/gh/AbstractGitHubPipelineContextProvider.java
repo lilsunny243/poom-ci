@@ -1,13 +1,12 @@
 package org.codingmatters.poom.ci.runners.pipeline.providers.gh;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTrigger;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
-import org.codingmatters.poom.ci.pipeline.descriptors.json.PipelineReader;
 import org.codingmatters.poom.ci.runners.pipeline.NotAPipelineContextException;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineContext;
+import org.codingmatters.poom.ci.runners.pipeline.PipelineDescriptoReader;
 import org.codingmatters.poom.ci.runners.pipeline.PipelineVariables;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 
@@ -20,12 +19,12 @@ public abstract class AbstractGitHubPipelineContextProvider implements PipelineC
     static public final String PROVIDER_WORKDIR_PROP = "gh.pipeline.provider.workdir";
 
     private final PoomCIPipelineAPIClient pipelineAPIClient;
-    private final YAMLFactory yamlFactory;
     private final CheckoutStrategy checkoutStrategy;
+    private PipelineDescriptoReader pipelineDescriptoReader;
 
     public AbstractGitHubPipelineContextProvider(PoomCIPipelineAPIClient pipelineAPIClient, YAMLFactory yamlFactory, CheckoutStrategy checkoutStrategy) {
         this.pipelineAPIClient = pipelineAPIClient;
-        this.yamlFactory = yamlFactory;
+        this.pipelineDescriptoReader = new PipelineDescriptoReader(yamlFactory);
         this.checkoutStrategy = checkoutStrategy;
     }
 
@@ -43,6 +42,12 @@ public abstract class AbstractGitHubPipelineContextProvider implements PipelineC
             this.checkoutTo(vars, sources);
 
             Pipeline pipeline = this.readPipeline(vars, sources);
+            if(pipeline.opt().from().isPresent() && ! pipeline.from().isEmpty()) {
+                try(FromPipelineChainMerger merger = new FromPipelineChainMerger(pipeline, pipelineDescriptoReader)) {
+                    merger.mergeSources(sources);
+                    pipeline = merger.mergedPipeline();
+                }
+            }
 
             return new PipelineContext(
                     vars,
@@ -63,13 +68,7 @@ public abstract class AbstractGitHubPipelineContextProvider implements PipelineC
     }
 
     protected Pipeline readPipeline(PipelineVariables vars, File workspace) throws IOException, NotAPipelineContextException {
-        File pipelineDescriptor = new File(workspace, "poom-ci-pipeline.yaml");
-        if(! pipelineDescriptor.exists()) {
-            throw new NotAPipelineContextException(vars.repository());
-        }
-        try(JsonParser parser = this.yamlFactory.createParser(pipelineDescriptor)) {
-            return new PipelineReader().read(parser);
-        }
+        return pipelineDescriptoReader.read(workspace);
     }
 
 

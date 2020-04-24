@@ -1,0 +1,22 @@
+[
+   {
+      "version" : "1.0.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.crons:poom-crons-service"
+   },
+   {
+      "version" : "1.0.0-SNAPSHOT",
+      "spec" : "org.codingmatters.poom.crons:poom-crons-api-spec"
+   },
+   {
+      "spec" : "org.codingmatters.poom.crons:poom-crons-api",
+      "version" : "1.0.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.poom.crons:poom-crons-domain",
+      "version" : "1.0.0-SNAPSHOT"
+   },
+   {
+      "spec" : "org.codingmatters.poom.crons:poom-crons",
+      "version" : "1.0.0-SNAPSHOT"
+   }
+]

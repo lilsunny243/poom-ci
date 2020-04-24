@@ -1,0 +1,50 @@
+[
+   {
+      "spec" : "io.flexio.io:flexio-mongo-io-maven-plugin",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.commons:flexio-graylog-client",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.io:flexio-mongo-io-support",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.commons:flexio-opentsdb-client"
+   },
+   {
+      "spec" : "io.flexio.commons:flexio-docker-client",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.io:flexio-mongo-io-repository"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.io:flexio-mongo-io-generation"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.commons:flexio-commons"
+   },
+   {
+      "spec" : "io.flexio.commons:flexio-mongo-tests",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "spec" : "io.flexio.io:flexio-mongo-io",
+      "version" : "1.6.0-SNAPSHOT"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.commons:flexio-services-archetype"
+   },
+   {
+      "version" : "1.6.0-SNAPSHOT",
+      "spec" : "io.flexio.io:flexio-mongo-io-values"
+   }
+]

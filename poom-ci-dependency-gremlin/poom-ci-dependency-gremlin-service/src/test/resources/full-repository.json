@@ -1,0 +1,633 @@
+{
+  "id": "REPOID",
+  "name": "REPONAME",
+  "checkoutSpec": "REPOSPEC",
+  "dependencies": [
+    {
+      "spec": "ch.qos.logback.contrib:logback-jackson",
+      "version": "0.1.5"
+    },
+    {
+      "spec": "ch.qos.logback.contrib:logback-json-classic",
+      "version": "0.1.5"
+    },
+    {
+      "spec": "ch.qos.logback.contrib:logback-json-core",
+      "version": "0.1.5"
+    },
+    {
+      "spec": "ch.qos.logback:logback-classic",
+      "version": "1.2.3"
+    },
+    {
+      "spec": "ch.qos.logback:logback-core",
+      "version": "1.2.3"
+    },
+    {
+      "spec": "com.carrotsearch:hppc",
+      "version": "0.7.1"
+    },
+    {
+      "spec": "com.codahale.metrics:metrics-core",
+      "version": "3.0.1"
+    },
+    {
+      "spec": "com.codahale.metrics:metrics-ganglia",
+      "version": "3.0.1"
+    },
+    {
+      "spec": "com.codahale.metrics:metrics-graphite",
+      "version": "3.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.core:jackson-annotations",
+      "version": "2.8.5"
+    },
+    {
+      "spec": "com.fasterxml.jackson.core:jackson-core",
+      "version": "2.8.5"
+    },
+    {
+      "spec": "com.fasterxml.jackson.core:jackson-databind",
+      "version": "2.8.5"
+    },
+    {
+      "spec": "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml",
+      "version": "2.8.5"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-jsonSchema",
+      "version": "2.8.5"
+    },
+    {
+      "spec": "com.github.ben-manes.caffeine:caffeine",
+      "version": "2.3.1"
+    },
+    {
+      "spec": "com.github.fge:btf",
+      "version": "1.2"
+    },
+    {
+      "spec": "com.github.fge:jackson-coreutils",
+      "version": "1.8"
+    },
+    {
+      "spec": "com.github.fge:json-schema-core",
+      "version": "1.2.5"
+    },
+    {
+      "spec": "com.github.fge:json-schema-validator",
+      "version": "2.2.6"
+    },
+    {
+      "spec": "com.github.fge:msg-simple",
+      "version": "1.1"
+    },
+    {
+      "spec": "com.github.fge:uri-template",
+      "version": "0.9"
+    },
+    {
+      "spec": "com.github.stephenc.high-scale-lib:high-scale-lib",
+      "version": "1.1.4"
+    },
+    {
+      "spec": "com.google.code.findbugs:annotations",
+      "version": "3.0.0"
+    },
+    {
+      "spec": "com.google.code.findbugs:jsr305",
+      "version": "3.0.0"
+    },
+    {
+      "spec": "com.googlecode.juniversalchardet:juniversalchardet",
+      "version": "1.0.3"
+    },
+    {
+      "spec": "com.googlecode.libphonenumber:libphonenumber",
+      "version": "6.2"
+    },
+    {
+      "spec": "com.google.guava:guava",
+      "version": "18.0"
+    },
+    {
+      "spec": "com.jcabi:jcabi-log",
+      "version": "0.14"
+    },
+    {
+      "spec": "com.jcabi:jcabi-manifests",
+      "version": "1.1"
+    },
+    {
+      "spec": "commons-codec:commons-codec",
+      "version": "1.7"
+    },
+    {
+      "spec": "commons-collections:commons-collections",
+      "version": "3.2.2"
+    },
+    {
+      "spec": "commons-configuration:commons-configuration",
+      "version": "1.10"
+    },
+    {
+      "spec": "commons-io:commons-io",
+      "version": "2.3"
+    },
+    {
+      "spec": "commons-io:commons-io",
+      "version": "2.4"
+    },
+    {
+      "spec": "commons-lang:commons-lang",
+      "version": "2.6"
+    },
+    {
+      "spec": "commons-logging:commons-logging",
+      "version": "1.1.1"
+    },
+    {
+      "spec": "com.squareup:javapoet",
+      "version": "1.7.0"
+    },
+    {
+      "spec": "com.squareup.okhttp3:okhttp",
+      "version": "3.10.0"
+    },
+    {
+      "spec": "com.squareup.okio:okio",
+      "version": "1.14.0"
+    },
+    {
+      "spec": "dom4j:dom4j",
+      "version": "1.6.1"
+    },
+    {
+      "spec": "info.ganglia.gmetric4j:gmetric4j",
+      "version": "1.0.3"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-docker-client",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-repository",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-support",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.netty:netty-all",
+      "version": "4.1.25.Final"
+    },
+    {
+      "spec": "io.undertow:undertow-core",
+      "version": "2.0.9.Final"
+    },
+    {
+      "spec": "javax.activation:activation",
+      "version": "1.1"
+    },
+    {
+      "spec": "javax.mail:mailapi",
+      "version": "1.4.3"
+    },
+    {
+      "spec": "javax.validation:validation-api",
+      "version": "1.1.0.Final"
+    },
+    {
+      "spec": "jline:jline",
+      "version": "2.12"
+    },
+    {
+      "spec": "joda-time:joda-time",
+      "version": "2.3"
+    },
+    {
+      "spec": "junit:junit",
+      "version": "4.12"
+    },
+    {
+      "spec": "net.objecthunter:exp4j",
+      "version": "0.4.8"
+    },
+    {
+      "spec": "net.sf.jopt-simple:jopt-simple",
+      "version": "4.6"
+    },
+    {
+      "spec": "org.antlr:antlr4-runtime",
+      "version": "4.7.1"
+    },
+    {
+      "spec": "org.apache.commons:commons-lang3",
+      "version": "3.3.1"
+    },
+    {
+      "spec": "org.apache.commons:commons-text",
+      "version": "1.0"
+    },
+    {
+      "spec": "org.apache.ivy:ivy",
+      "version": "2.3.0"
+    },
+    {
+      "spec": "org.apache.tinkerpop:gremlin-core",
+      "version": "3.4.0"
+    },
+    {
+      "spec": "org.apache.tinkerpop:gremlin-driver",
+      "version": "3.4.0"
+    },
+    {
+      "spec": "org.apache.tinkerpop:gremlin-groovy",
+      "version": "3.3.3"
+    },
+    {
+      "spec": "org.apache.tinkerpop:gremlin-shaded",
+      "version": "3.4.0"
+    },
+    {
+      "spec": "org.apache.tinkerpop:tinkergraph-gremlin",
+      "version": "3.4.0"
+    },
+    {
+      "spec": "org.apache.ws.xmlschema:xmlschema-core",
+      "version": "2.2.1"
+    },
+    {
+      "spec": "org.codehaus.groovy:groovy",
+      "version": "2.4.15"
+    },
+    {
+      "spec": "org.codehaus.groovy:groovy-console",
+      "version": "2.4.15"
+    },
+    {
+      "spec": "org.codehaus.groovy:groovy-groovysh:jar",
+      "version": "2.4.15"
+    },
+    {
+      "spec": "org.codehaus.groovy:groovy:jar",
+      "version": "2.5.4"
+    },
+    {
+      "spec": "org.codehaus.groovy:groovy-json:jar",
+      "version": "2.5.4"
+    },
+    {
+      "spec": "org.codehaus.groovy:groovy-jsr223:jar",
+      "version": "2.4.15"
+    },
+    {
+      "spec": "org.codehaus.groovy:groovy-swing",
+      "version": "2.4.15"
+    },
+    {
+      "spec": "org.codehaus.groovy:groovy-templates",
+      "version": "2.4.15"
+    },
+    {
+      "spec": "org.codehaus.groovy:groovy-xml",
+      "version": "2.4.15"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-ciphering",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-dependency-api",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-dependency-api-spec",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-dependency-client",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-github-webhook",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-pipeline-api",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-pipeline-api-client",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-pipeline-api-spec",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-pipeline-service",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-stages",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-triggers",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-utilities:jar",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-pack-composer-api",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-pack-composer-api-spec",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poomjobs-api",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poomjobs-api-spec",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poomjobs-clients",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poomjobs-domain",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poomjobs-registries-service",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poomjobs-runner",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poomjobs-runner-manager",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poomjobs-service",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-domain",
+      "version": "1.3.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-logging",
+      "version": "1.3.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-logging-json-layout",
+      "version": "1.3.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-production-support:jar",
+      "version": "1.3.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-repository-in-memory",
+      "version": "1.3.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-support",
+      "version": "1.3.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-api",
+      "version": "1.5.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-client-api",
+      "version": "1.5.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-client-okhttp",
+      "version": "1.5.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-io",
+      "version": "1.5.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-tests-support",
+      "version": "1.5.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-undertow",
+      "version": "1.5.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-values",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.glassfish:javax.json",
+      "version": "1.0"
+    },
+    {
+      "spec": "org.hamcrest:hamcrest-all",
+      "version": "1.3"
+    },
+    {
+      "spec": "org.hamcrest:hamcrest-core",
+      "version": "1.3"
+    },
+    {
+      "spec": "org.janusgraph:janusgraph-core",
+      "version": "0.3.1"
+    },
+    {
+      "spec": "org.javassist:javassist",
+      "version": "3.16.1-GA"
+    },
+    {
+      "spec": "org.javatuples:javatuples",
+      "version": "1.2"
+    },
+    {
+      "spec": "org.jboss.logging:jboss-logging",
+      "version": "3.3.0.Final"
+    },
+    {
+      "spec": "org.jboss.xnio:xnio-api",
+      "version": "3.3.8.Final"
+    },
+    {
+      "spec": "org.jboss.xnio:xnio-nio",
+      "version": "3.3.8.Final"
+    },
+    {
+      "spec": "org.locationtech.jts:jts-core",
+      "version": "1.15.0"
+    },
+    {
+      "spec": "org.locationtech.spatial4j:spatial4j",
+      "version": "0.7"
+    },
+    {
+      "spec": "org.mindrot:jbcrypt",
+      "version": "0.4"
+    },
+    {
+      "spec": "org.mongodb:bson",
+      "version": "3.8.2"
+    },
+    {
+      "spec": "org.mongodb:mongodb-driver",
+      "version": "3.8.2"
+    },
+    {
+      "spec": "org.mongodb:mongodb-driver-core",
+      "version": "3.8.2"
+    },
+    {
+      "spec": "org.mozilla:rhino",
+      "version": "1.7R4"
+    },
+    {
+      "spec": "org.noggit:noggit",
+      "version": "0.6"
+    },
+    {
+      "spec": "org.raml:raml-parser-2",
+      "version": "1.0.8"
+    },
+    {
+      "spec": "org.raml:yagi",
+      "version": "1.0.8"
+    },
+    {
+      "spec": "org.reflections:reflections",
+      "version": "0.9.9-RC1"
+    },
+    {
+      "spec": "org.slf4j:jcl-over-slf4j",
+      "version": "1.7.21"
+    },
+    {
+      "spec": "org.slf4j:slf4j-api",
+      "version": "1.7.25"
+    },
+    {
+      "spec": "org.yaml:snakeyaml",
+      "version": "1.15"
+    },
+    {
+      "spec": "org.yaml:snakeyaml",
+      "version": "1.17"
+    },
+    {
+      "spec": "xml-apis:xml-apis",
+      "version": "1.0.b2"
+    }
+  ],
+  "produces": [
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-triggers",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-stages",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-pipeline-api-spec",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-pipeline-api",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-pipeline-api-client",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-github-webhook",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-pipeline-service",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-ciphering",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-runners",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-dependency-api-spec",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-dependency-api",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-dependency-client",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-dependency-gremlin",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-dependency-gremlin-service",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-utilities",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-deployment",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-ci-service-bundle",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-pack-composer",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-pack-composer-api-spec",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-pack-composer-api",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-pack-composer-service",
+      "version": "1.2.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.ci:poom-pack-composer-client",
+      "version": "1.2.0-SNAPSHOT"
+    }
+  ]
+}

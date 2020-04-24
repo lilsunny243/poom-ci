@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelinesGetRequest;
 import org.codingmatters.poom.ci.pipeline.api.ValueList;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
@@ -10,7 +11,14 @@ import static org.junit.Assert.assertThat;
 
 public class PipelinesBrowsingTest extends AbstractPoomCITest {
 
-    private PipelinesBrowsing handler = new PipelinesBrowsing(this.repository());
+    private PipelinesBrowsing handler;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        handler = new PipelinesBrowsing(this.repository());
+    }
 
     @Test
     public void empty() {

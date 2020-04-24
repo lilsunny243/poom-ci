@@ -1,6 +1,7 @@
 package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
 import org.codingmatters.poom.ci.pipeline.api.PipelinePatchRequest;
+import org.codingmatters.poom.ci.pipeline.api.PipelinePatchResponse;
 import org.codingmatters.poom.ci.pipeline.api.pipelinepatchresponse.Status200;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.PipelineTermination;
@@ -13,20 +14,21 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class PipelineUpdateTest extends AbstractPoomCITest {
 
-    private PipelineUpdate handler = new PipelineUpdate(this.repository());
+    private PipelineUpdate handler;
 
     private String runningPipelineId;
     private String donePipelineId;
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
+        handler = new PipelineUpdate(this.repository());
         Entity<Pipeline> pipe = this.repository().pipelineRepository().create(Pipeline.builder()
                 .status(Status.builder()
                         .run(Status.Run.RUNNING)
@@ -64,6 +66,24 @@ public class PipelineUpdateTest extends AbstractPoomCITest {
         assertTrue(response.payload().status().triggered().isBefore(response.payload().status().finished()));
     }
 
+
+    @Test
+    public void givenPipelineIsPending__whenPatchingWithRunStatus__thenStatusUpdated() {
+        PipelinePatchResponse resp = this.handler.apply(PipelinePatchRequest.builder()
+                .pipelineId(this.runningPipelineId)
+                .payload(termination -> termination.run(PipelineTermination.Run.RUNNING))
+                .build());
+        Status200 response = resp
+                .opt().status200()
+                .orElseThrow(() -> new AssertionError("should have a 200 : " + resp));
+
+        assertThat(response.payload().id(), is(this.runningPipelineId));
+        assertThat(response.payload().status().run(), is(Status.Run.RUNNING));
+        assertThat(response.payload().status().exit(), is(nullValue()));
+        assertThat(response.payload().status().finished(), is(notNullValue()));
+        assertTrue(response.payload().status().triggered().isBefore(response.payload().status().finished()));
+    }
+
     @Test
     public void givenPipelineIsNotRunning__whenPatching__theIllegalResourceChange() {
         this.handler.apply(PipelinePatchRequest.builder()
@@ -83,12 +103,13 @@ public class PipelineUpdateTest extends AbstractPoomCITest {
     }
 
     @Test
-    public void givenPipelineIsRunning__whenPatchingWithoutExitStatus__thenIllegalResourceChange() {
-        this.handler.apply(PipelinePatchRequest.builder()
+    public void givenPipelineIsRunning__whenPatchingWithoutExitStatusOrRunStatus__thenIllegalResourceChange() {
+        PipelinePatchResponse response = this.handler.apply(PipelinePatchRequest.builder()
                 .pipelineId(this.runningPipelineId)
                 .payload(PipelineTermination.builder().build())
-                .build())
+                .build());
+        response
                 .opt().status400()
-                .orElseThrow(() -> new AssertionError("should have a 400"));
+                .orElseThrow(() -> new AssertionError("should have a 400 : " + response));
     }
 }

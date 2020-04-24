@@ -1,0 +1,257 @@
+[
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-data-protection.git|develop",
+      "id" : "Flexio-corp-flexio-data-protection-develop",
+      "name" : "Flexio-corp/flexio-data-protection"
+   },
+   {
+      "name" : "flexiooss/poomjobs",
+      "id" : "flexiooss-poomjobs-develop",
+      "checkoutSpec" : "git|git@github.com:flexiooss/poomjobs.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/poom-services.git|develop",
+      "name" : "flexiooss/poom-services",
+      "id" : "flexiooss-poom-services-develop"
+   },
+   {
+      "name" : "Flexio-corp/flexio-services",
+      "id" : "Flexio-corp-flexio-services-master",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-services.git|master"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-data-cyphering.git|master",
+      "id" : "Flexio-corp-flexio-data-cyphering-master",
+      "name" : "Flexio-corp/flexio-data-cyphering"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-dek-storage.git|master",
+      "id" : "Flexio-corp-flexio-dek-storage-master",
+      "name" : "Flexio-corp/flexio-dek-storage"
+   },
+   {
+      "id" : "Flexio-corp-flexio-tabular-master",
+      "name" : "Flexio-corp/flexio-tabular",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-tabular.git|master"
+   },
+   {
+      "name" : "Flexio-corp/flexio-oauth-manager",
+      "id" : "Flexio-corp-flexio-oauth-manager-develop",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-oauth-manager.git|develop"
+   },
+   {
+      "name" : "flexiooss/poom-services",
+      "id" : "flexiooss-poom-services-master",
+      "checkoutSpec" : "git|git@github.com:flexiooss/poom-services.git|master"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-tabular.git|develop",
+      "id" : "Flexio-corp-flexio-tabular-develop",
+      "name" : "Flexio-corp/flexio-tabular"
+   },
+   {
+      "id" : "Flexio-corp-flexio-document-production-develop",
+      "name" : "Flexio-corp/flexio-document-production",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-document-production.git|develop"
+   },
+   {
+      "name" : "Flexio-corp/flexio-service-parent",
+      "id" : "Flexio-corp-flexio-service-parent-develop",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-service-parent.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-parent.git|develop",
+      "id" : "Flexio-corp-flexio-parent-develop",
+      "name" : "Flexio-corp/flexio-parent"
+   },
+   {
+      "id" : "flexiooss-codingmatters-reflect-unit-develop",
+      "name" : "flexiooss/codingmatters-reflect-unit",
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-reflect-unit.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-data-protection.git|master",
+      "id" : "Flexio-corp-flexio-data-protection-master",
+      "name" : "Flexio-corp/flexio-data-protection"
+   },
+   {
+      "id" : "Flexio-corp-flexio-services-develop",
+      "name" : "Flexio-corp/flexio-services",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-services.git|develop"
+   },
+   {
+      "id" : "Flexio-corp-flexio-service-parent-master",
+      "name" : "Flexio-corp/flexio-service-parent",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-service-parent.git|master"
+   },
+   {
+      "id" : "Flexio-corp-flexio-external-processing-develop",
+      "name" : "Flexio-corp/flexio-external-processing",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-external-processing.git|develop"
+   },
+   {
+      "id" : "Flexio-corp-flexio-dek-storage-develop",
+      "name" : "Flexio-corp/flexio-dek-storage",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-dek-storage.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-legacy.git|master",
+      "id" : "Flexio-corp-flexio-legacy-master",
+      "name" : "Flexio-corp/flexio-legacy"
+   },
+   {
+      "id" : "Flexio-corp-flexio-crons-develop",
+      "name" : "Flexio-corp/flexio-crons",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-crons.git|develop"
+   },
+   {
+      "name" : "flexiooss/codingmatters-reflect-unit",
+      "id" : "flexiooss-codingmatters-reflect-unit-master",
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-reflect-unit.git|master"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-live-test-harness.git|develop",
+      "name" : "Flexio-corp/flexio-live-test-harness",
+      "id" : "Flexio-corp-flexio-live-test-harness-develop"
+   },
+   {
+      "id" : "flexiooss-codingmatters-value-objects-master",
+      "name" : "flexiooss/codingmatters-value-objects",
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-value-objects.git|master"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-rest.git|develop",
+      "id" : "flexiooss-codingmatters-rest-develop",
+      "name" : "flexiooss/codingmatters-rest"
+   },
+   {
+      "id" : "Flexio-corp-flexio-log-develop",
+      "name" : "Flexio-corp/flexio-log",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-log.git|develop"
+   },
+   {
+      "name" : "Flexio-corp/flexio-office-suites-connectors",
+      "id" : "Flexio-corp-flexio-office-suites-connectors-develop",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-office-suites-connectors.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/poom-crons.git|develop",
+      "id" : "flexiooss-poom-crons-develop",
+      "name" : "flexiooss/poom-crons"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-external-dependencies-bom.git|master",
+      "name" : "flexiooss/codingmatters-external-dependencies-bom",
+      "id" : "flexiooss-codingmatters-external-dependencies-bom-master"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-parent.git|master",
+      "id" : "flexiooss-codingmatters-parent-master",
+      "name" : "flexiooss/codingmatters-parent"
+   },
+   {
+      "id" : "Flexio-corp-flexio-medias-develop",
+      "name" : "Flexio-corp/flexio-medias",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-medias.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-legacy.git|develop",
+      "name" : "Flexio-corp/flexio-legacy",
+      "id" : "Flexio-corp-flexio-legacy-develop"
+   },
+   {
+      "id" : "flexiooss-codingmatters-parent-develop",
+      "name" : "flexiooss/codingmatters-parent",
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-parent.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-data-cyphering.git|develop",
+      "id" : "Flexio-corp-flexio-data-cyphering-develop",
+      "name" : "Flexio-corp/flexio-data-cyphering"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/flexio-commons.git|master",
+      "id" : "flexiooss-flexio-commons-master",
+      "name" : "flexiooss/flexio-commons"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-parent.git|master",
+      "id" : "Flexio-corp-flexio-parent-master",
+      "name" : "Flexio-corp/flexio-parent"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-audit.git|develop",
+      "name" : "Flexio-corp/flexio-audit",
+      "id" : "Flexio-corp-flexio-audit-develop"
+   },
+   {
+      "id" : "Flexio-corp-flexio-productivity-connectors-develop",
+      "name" : "Flexio-corp/flexio-productivity-connectors",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-productivity-connectors.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-medias.git|master",
+      "name" : "Flexio-corp/flexio-medias",
+      "id" : "Flexio-corp-flexio-medias-master"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-audit.git|master",
+      "id" : "Flexio-corp-flexio-audit-master",
+      "name" : "Flexio-corp/flexio-audit"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-live-test-harness.git|master",
+      "id" : "Flexio-corp-flexio-live-test-harness-master",
+      "name" : "Flexio-corp/flexio-live-test-harness"
+   },
+   {
+      "name" : "Flexio-corp/flexio-productivity-connectors",
+      "id" : "Flexio-corp-flexio-productivity-connectors-master",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-productivity-connectors.git|master"
+   },
+   {
+      "name" : "Flexio-corp/flexio-email",
+      "id" : "Flexio-corp-flexio-email-develop",
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-email.git|develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/poom-crons.git|master",
+      "name" : "flexiooss/poom-crons",
+      "id" : "flexiooss-poom-crons-master"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/poom-ci.git|develop",
+      "name" : "flexiooss/poom-ci",
+      "id" : "flexiooss-poom-ci-develop"
+   },
+   {
+      "id" : "flexiooss-codingmatters-rest-master",
+      "name" : "flexiooss/codingmatters-rest",
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-rest.git|master"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:Flexio-corp/flexio-oauth-manager.git|master",
+      "name" : "Flexio-corp/flexio-oauth-manager",
+      "id" : "Flexio-corp-flexio-oauth-manager-master"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-external-dependencies-bom.git|develop",
+      "name" : "flexiooss/codingmatters-external-dependencies-bom",
+      "id" : "flexiooss-codingmatters-external-dependencies-bom-develop"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/codingmatters-value-objects.git|develop",
+      "id" : "flexiooss-codingmatters-value-objects-develop",
+      "name" : "flexiooss/codingmatters-value-objects"
+   },
+   {
+      "checkoutSpec" : "git|git@github.com:flexiooss/flexio-commons.git|develop",
+      "id" : "flexiooss-flexio-commons-develop",
+      "name" : "flexiooss/flexio-commons"
+   },
+   {
+      "name" : "flexiooss/flexio-flow-maven-plugin",
+      "id" : "flexiooss-flexio-flow-maven-plugin-develop",
+      "checkoutSpec" : "git|git@github.com:flexiooss/flexio-flow-maven-plugin.git|develop"
+   }
+]

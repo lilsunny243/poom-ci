@@ -60,6 +60,12 @@ public class OnlyWenExpressionTest {
     }
 
     @Test
+    public void branchIsSyntax__withFlexioFlowFeatureBranchPattern() {
+        this.visitor.visit(this.parseExpression("branch is 'feature/refactor-ingredient-1.42.0-dev##56#258'"));
+        assertThat(this.tokens.toString(), this.tokens, contains("branch", "is", "'feature/refactor-ingredient-1.42.0-dev##56#258'"));
+    }
+
+    @Test
     public void branchIsSyntax__withQuotedString() {
         this.visitor.visit(this.parseExpression("branch is 'string with spaces'"));
         assertThat(this.tokens.toString(), this.tokens, contains("branch", "is", "'string with spaces'"));
@@ -69,6 +75,18 @@ public class OnlyWenExpressionTest {
     public void branchInSyntax() {
         this.visitor.visit(this.parseExpression("branch in (master, develop)"));
         assertThat(this.tokens.toString(), this.tokens, contains("branch", "in", "master", "develop"));
+    }
+
+    @Test
+    public void branchInSyntax_withFlexioFlowFeatureBranchPattern() {
+        this.visitor.visit(this.parseExpression("branch in (master, develop, 'feature/refactor-ingredient-1.42.0-dev##56#258')"));
+        assertThat(this.tokens.toString(), this.tokens, contains("branch", "in", "master", "develop", "'feature/refactor-ingredient-1.42.0-dev##56#258'"));
+    }
+
+    @Test
+    public void given__when__then() throws Exception {
+        this.visitor.visit(this.parseExpression("branch in (master, develop, 'feature/*')"));
+        assertThat(this.tokens.toString(), this.tokens, contains("branch", "in", "master", "develop", "'feature/*'"));
     }
 
     @Test

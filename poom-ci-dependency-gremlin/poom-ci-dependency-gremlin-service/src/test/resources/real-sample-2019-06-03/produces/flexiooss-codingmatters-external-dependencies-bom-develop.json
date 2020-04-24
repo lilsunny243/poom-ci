@@ -1,0 +1,6 @@
+[
+   {
+      "version" : "1.4.0-SNAPSHOT",
+      "spec" : "org.codingmatters:codingmatters-external-dependencies-bom"
+   }
+]

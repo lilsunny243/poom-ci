@@ -1,0 +1,50 @@
+[
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.tabular.callback:flexio-tabular-callback-api"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.tabular:flexio-tabular-api-spec"
+   },
+   {
+      "spec" : "io.flexio.services.tabular.callback:flexio-tabular-callback-client",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.tabular.callback:flexio-tabular-callback-api-spec"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.tabular:flexio-tabular"
+   },
+   {
+      "spec" : "io.flexio.services.tabular:tabular-runner",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.tabular:flexio-tabular-service"
+   },
+   {
+      "spec" : "io.flexio.services.tabular.callback:flexio-tabular-callback-service",
+      "version" : "1.5.0"
+   },
+   {
+      "spec" : "io.flexio.services.tabular:flexio-tabular-connector",
+      "version" : "1.5.0"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.tabular.callback:flexio-tabular-callback"
+   },
+   {
+      "version" : "1.5.0",
+      "spec" : "io.flexio.services.tabular:flexio-tabular-client"
+   },
+   {
+      "spec" : "io.flexio.services.tabular:flexio-tabular-api",
+      "version" : "1.5.0"
+   }
+]

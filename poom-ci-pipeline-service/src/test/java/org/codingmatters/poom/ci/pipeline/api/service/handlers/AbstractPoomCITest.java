@@ -1,43 +1,35 @@
 package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
+import org.codingmatters.poom.ci.pipeline.api.service.repository.logs.FileLogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.SegmentedRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
+import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
-import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
-import org.codingmatters.poom.services.domain.repositories.Repository;
-import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepository;
-import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.codingmatters.poom.ci.triggers.GithubPushEvent;
+import org.codingmatters.poom.ci.triggers.UpstreamBuild;
+import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepositoryWithPropertyQuery;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 
 public class AbstractPoomCITest {
 
-    private PoomCIRepository inMemory = PoomCIRepository.inMemory(
-            new SegmentedRepository<PoomCIRepository.StageLogKey, StageLog, StageLogQuery>() {
-                private final Map<PoomCIRepository.StageLogKey, Repository<StageLog, StageLogQuery>> storage = new HashMap<>();
+    @Rule
+    public TemporaryFolder logStorage = new TemporaryFolder();
 
-                @Override
-                public synchronized Repository<StageLog, StageLogQuery> repository(PoomCIRepository.StageLogKey key) {
-                    this.storage.computeIfAbsent(key,  this::createStageLogRepository);
-                    return this.storage.get(key);
-                }
+    private PoomCIRepository inMemory;
 
-                private Repository<StageLog, StageLogQuery> createStageLogRepository(PoomCIRepository.StageLogKey key) {
-                    return new InMemoryRepository<StageLog, StageLogQuery>() {
-                        @Override
-                        public PagedEntityList<StageLog> search(StageLogQuery query, long startIndex, long endIndex) throws RepositoryException {
-                            throw new UnsupportedOperationException();
-                        }
-                    };
-                }
-
-            }
-    );
+    @Before
+    public void setUp() throws Exception {
+        this.inMemory = new PoomCIRepository(
+                new FileLogStore(this.logStorage.getRoot()),
+                InMemoryRepositoryWithPropertyQuery.validating(Pipeline.class),
+                InMemoryRepositoryWithPropertyQuery.validating(GithubPushEvent.class),
+                InMemoryRepositoryWithPropertyQuery.validating(UpstreamBuild.class),
+                InMemoryRepositoryWithPropertyQuery.validating(PipelineStage.class)
+        );
+    }
 
     public PoomCIRepository repository() {
         return inMemory;

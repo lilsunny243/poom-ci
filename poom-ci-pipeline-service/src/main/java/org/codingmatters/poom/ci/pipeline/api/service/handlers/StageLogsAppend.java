@@ -3,32 +3,35 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.helpers.StageHelper;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.SegmentedRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
-import org.codingmatters.poom.ci.pipeline.api.types.*;
+import org.codingmatters.poom.ci.pipeline.api.types.AppendedLogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
+import org.codingmatters.poom.ci.pipeline.api.types.Stage;
+import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
 import org.codingmatters.rest.api.Processor;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, PipelineStageLogsPatchResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(StageLogsAppend.class);
 
-    private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
-    private final SegmentedRepository<PoomCIRepository.StageLogKey, StageLog, StageLogQuery> logRepository;
+    private final Repository<PipelineStage, PropertyQuery> stageRepository;
+    private final LogStore logStore;
 
     public StageLogsAppend(PoomCIRepository repository) {
         this.stageRepository = repository.stageRepository();
-        this.logRepository = repository.logRepository();
+        this.logStore = repository.logStore();
     }
 
     @Override
@@ -76,7 +79,15 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
                     .build());
         }
 
-        PagedEntityList<PipelineStage> stageSearch = this.stageRepository.search(PipelineStageQuery.builder().withPipelineId(request.pipelineId()).withName(request.stageName()).build(), 0, 0);
+        PagedEntityList<PipelineStage> stageSearch = this.stageRepository.search(
+                PropertyQuery.builder()
+                        .filter(String.format(
+                                "pipelineId == '%s' && stage.name == '%s'",
+                                request.pipelineId(),
+                                request.stageName()
+                                ))
+                        .build(),
+                0, 0);
         if(stageSearch.total() == 0) {
             invalid = Optional.of(PipelineStageLogsPatchResponse.builder()
                     .status404(status -> status.payload(error -> error
@@ -103,30 +114,17 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
     }
 
     private void appendLogs(PipelineStageLogsPatchRequest request) throws RepositoryException {
-        Stage.StageType stageType = Stage.StageType.valueOf(request.stageType().toUpperCase());
-        PoomCIRepository.StageLogKey key = new PoomCIRepository.StageLogKey(request.pipelineId(), stageType, request.stageName());
-        Repository<StageLog, StageLogQuery> repository = this.logRepository.repository(key);
-
-        long logCount = repository.all(0, 0).total();
-        long nextLine = logCount;
-
-        for (AppendedLogLine logLine : request.payload()) {
-            nextLine++;
-            LogLine logEntry = LogLine.builder()
-                    .line(nextLine)
-                    .content(logLine.content())
-                    .build();
-            repository.create(StageLog.builder()
-                    .log(logEntry)
-                    .pipelineId(request.pipelineId())
-                    .stageName(request.stageName())
-                    .stageType(stageType)
-                    .build());
+        List<String> lines = request.payload().stream().map(AppendedLogLine::content).collect(Collectors.toList());
+        try {
+            this.logStore.segment(request.pipelineId(), Stage.StageType.valueOf(request.stageType().toUpperCase()), request.stageName())
+                    .append(lines.toArray(new String[lines.size()]));
+        } catch (IOException e) {
+            throw new RepositoryException("error storing log lines " + lines, e);
         }
-
-        log.audit().trace("appended {} lines to pipeline log {} stage {}",
-                nextLine - logCount,
+        log.audit().trace("appended {} lines to pipeline log {} stage {}/{}",
+                lines.size(),
                 request.pipelineId(),
+                request.stageType(),
                 request.stageName()
         );
     }

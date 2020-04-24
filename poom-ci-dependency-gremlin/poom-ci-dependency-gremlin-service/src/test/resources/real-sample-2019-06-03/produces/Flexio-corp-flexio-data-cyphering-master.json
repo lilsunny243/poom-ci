@@ -1,0 +1,14 @@
+[
+   {
+      "spec" : "io.flexio.services.datacyphering:flexio-data-cyphering",
+      "version" : "1.0.0"
+   },
+   {
+      "spec" : "io.flexio.services.datacyphering:flexio-data-cyphering-api",
+      "version" : "1.0.0"
+   },
+   {
+      "spec" : "io.flexio.services.datacyphering:flexio-data-cyphering-test-support",
+      "version" : "1.0.0"
+   }
+]
