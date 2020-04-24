@@ -1,8 +1,9 @@
 package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
-import org.codingmatters.poom.ci.pipeline.api.service.repository.logs.FileLogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.logs.RepositoryLogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
@@ -23,7 +24,7 @@ public class AbstractPoomCITest {
     @Before
     public void setUp() throws Exception {
         this.inMemory = new PoomCIRepository(
-                new FileLogStore(this.logStorage.getRoot()),
+                new RepositoryLogStore(InMemoryRepositoryWithPropertyQuery.validating(StageLog.class)),
                 InMemoryRepositoryWithPropertyQuery.validating(Pipeline.class),
                 InMemoryRepositoryWithPropertyQuery.validating(GithubPushEvent.class),
                 InMemoryRepositoryWithPropertyQuery.validating(UpstreamBuild.class),
