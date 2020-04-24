@@ -6,10 +6,12 @@ import io.flexio.io.mongo.repository.MongoCollectionRepository;
 import io.flexio.io.mongo.repository.property.query.PropertyQuerier;
 import io.flexio.services.support.mondo.MongoProvider;
 import io.undertow.Undertow;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.logs.FileLogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.logs.RepositoryLogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.mongo.PipelineStageMongoMapper;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.mongo.StageLogMongoMapper;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.mongo.PipelineMongoMapper;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
@@ -18,14 +20,12 @@ import org.codingmatters.poom.ci.triggers.mongo.GithubPushEventMongoMapper;
 import org.codingmatters.poom.ci.triggers.mongo.UpstreamBuildMongoMapper;
 import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
-import org.codingmatters.poomjobs.client.PoomjobsJobRegistryAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
+import org.codingmatters.poomjobs.client.PoomjobsJobRegistryAPIRequesterClient;
 import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
-
-import java.io.File;
 
 public class PoomCIPipelineService {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(PoomCIPipelineService.class);
@@ -54,13 +54,11 @@ public class PoomCIPipelineService {
     static public PoomCIApi api() {
         JsonFactory jsonFactory = new JsonFactory();
 
-        File logStorage = new File(Env.mandatory("LOG_STORAGE").asString());
-
         MongoClient mongoClient = MongoProvider.fromEnv();
         String database = Env.mandatory(PIPELINES_DB).asString();
 
         PoomCIRepository repository = new PoomCIRepository(
-                new FileLogStore(logStorage),
+                new RepositoryLogStore(stagelogRepository(mongoClient, database)),
                 pipelineRepository(mongoClient, database),
                 githubPushEventRepository(mongoClient, database),
                 upstreamBuildRepository(mongoClient, database),
@@ -139,6 +137,18 @@ public class PoomCIPipelineService {
         PropertyQuerier querier = new PropertyQuerier();
 
         return MongoCollectionRepository.<PipelineStage, PropertyQuery>repository(database, "pipeline_stages")
+                .withToDocument(mapper::toDocument)
+                .withToValue(mapper::toValue)
+                .withFilter(querier.filterer())
+                .withSort(querier.sorter())
+                .build(mongoClient);
+    }
+
+    private static Repository<StageLog, PropertyQuery> stagelogRepository(MongoClient mongoClient, String database) {
+        StageLogMongoMapper mapper = new StageLogMongoMapper();
+        PropertyQuerier querier = new PropertyQuerier();
+
+        return MongoCollectionRepository.<StageLog, PropertyQuery>repository(database, "stage_logs")
                 .withToDocument(mapper::toDocument)
                 .withToValue(mapper::toValue)
                 .withFilter(querier.filterer())
