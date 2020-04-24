@@ -6,7 +6,7 @@ import io.flexio.io.mongo.repository.MongoCollectionRepository;
 import io.flexio.io.mongo.repository.property.query.PropertyQuerier;
 import io.flexio.services.support.mondo.MongoProvider;
 import io.undertow.Undertow;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.logs.FileLogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.mongo.PipelineStageMongoMapper;
@@ -18,7 +18,6 @@ import org.codingmatters.poom.ci.triggers.mongo.GithubPushEventMongoMapper;
 import org.codingmatters.poom.ci.triggers.mongo.UpstreamBuildMongoMapper;
 import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
-import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepositoryWithPropertyQuery;
 import org.codingmatters.poomjobs.client.PoomjobsJobRegistryAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
@@ -61,7 +60,7 @@ public class PoomCIPipelineService {
         String database = Env.mandatory(PIPELINES_DB).asString();
 
         PoomCIRepository repository = new PoomCIRepository(
-                new LogFileStore(logStorage),
+                new FileLogStore(logStorage),
                 pipelineRepository(mongoClient, database),
                 githubPushEventRepository(mongoClient, database),
                 upstreamBuildRepository(mongoClient, database),

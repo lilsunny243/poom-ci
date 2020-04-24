@@ -1,6 +1,7 @@
-package org.codingmatters.poom.ci.pipeline.api.service.repository;
+package org.codingmatters.poom.ci.pipeline.api.service.repository.logs;
 
 
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLogQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
@@ -13,10 +14,10 @@ import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
 import java.io.*;
 import java.util.LinkedList;
 
-public class LogFileStore implements LogStore {
+public class FileLogStore implements LogStore {
     private final File dir;
 
-    public LogFileStore(File dir) {
+    public FileLogStore(File dir) {
         this.dir = dir;
         this.dir.mkdirs();
     }
