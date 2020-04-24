@@ -13,6 +13,11 @@
     <artifactId>poom-ci-runners</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
 
+    <properties>
+        <docker.image.namespace>${codingmatters.docker.namespace}</docker.image.namespace>
+        <service.class.name>org.codingmatters.poom.ci.runners.PoomCIRunner</service.class.name>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.codingmatters.poom</groupId>
