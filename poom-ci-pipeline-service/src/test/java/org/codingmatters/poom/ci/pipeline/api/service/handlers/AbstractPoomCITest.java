@@ -10,6 +10,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepositoryWithPropertyQuery;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -20,16 +21,23 @@ public class AbstractPoomCITest {
     public TemporaryFolder logStorage = new TemporaryFolder();
 
     private PoomCIRepository inMemory;
+    private RepositoryLogStore logStore;
 
     @Before
     public void setUp() throws Exception {
+        this.logStore = new RepositoryLogStore(InMemoryRepositoryWithPropertyQuery.validating(StageLog.class));
         this.inMemory = new PoomCIRepository(
-                new RepositoryLogStore(InMemoryRepositoryWithPropertyQuery.validating(StageLog.class)),
+                this.logStore,
                 InMemoryRepositoryWithPropertyQuery.validating(Pipeline.class),
                 InMemoryRepositoryWithPropertyQuery.validating(GithubPushEvent.class),
                 InMemoryRepositoryWithPropertyQuery.validating(UpstreamBuild.class),
                 InMemoryRepositoryWithPropertyQuery.validating(PipelineStage.class)
         );
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        this.logStore.close();
     }
 
     public PoomCIRepository repository() {

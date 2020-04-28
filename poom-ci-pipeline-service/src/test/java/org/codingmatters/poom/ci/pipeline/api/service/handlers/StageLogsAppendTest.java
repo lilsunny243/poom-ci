@@ -10,13 +10,14 @@ import org.codingmatters.poom.ci.pipeline.api.types.AppendedLogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
+import org.codingmatters.poom.services.tests.Eventually;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class StageLogsAppendTest extends AbstractPoomCITest {
 
@@ -48,6 +49,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
         for (long i = 0; i < 500; i++) {
             segment.append("content of log line " + i);
         }
+        Eventually.defaults().assertThat(() -> segment.all(0L, 0L).total(), is(500L));
     }
 
     @Test
@@ -86,6 +88,8 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .build())
                 .opt().status201()
                 .orElseThrow(() -> new AssertionError("should have a 201"));
+
+        Eventually.defaults().assertThat(() -> segment.all(500, 500).size(), is(1));
         StageLog lastLog = segment.all(500, 500).valueList().get(0);
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
@@ -115,11 +119,11 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .opt().status201()
                 .orElseThrow(() -> new AssertionError("should have a 201"));
 
-        List<StageLog> lastLogs = segment.all(500, 600).valueList();
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
-        assertThat(segment.all(0, 0).total(), is(logCount + 10));
+        Eventually.defaults().assertThat(() -> segment.all(0L, 0L).total(), is(logCount + 10L));
 
+        List<StageLog> lastLogs = segment.all(500, 600).valueList();
         assertThat(lastLogs.size(), is(10));
 
         for (long i = 1; i <= 10; i++) {
