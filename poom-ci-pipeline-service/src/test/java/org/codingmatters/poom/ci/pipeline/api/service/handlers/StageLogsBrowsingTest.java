@@ -8,6 +8,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
+import org.codingmatters.poom.services.tests.Eventually;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,6 +29,7 @@ public class StageLogsBrowsingTest extends AbstractPoomCITest {
         for (long i = 0; i < 500; i++) {
             segment.append("content of log line " + i);
         }
+        Eventually.defaults().assertThat(() -> segment.all(0L, 0L).total(), is(500L));
     }
 
     @Test

@@ -8,6 +8,7 @@ import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepositoryWithPropertyQuery;
 import org.codingmatters.poom.services.support.date.UTC;
 import org.codingmatters.poom.services.tests.DateMatchers;
+import org.codingmatters.poom.services.tests.Eventually;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class RepositoryLogStoreTest {
         LogStore.Segment segment = this.store.segment("pipeline-id", Stage.StageType.MAIN, "a-stage");
         segment.append("a log line");
 
-        assertThat(this.repository.all(0, 1000).total(), is(1L));
+        Eventually.defaults().assertThat(() ->this.repository.all(0, 1000).total(), is(1L));
 
         StageLog actual = this.repository.all(0, 0).valueList().get(0);
         assertThat(actual.pipelineId(), is("pipeline-id"));
@@ -52,7 +53,7 @@ public class RepositoryLogStoreTest {
         LogStore.Segment segment = this.store.segment("pipeline-id", Stage.StageType.MAIN, "a-stage");
         segment.append("a log line", "another log line");
 
-        assertThat(this.repository.all(0, 1000).total(), is(2L));
+        Eventually.defaults().assertThat(() -> this.repository.all(0, 1000).total(), is(2L));
 
         List<StageLog> actual = this.repository.all(0, 1).valueList();
 
@@ -68,7 +69,7 @@ public class RepositoryLogStoreTest {
         segment.append("a log line");
         segment.append("another log line");
 
-        assertThat(this.repository.all(0, 1000).total(), is(2L));
+        Eventually.defaults().assertThat(() ->this.repository.all(0, 1000).total(), is(2L));
 
         List<StageLog> actual = this.repository.all(0, 1).valueList();
 
@@ -83,7 +84,7 @@ public class RepositoryLogStoreTest {
         this.store.segment("pipeline-id", Stage.StageType.MAIN, "a-stage").append("a log line");
         this.store.segment("pipeline-id", Stage.StageType.SUCCESS, "a-stage").append("another log line");
 
-        assertThat(this.repository.all(0, 1000).total(), is(2L));
+        Eventually.defaults().assertThat(() ->this.repository.all(0, 1000).total(), is(2L));
 
         List<StageLog> actual = this.repository.all(0, 1).valueList();
 
@@ -101,7 +102,7 @@ public class RepositoryLogStoreTest {
         this.store.segment("pipeline-id", Stage.StageType.MAIN, "a-stage").append("a log line");
         this.store.segment("pipeline-id", Stage.StageType.SUCCESS, "a-stage").append("another log line");
 
-        assertThat(this.store.segment("pipeline-id", Stage.StageType.MAIN, "a-stage").all(0, 0).total(), is(1L));
-        assertThat(this.store.segment("pipeline-id", Stage.StageType.SUCCESS, "a-stage").all(0, 0).total(), is(1L));
+        Eventually.defaults().assertThat(() ->this.store.segment("pipeline-id", Stage.StageType.MAIN, "a-stage").all(0, 0).total(), is(1L));
+        Eventually.defaults().assertThat(() ->this.store.segment("pipeline-id", Stage.StageType.SUCCESS, "a-stage").all(0, 0).total(), is(1L));
     }
 }

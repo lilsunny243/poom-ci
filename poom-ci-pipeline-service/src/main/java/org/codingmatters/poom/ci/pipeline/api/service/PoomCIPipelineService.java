@@ -6,6 +6,7 @@ import io.flexio.io.mongo.repository.MongoCollectionRepository;
 import io.flexio.io.mongo.repository.property.query.PropertyQuerier;
 import io.flexio.services.support.mondo.MongoProvider;
 import io.undertow.Undertow;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.logs.RepositoryLogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
@@ -35,30 +36,35 @@ public class PoomCIPipelineService {
         String host = Env.mandatory(Env.SERVICE_HOST).asString();
         int port = Env.mandatory(Env.SERVICE_PORT).asInteger();
 
-        PoomCIPipelineService service = new PoomCIPipelineService(api(), port, host);
-        service.start();
-
-        log.info("poom-ci pipeline api service running");
-        while (true) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                break;
-            }
-        }
-        log.info("poom-ci pipeline api service stopping...");
-        service.stop();
-        log.info("poom-ci pipeline api service stopped.");
-    }
-
-    static public PoomCIApi api() {
-        JsonFactory jsonFactory = new JsonFactory();
-
         MongoClient mongoClient = MongoProvider.fromEnv();
         String database = Env.mandatory(PIPELINES_DB).asString();
 
+        try(RepositoryLogStore logStore = new RepositoryLogStore(stagelogRepository(mongoClient, database))) {
+
+            PoomCIPipelineService service = new PoomCIPipelineService(api(logStore, mongoClient, database), port, host);
+            service.start();
+
+            log.info("poom-ci pipeline api service running");
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+            log.info("poom-ci pipeline api service stopping...");
+            service.stop();
+        } catch (Exception e) {
+            log.error("error terminating log store", e);
+        }
+        log.info("poom-ci pipeline api service stopped.");
+    }
+
+    static public PoomCIApi api(LogStore logStore, MongoClient mongoClient, String database) {
+        JsonFactory jsonFactory = new JsonFactory();
+
         PoomCIRepository repository = new PoomCIRepository(
-                new RepositoryLogStore(stagelogRepository(mongoClient, database)),
+                logStore,
                 pipelineRepository(mongoClient, database),
                 githubPushEventRepository(mongoClient, database),
                 upstreamBuildRepository(mongoClient, database),
