@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class DirectStageLogger implements PipelineExecutor.StageLogListener, AutoCloseable {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(DirectStageLogger.class);
-    public static final int LOB_BATCH_SIZE = 10;
+    public static final int LOB_BATCH_SIZE = 100;
 
     private final String pipilineId;
     private final StageHolder stage;
