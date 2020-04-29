@@ -168,8 +168,7 @@ public class PipelineJobProcessorTest {
         assertThat(this.pipelinePatchCalls.get(1).pipelineId(), is("pipeline-id"));
         assertThat(this.pipelinePatchCalls.get(1).payload(), is(PipelineTermination.builder().exit(PipelineTermination.Exit.SUCCESS).build()));
 
-        System.out.println(this.logsPatchCalls);
-
+        Thread.sleep(2000L);
         List<String> logs = new LinkedList<>();
         this.logsPatchCalls.stream().map(request -> request.payload().stream().map(line -> line.content()).collect(Collectors.toList())).forEach(line -> logs.addAll(line));
 
