@@ -98,15 +98,15 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
                             .description("must provide an existing pipeline stage")
                     ))
                     .build());
-        } else if(StageStatus.Run.DONE.equals(stageSearch.get(0).value().stage().status().run())) {
-            invalid = Optional.of(PipelineStageLogsPatchResponse.builder()
-                    .status400(status -> status.payload(error -> error
-                            .token(log.audit().tokenized().info("stage log append request on DONE stage {} for pipeline {}",
-                                    request.stageName(), request.pipelineId()))
-                            .code(Error.Code.ILLEGAL_COLLECTION_CHANGE)
-                            .description("cannot add logs to a done stage")
-                    ))
-                    .build());
+//        } else if(StageStatus.Run.DONE.equals(stageSearch.get(0).value().stage().status().run())) {
+//            invalid = Optional.of(PipelineStageLogsPatchResponse.builder()
+//                    .status400(status -> status.payload(error -> error
+//                            .token(log.audit().tokenized().info("stage log append request on DONE stage {} for pipeline {}",
+//                                    request.stageName(), request.pipelineId()))
+//                            .code(Error.Code.ILLEGAL_COLLECTION_CHANGE)
+//                            .description("cannot add logs to a done stage")
+//                    ))
+//                    .build());
         } else {
             invalid = Optional.empty();
         }
