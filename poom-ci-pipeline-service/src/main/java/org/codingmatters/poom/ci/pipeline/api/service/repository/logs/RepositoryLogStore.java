@@ -42,6 +42,8 @@ public class RepositoryLogStore implements LogStore, AutoCloseable {
                 log.error("error waiting for pending requests", e);
             } catch (IOException e) {
                 log.error("error processing pending requests", e);
+            } catch (Exception e) {
+                log.error("unexpected error processing pending requests", e);
             }
         }
     }
@@ -78,7 +80,7 @@ public class RepositoryLogStore implements LogStore, AutoCloseable {
             try {
                 this.appendRequestQueue.offer(
                         new AppendRequest(this.pipelineId, this.stageType, this.stageName, lines),
-                        10, TimeUnit.SECONDS
+                        200, TimeUnit.MILLISECONDS
                 );
             } catch (InterruptedException e) {
                 log.error("couldn't process log appending request, logs are lost", e);

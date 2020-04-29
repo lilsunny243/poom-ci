@@ -131,6 +131,22 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
     }
 
     @Test
+    public void givenStageIsDone__whenAddingLogs__then201_andLogIsAppended() {
+        this.handler.apply(PipelineStageLogsPatchRequest.builder()
+                .pipelineId("a-pipeline")
+                .stageName("a-done-stage")
+                .stageType("main")
+                .payload(AppendedLogLine.builder().content("added").build())
+                .build())
+                .opt().status201()
+                .orElseThrow(() -> new AssertionError("should have a 201"));
+
+        LogStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-done-stage");
+        eventually.assertThat(() -> segment.all(0, 0).total(), is(1L));
+
+    }
+
+    @Test
     public void givenStageDoesntExist__whenAddingSomeLogs__thenResourceNotFound() {
         this.handler.apply(PipelineStageLogsPatchRequest.builder()
                 .pipelineId("a-pipeline")
@@ -140,17 +156,5 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .build())
                 .opt().status404()
                 .orElseThrow(() -> new AssertionError("should have a 404"));
-    }
-
-    @Test
-    public void givenStageIsDone__whenAddingLogs__thenIllegalCollectionChange() {
-        this.handler.apply(PipelineStageLogsPatchRequest.builder()
-                .pipelineId("a-pipeline")
-                .stageName("a-done-stage")
-                .stageType("main")
-                .payload(AppendedLogLine.builder().content("added").build())
-                .build())
-                .opt().status400()
-                .orElseThrow(() -> new AssertionError("should have a 400"));
     }
 }
