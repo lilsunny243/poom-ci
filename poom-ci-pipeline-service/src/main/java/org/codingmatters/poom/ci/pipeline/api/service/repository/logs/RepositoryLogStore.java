@@ -42,6 +42,8 @@ public class RepositoryLogStore implements LogStore, AutoCloseable {
                 log.error("error waiting for pending requests", e);
             } catch (IOException e) {
                 log.error("error processing pending requests", e);
+            } catch (Exception e) {
+                log.error("unexpected error processing pending requests", e);
             }
         }
     }
