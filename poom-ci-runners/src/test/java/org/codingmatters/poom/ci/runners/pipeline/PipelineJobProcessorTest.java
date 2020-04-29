@@ -172,6 +172,7 @@ public class PipelineJobProcessorTest {
         List<String> logs = new LinkedList<>();
         this.logsPatchCalls.stream().map(request -> request.payload().stream().map(line -> line.content()).collect(Collectors.toList())).forEach(line -> logs.addAll(line));
 
+        System.out.println(logs);
         assertThat(logs, contains("stage1 log 1", "stage1 log 2", "stage1 log 3", "stage2 log 1", "stage2 log 2", "stage2 log 3"));
 
         assertThat(job.status().run(), is(Status.Run.DONE));
