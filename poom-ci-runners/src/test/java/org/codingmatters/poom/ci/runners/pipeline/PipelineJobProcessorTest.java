@@ -21,9 +21,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PipelineJobProcessorTest {
 
@@ -166,27 +168,12 @@ public class PipelineJobProcessorTest {
         assertThat(this.pipelinePatchCalls.get(1).pipelineId(), is("pipeline-id"));
         assertThat(this.pipelinePatchCalls.get(1).payload(), is(PipelineTermination.builder().exit(PipelineTermination.Exit.SUCCESS).build()));
 
-        assertThat(this.logsPatchCalls, hasSize(6));
+        System.out.println(this.logsPatchCalls);
 
-        assertThat(this.logsPatchCalls.get(0).stageName(), is("stage1"));
-        assertThat(this.logsPatchCalls.get(0).stageType(), is(Stage.StageType.MAIN.name()));
-        assertThat(this.logsPatchCalls.get(0).payload().get(0).content(), is("stage1 log 1"));
-        assertThat(this.logsPatchCalls.get(1).stageName(), is("stage1"));
-        assertThat(this.logsPatchCalls.get(1).stageType(), is(Stage.StageType.MAIN.name()));
-        assertThat(this.logsPatchCalls.get(1).payload().get(0).content(), is("stage1 log 2"));
-        assertThat(this.logsPatchCalls.get(2).stageName(), is("stage1"));
-        assertThat(this.logsPatchCalls.get(2).stageType(), is(Stage.StageType.MAIN.name()));
-        assertThat(this.logsPatchCalls.get(2).payload().get(0).content(), is("stage1 log 3"));
+        List<String> logs = new LinkedList<>();
+        this.logsPatchCalls.stream().map(request -> request.payload().stream().map(line -> line.content()).collect(Collectors.toList())).forEach(line -> logs.addAll(line));
 
-        assertThat(this.logsPatchCalls.get(3).stageName(), is("stage2"));
-        assertThat(this.logsPatchCalls.get(3).stageType(), is(Stage.StageType.MAIN.name()));
-        assertThat(this.logsPatchCalls.get(3).payload().get(0).content(), is("stage2 log 1"));
-        assertThat(this.logsPatchCalls.get(4).stageName(), is("stage2"));
-        assertThat(this.logsPatchCalls.get(4).stageType(), is(Stage.StageType.MAIN.name()));
-        assertThat(this.logsPatchCalls.get(4).payload().get(0).content(), is("stage2 log 2"));
-        assertThat(this.logsPatchCalls.get(5).stageName(), is("stage2"));
-        assertThat(this.logsPatchCalls.get(5).stageType(), is(Stage.StageType.MAIN.name()));
-        assertThat(this.logsPatchCalls.get(5).payload().get(0).content(), is("stage2 log 3"));
+        assertThat(logs, contains("stage1 log 1", "stage1 log 2", "stage1 log 3", "stage2 log 1", "stage2 log 2", "stage2 log 3"));
 
         assertThat(job.status().run(), is(Status.Run.DONE));
         assertThat(job.status().exit(), is(Status.Exit.SUCCESS));
