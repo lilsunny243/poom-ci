@@ -35,7 +35,9 @@ public class RepositoryLogStore implements LogStore, AutoCloseable {
         while(! this.stop.get()) {
             try {
                 AppendRequest request = this.appendRequestQueue.poll(500, TimeUnit.MILLISECONDS);
-                request.appendTo(this.repository);
+                if(request != null) {
+                    request.appendTo(this.repository);
+                }
             } catch (InterruptedException e) {
                 log.error("error waiting for pending requests", e);
             } catch (IOException e) {

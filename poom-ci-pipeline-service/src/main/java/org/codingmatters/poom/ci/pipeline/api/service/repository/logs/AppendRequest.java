@@ -9,7 +9,9 @@ import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.support.date.UTC;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class AppendRequest {
     private final String pipelineId;
@@ -59,5 +61,33 @@ public class AppendRequest {
                 throw new IOException("failed adding log line", e);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "AppendRequest{" +
+                "pipelineId='" + pipelineId + '\'' +
+                ", stageType=" + stageType +
+                ", stageName='" + stageName + '\'' +
+                ", lines=" + Arrays.toString(lines) +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AppendRequest that = (AppendRequest) o;
+        return Objects.equals(pipelineId, that.pipelineId) &&
+                stageType == that.stageType &&
+                Objects.equals(stageName, that.stageName) &&
+                Arrays.equals(lines, that.lines);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(pipelineId, stageType, stageName);
+        result = 31 * result + Arrays.hashCode(lines);
+        return result;
     }
 }
