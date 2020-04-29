@@ -23,7 +23,6 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
 
     private StageLogsAppend handler;
 
-
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -49,7 +48,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
         for (long i = 0; i < 500; i++) {
             segment.append("content of log line " + i);
         }
-        Eventually.defaults().assertThat(() -> segment.all(0L, 0L).total(), is(500L));
+        eventually.assertThat(() -> segment.all(0L, 0L).total(), is(500L));
     }
 
     @Test
@@ -89,7 +88,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .opt().status201()
                 .orElseThrow(() -> new AssertionError("should have a 201"));
 
-        Eventually.defaults().assertThat(() -> segment.all(500, 500).size(), is(1));
+        eventually.assertThat(() -> segment.all(500, 500).size(), is(1));
         StageLog lastLog = segment.all(500, 500).valueList().get(0);
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
@@ -121,7 +120,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
 
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
-        Eventually.defaults().assertThat(() -> segment.all(0L, 0L).total(), is(logCount + 10L));
+        eventually.assertThat(() -> segment.all(0L, 0L).total(), is(logCount + 10L));
 
         List<StageLog> lastLogs = segment.all(500, 600).valueList();
         assertThat(lastLogs.size(), is(10));

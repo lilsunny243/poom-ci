@@ -10,12 +10,15 @@ import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.codingmatters.poom.ci.triggers.GithubPushEvent;
 import org.codingmatters.poom.ci.triggers.UpstreamBuild;
 import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepositoryWithPropertyQuery;
+import org.codingmatters.poom.services.tests.Eventually;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
 public class AbstractPoomCITest {
+
+    public static final Eventually eventually = Eventually.timeout(8 * 1000L);
 
     @Rule
     public TemporaryFolder logStorage = new TemporaryFolder();

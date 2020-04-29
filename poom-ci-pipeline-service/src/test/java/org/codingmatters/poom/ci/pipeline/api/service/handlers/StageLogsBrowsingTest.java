@@ -29,7 +29,7 @@ public class StageLogsBrowsingTest extends AbstractPoomCITest {
         for (long i = 0; i < 500; i++) {
             segment.append("content of log line " + i);
         }
-        Eventually.defaults().assertThat(() -> segment.all(0L, 0L).total(), is(500L));
+        eventually.assertThat(() -> segment.all(0L, 0L).total(), is(500L));
     }
 
     @Test
