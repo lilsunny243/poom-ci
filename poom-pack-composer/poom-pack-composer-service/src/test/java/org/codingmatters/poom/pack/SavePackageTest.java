@@ -2,6 +2,7 @@ package org.codingmatters.poom.pack;
 
 import org.codingmatters.poom.ci.api.RepositoryPostRequest;
 import org.codingmatters.poom.pack.handler.SavePackage;
+import org.codingmatters.poom.pack.handler.pack.JsonPackager;
 import org.codingmatters.rest.api.types.File;
 import org.codingmatters.rest.io.Content;
 import org.junit.Before;
@@ -23,6 +24,7 @@ public class SavePackageTest {
 
     @Before
     public void setUp() throws Exception {
+        JsonPackager.deleteFile();
         temp = new TemporaryFolder();
         temp.create();
         savePackage = new SavePackage( temp.getRoot().getPath(), API_KEY );

@@ -5,7 +5,9 @@ import org.codingmatters.poom.ci.api.PackagesGetRequest;
 import org.codingmatters.poom.ci.api.packagesgetresponse.Status200;
 import org.codingmatters.poom.pack.handler.GetPackage;
 import org.codingmatters.poom.pack.handler.pack.JsonPackageBuilder;
+import org.codingmatters.poom.pack.handler.pack.JsonPackager;
 import org.codingmatters.value.objects.values.ObjectValue;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,6 +16,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GetPackageTest {
+
+    @Before
+    public void setUp() throws Exception {
+        JsonPackager.deleteFile();
+    }
 
     @Test
     public void testGetComposerJson() {

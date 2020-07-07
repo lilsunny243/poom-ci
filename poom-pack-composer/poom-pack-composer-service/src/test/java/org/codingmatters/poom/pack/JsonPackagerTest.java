@@ -1,5 +1,6 @@
 package org.codingmatters.poom.pack;
 
+import org.codingmatters.poom.ci.api.types.JsonPackage;
 import org.codingmatters.poom.pack.handler.pack.JsonPackager;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,9 +21,10 @@ public class JsonPackagerTest {
 
     @Before
     public void setUp() throws Exception {
+        JsonPackager.deleteFile();
         String repositoryPath = Thread.currentThread().getContextClassLoader().getResource( "repository" ).getPath();
         repository = new File( repositoryPath );
-        serviceUrl = "http://service/";
+        serviceUrl = "http://service:456";
     }
 
     @Test
