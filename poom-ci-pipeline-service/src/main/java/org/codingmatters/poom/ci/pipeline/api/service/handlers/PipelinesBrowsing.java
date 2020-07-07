@@ -7,6 +7,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.paging.Rfc7233Pager;
@@ -17,7 +18,7 @@ public class PipelinesBrowsing implements Function<PipelinesGetRequest, Pipeline
 
     static private CategorizedLogger log = CategorizedLogger.getLogger(PipelinesBrowsing.class);
 
-    private final Repository<Pipeline, PipelineQuery> repository;
+    private final Repository<Pipeline, PropertyQuery> repository;
 
     public PipelinesBrowsing(PoomCIRepository repository) {
         this.repository = repository.pipelineRepository();
@@ -25,7 +26,7 @@ public class PipelinesBrowsing implements Function<PipelinesGetRequest, Pipeline
 
     @Override
     public PipelinesGetResponse apply(PipelinesGetRequest request) {
-        Rfc7233Pager<Pipeline, PipelineQuery>  pager = Rfc7233Pager
+        Rfc7233Pager<Pipeline, PropertyQuery>  pager = Rfc7233Pager
                 .forRequestedRange(request.range())
                 .unit("Pipeline")
                 .maxPageSize(100)

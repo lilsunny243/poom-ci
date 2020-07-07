@@ -7,6 +7,7 @@ import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
@@ -17,7 +18,7 @@ import java.util.function.Function;
 public class StageGet implements Function<PipelineStageGetRequest, PipelineStageGetResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(StageGet.class);
 
-    private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
+    private final Repository<PipelineStage, PropertyQuery> stageRepository;
 
     public StageGet(PoomCIRepository repository) {
         this.stageRepository = repository.stageRepository();
@@ -76,11 +77,33 @@ public class StageGet implements Function<PipelineStageGetRequest, PipelineStage
         return Optional.empty();
     }
 
-    private PipelineStageQuery parseQuery(PipelineStageGetRequest request) {
-        return PipelineStageQuery.builder()
-                .withPipelineId(request.pipelineId())
-                .withName(request.stageName())
-                .withType(request.stageType())
-                .build();
+    private PropertyQuery parseQuery(PipelineStageGetRequest request) {
+        boolean hasFilter = false;
+        StringBuilder query = new StringBuilder();
+
+        if(request.opt().pipelineId().isPresent()) {
+            query.append(String.format("pipelineId == '%s'", request.pipelineId()));
+            hasFilter = true;
+        }
+        if(request.opt().stageName().isPresent()) {
+            if(hasFilter) {
+                query.append(" && ");
+            }
+            query.append(String.format("stage.name == '%s'", request.stageName()));
+            hasFilter = true;
+        }
+        if(request.opt().stageType().isPresent()) {
+            if(hasFilter) {
+                query.append(" && ");
+            }
+            query.append(String.format("stage.stageType == '%s'", request.stageType().toUpperCase()));
+            hasFilter = true;
+        }
+
+        if(hasFilter) {
+            return PropertyQuery.builder().filter(query.toString()).build();
+        } else {
+            return PropertyQuery.builder().build();
+        }
     }
 }

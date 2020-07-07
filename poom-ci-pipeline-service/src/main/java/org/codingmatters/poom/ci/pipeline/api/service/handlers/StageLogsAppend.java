@@ -3,15 +3,15 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchResponse;
 import org.codingmatters.poom.ci.pipeline.api.service.helpers.StageHelper;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
-import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStageQuery;
 import org.codingmatters.poom.ci.pipeline.api.types.AppendedLogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.servives.domain.entities.PagedEntityList;
@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, PipelineStageLogsPatchResponse> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(StageLogsAppend.class);
 
-    private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
-    private final LogFileStore logStore;
+    private final Repository<PipelineStage, PropertyQuery> stageRepository;
+    private final LogStore logStore;
 
     public StageLogsAppend(PoomCIRepository repository) {
         this.stageRepository = repository.stageRepository();
@@ -79,7 +79,15 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
                     .build());
         }
 
-        PagedEntityList<PipelineStage> stageSearch = this.stageRepository.search(PipelineStageQuery.builder().withPipelineId(request.pipelineId()).withName(request.stageName()).build(), 0, 0);
+        PagedEntityList<PipelineStage> stageSearch = this.stageRepository.search(
+                PropertyQuery.builder()
+                        .filter(String.format(
+                                "pipelineId == '%s' && stage.name == '%s'",
+                                request.pipelineId(),
+                                request.stageName()
+                                ))
+                        .build(),
+                0, 0);
         if(stageSearch.total() == 0) {
             invalid = Optional.of(PipelineStageLogsPatchResponse.builder()
                     .status404(status -> status.payload(error -> error
@@ -88,15 +96,6 @@ public class StageLogsAppend implements Function<PipelineStageLogsPatchRequest, 
                                     request.pipelineId()))
                             .code(Error.Code.RESOURCE_NOT_FOUND)
                             .description("must provide an existing pipeline stage")
-                    ))
-                    .build());
-        } else if(StageStatus.Run.DONE.equals(stageSearch.get(0).value().stage().status().run())) {
-            invalid = Optional.of(PipelineStageLogsPatchResponse.builder()
-                    .status400(status -> status.payload(error -> error
-                            .token(log.audit().tokenized().info("stage log append request on DONE stage {} for pipeline {}",
-                                    request.stageName(), request.pipelineId()))
-                            .code(Error.Code.ILLEGAL_COLLECTION_CHANGE)
-                            .description("cannot add logs to a done stage")
                     ))
                     .build());
         } else {

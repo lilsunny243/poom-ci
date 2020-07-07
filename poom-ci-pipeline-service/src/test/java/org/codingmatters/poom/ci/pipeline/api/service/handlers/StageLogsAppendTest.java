@@ -3,25 +3,25 @@ package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 import org.codingmatters.poom.ci.pipeline.api.PipelineStageLogsPatchRequest;
 import org.codingmatters.poom.ci.pipeline.api.ValueList;
 import org.codingmatters.poom.ci.pipeline.api.pipelinestagelogspatchresponse.Status201;
-import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
 import org.codingmatters.poom.ci.pipeline.api.types.AppendedLogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.LogLine;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
+import org.codingmatters.poom.services.tests.Eventually;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class StageLogsAppendTest extends AbstractPoomCITest {
 
     private StageLogsAppend handler;
-
 
     @Before
     public void setUp() throws Exception {
@@ -44,10 +44,11 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 )
                 .build());
 
-        LogFileStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
+        LogStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
         for (long i = 0; i < 500; i++) {
             segment.append("content of log line " + i);
         }
+        eventually.assertThat(() -> segment.all(0L, 0L).total(), is(500L));
     }
 
     @Test
@@ -75,7 +76,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
 
     @Test
     public void givenStageExists__whenAppendingOneLog__thenLineIsStoredAndAssignedLastIndex() throws Exception {
-        LogFileStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
+        LogStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
 
         long logCount = segment.all(0, 0).total();
         Status201 response = this.handler.apply(PipelineStageLogsPatchRequest.builder()
@@ -86,6 +87,8 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .build())
                 .opt().status201()
                 .orElseThrow(() -> new AssertionError("should have a 201"));
+
+        eventually.assertThat(() -> segment.all(500, 500).size(), is(1));
         StageLog lastLog = segment.all(500, 500).valueList().get(0);
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
@@ -98,7 +101,7 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
 
     @Test
     public void givenStageExists__whenAppendingManyLogs__thenLinesAreStoredAndAssignedLastIndex() throws Exception {
-        LogFileStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
+        LogStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-running-stage");
 
         long logCount = segment.all(0, 0).total();
         ValueList.Builder<AppendedLogLine> listBuilder = new ValueList.Builder<AppendedLogLine>();
@@ -115,16 +118,32 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .opt().status201()
                 .orElseThrow(() -> new AssertionError("should have a 201"));
 
-        List<StageLog> lastLogs = segment.all(500, 600).valueList();
 
         assertThat(response.location(), is("%API_PATH%/pipelines/a-pipeline/stages/a-running-stage/logs"));
-        assertThat(segment.all(0, 0).total(), is(logCount + 10));
+        eventually.assertThat(() -> segment.all(0L, 0L).total(), is(logCount + 10L));
 
+        List<StageLog> lastLogs = segment.all(500, 600).valueList();
         assertThat(lastLogs.size(), is(10));
 
         for (long i = 1; i <= 10; i++) {
             assertThat("added log " + i, lastLogs.get((int) i - 1).log(), is(LogLine.builder().line(500 + i).content("added " + i).build()));
         }
+    }
+
+    @Test
+    public void givenStageIsDone__whenAddingLogs__then201_andLogIsAppended() {
+        this.handler.apply(PipelineStageLogsPatchRequest.builder()
+                .pipelineId("a-pipeline")
+                .stageName("a-done-stage")
+                .stageType("main")
+                .payload(AppendedLogLine.builder().content("added").build())
+                .build())
+                .opt().status201()
+                .orElseThrow(() -> new AssertionError("should have a 201"));
+
+        LogStore.Segment segment = this.repository().logStore().segment("a-pipeline", Stage.StageType.MAIN, "a-done-stage");
+        eventually.assertThat(() -> segment.all(0, 0).total(), is(1L));
+
     }
 
     @Test
@@ -137,17 +156,5 @@ public class StageLogsAppendTest extends AbstractPoomCITest {
                 .build())
                 .opt().status404()
                 .orElseThrow(() -> new AssertionError("should have a 404"));
-    }
-
-    @Test
-    public void givenStageIsDone__whenAddingLogs__thenIllegalCollectionChange() {
-        this.handler.apply(PipelineStageLogsPatchRequest.builder()
-                .pipelineId("a-pipeline")
-                .stageName("a-done-stage")
-                .stageType("main")
-                .payload(AppendedLogLine.builder().content("added").build())
-                .build())
-                .opt().status400()
-                .orElseThrow(() -> new AssertionError("should have a 400"));
     }
 }

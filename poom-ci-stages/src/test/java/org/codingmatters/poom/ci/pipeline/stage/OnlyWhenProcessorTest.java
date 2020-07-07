@@ -33,6 +33,9 @@ public class OnlyWhenProcessorTest {
 
         this.branch = "feature/deployment-#1";
         assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch is feature/deployment-#1").build()), is(true));
+
+        this.branch = "feature/deployment-#1";
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch is 'feature/.*'").build()), is(true));
     }
 
     @Test
@@ -51,6 +54,13 @@ public class OnlyWhenProcessorTest {
 
         this.branch = "feature/refactor-ingredient-1.42.0-dev##56#258";
         assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch in (master, develop, 'feature/refactor-ingredient-1.42.0-dev##56#258')").build()), is(true));
+
+        this.branch = "master";
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch in (master, develop, 'feature/.*')").build()), is(true));
+        this.branch = "develop";
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch in (master, develop, 'feature/.*')").build()), is(true));
+        this.branch = "feature/deployment-#1";
+        assertThat(processor.isExecutable(Stage.builder().onlyWhen("branch in (master, develop, 'feature/.*')").build()), is(true));
     }
 
     @Test(expected = OnlyWhenParsingException.class)

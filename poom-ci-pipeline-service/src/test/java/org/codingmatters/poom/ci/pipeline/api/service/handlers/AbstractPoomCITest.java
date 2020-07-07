@@ -1,24 +1,46 @@
 package org.codingmatters.poom.ci.pipeline.api.service.handlers;
 
-import org.codingmatters.poom.ci.pipeline.api.service.repository.LogFileStore;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.PoomCIRepository;
+import org.codingmatters.poom.ci.pipeline.api.service.repository.logs.RepositoryLogStore;
 import org.codingmatters.poom.ci.pipeline.api.service.storage.PipelineStage;
+import org.codingmatters.poom.ci.pipeline.api.service.storage.StageLog;
+import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.Stage;
 import org.codingmatters.poom.ci.pipeline.api.types.StageStatus;
+import org.codingmatters.poom.ci.triggers.GithubPushEvent;
+import org.codingmatters.poom.ci.triggers.UpstreamBuild;
+import org.codingmatters.poom.services.domain.repositories.inmemory.InMemoryRepositoryWithPropertyQuery;
+import org.codingmatters.poom.services.tests.Eventually;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
 public class AbstractPoomCITest {
 
+    public static final Eventually eventually = Eventually.timeout(8 * 1000L);
+
     @Rule
     public TemporaryFolder logStorage = new TemporaryFolder();
 
     private PoomCIRepository inMemory;
+    private RepositoryLogStore logStore;
 
     @Before
     public void setUp() throws Exception {
-        this.inMemory = PoomCIRepository.inMemory(new LogFileStore(this.logStorage.getRoot()));
+        this.logStore = new RepositoryLogStore(InMemoryRepositoryWithPropertyQuery.validating(StageLog.class));
+        this.inMemory = new PoomCIRepository(
+                this.logStore,
+                InMemoryRepositoryWithPropertyQuery.validating(Pipeline.class),
+                InMemoryRepositoryWithPropertyQuery.validating(GithubPushEvent.class),
+                InMemoryRepositoryWithPropertyQuery.validating(UpstreamBuild.class),
+                InMemoryRepositoryWithPropertyQuery.validating(PipelineStage.class)
+        );
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        this.logStore.close();
     }
 
     public PoomCIRepository repository() {

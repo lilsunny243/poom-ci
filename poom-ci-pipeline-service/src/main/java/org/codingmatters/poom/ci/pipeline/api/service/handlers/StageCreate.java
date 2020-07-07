@@ -10,6 +10,7 @@ import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.*;
 import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.date.UTC;
@@ -24,8 +25,8 @@ import java.util.stream.Collectors;
 public class StageCreate implements Function<PipelineStagesPostRequest, PipelineStagesPostResponse> {
     static private CategorizedLogger log = CategorizedLogger.getLogger(StageCreate.class);
 
-    private final Repository<Pipeline, PipelineQuery> pipelineRepository;
-    private final Repository<PipelineStage, PipelineStageQuery> stageRepository;
+    private final Repository<Pipeline, PropertyQuery> pipelineRepository;
+    private final Repository<PipelineStage, PropertyQuery> stageRepository;
 
     public StageCreate(PoomCIRepository repository) {
         this.pipelineRepository = repository.pipelineRepository();
@@ -144,18 +145,20 @@ public class StageCreate implements Function<PipelineStagesPostRequest, Pipeline
     }
 
     private boolean aStageIsAlreadyRunning(PipelineStagesPostRequest request) throws RepositoryException {
-        return this.stageRepository.search(PipelineStageQuery.builder()
-                .withPipelineId(request.pipelineId())
-                .withRunningStatus(PipelineStageQuery.WithRunningStatus.RUNNING)
+        return this.stageRepository.search(PropertyQuery.builder().filter(String.format(
+                "pipelineId == '%s' && stage.status.run == '%s'",
+                request.pipelineId(),
+                PipelineStageQuery.WithRunningStatus.RUNNING.name()))
                 .build(), 0, 0).total() > 0;
     }
 
     private boolean stageAlreadyExists(PipelineStagesPostRequest request) throws RepositoryException {
-        return this.stageRepository.search(PipelineStageQuery.builder()
-                .withPipelineId(request.pipelineId())
-                .withType(request.stageType().toUpperCase())
-                .withName(request.payload().name())
-                .build(), 0, 0).total() > 0;
+        return this.stageRepository.search(PropertyQuery.builder().filter(String.format(
+                "pipelineId == '%s' && stage.stageType == '%s' && stage.name == '%s'",
+                request.pipelineId(),
+                request.stageType().toUpperCase(),
+                request.payload().name()
+        )).build(), 0, 0).total() > 0;
     }
 
     private boolean pipelineIsRunning(Entity<Pipeline> pipeline) {

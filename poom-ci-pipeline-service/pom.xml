@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.codingmatters.poom.ci</groupId>
         <artifactId>poom-ci</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>2.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>poom-ci-pipeline-service</artifactId>
@@ -50,6 +50,14 @@
             <artifactId>poomjobs-clients</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.flexio.io</groupId>
+            <artifactId>flexio-mongo-io-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.flexio.io</groupId>
+            <artifactId>flexio-mongo-io-repository</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.codingmatters.rest</groupId>
@@ -58,6 +66,12 @@
         <dependency>
             <groupId>org.codingmatters.rest</groupId>
             <artifactId>cdm-rest-client-okhttp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codingmatters.poom</groupId>
+            <artifactId>poom-services-test-support</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -99,6 +113,7 @@
                 </executions>
             </plugin>
 
+
             <plugin>
                 <groupId>org.codingmatters.rest</groupId>
                 <artifactId>cdm-rest-maven-plugin</artifactId>
@@ -129,6 +144,70 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>io.flexio.io</groupId>
+                <artifactId>flexio-mongo-io-maven-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>poom-ci-pipeline-api-spec</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>poom-ci-pipeline-api</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>poom-ci-triggers</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codingmatters.poom.ci</groupId>
+                        <artifactId>poom-ci-triggers</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>domain</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>mongo-mapping</goal>
+                        </goals>
+                        <configuration>
+                            <destination-package>org.codingmatters.poom.ci.pipeline.api.service.storage</destination-package>
+                            <input-spec>src/main/resources/stored-resources.yaml</input-spec>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>triggers</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>mongo-mapping</goal>
+                        </goals>
+                        <configuration>
+                            <destination-package>org.codingmatters.poom.ci.triggers</destination-package>
+                            <input-spec-resource>triggers.yaml</input-spec-resource>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>api</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>mongo-mapping</goal>
+                        </goals>
+                        <configuration>
+                            <destination-package>${project.groupId}.pipeline.api.types</destination-package>
+                            <api-spec-resource>poom-ci-pipeline-api.raml</api-spec-resource>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
