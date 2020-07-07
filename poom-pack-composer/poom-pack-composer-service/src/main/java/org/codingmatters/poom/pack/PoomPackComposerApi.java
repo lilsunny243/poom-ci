@@ -2,12 +2,12 @@ package org.codingmatters.poom.pack;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import org.codingmatters.poom.ci.api.PoomPackComposerHandlers;
-import org.codingmatters.poom.pack.handler.DeleteArtifact;
-import org.codingmatters.poom.pack.handler.GetArtifact;
-import org.codingmatters.poom.pack.handler.GetPackage;
-import org.codingmatters.poom.pack.handler.SavePackage;
+import org.codingmatters.poom.pack.handler.*;
 import org.codingmatters.poom.ci.service.PoomPackComposerProcessor;
+import org.codingmatters.poom.pack.handler.pack.JsonPackageBuilder;
 import org.codingmatters.rest.api.Processor;
+
+import java.io.File;
 
 
 public class PoomPackComposerApi {
@@ -17,8 +17,9 @@ public class PoomPackComposerApi {
     private PoomPackComposerProcessor processor;
 
     public PoomPackComposerApi( String repositoryPath, String serviceUrl, String api_key ) {
+        final File repository = new File( repositoryPath );
         this.handlers = new PoomPackComposerHandlers.Builder()
-                .packagesGetHandler( new GetPackage( repositoryPath, serviceUrl ) )
+                .packagesGetHandler( new GetPackage( repository, serviceUrl ) )
                 .repositoryPostHandler( new SavePackage( repositoryPath, api_key ) )
                 .artifactsDeleteHandler( new DeleteArtifact( repositoryPath, api_key ) )
                 .artifactsGetHandler( new GetArtifact( repositoryPath ) )

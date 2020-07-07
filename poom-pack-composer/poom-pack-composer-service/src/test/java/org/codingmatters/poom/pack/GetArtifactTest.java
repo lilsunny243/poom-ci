@@ -3,6 +3,7 @@ package org.codingmatters.poom.pack;
 import org.codingmatters.poom.ci.api.ArtifactsGetRequest;
 import org.codingmatters.poom.ci.api.artifactsgetresponse.Status200;
 import org.codingmatters.poom.pack.handler.GetArtifact;
+import org.codingmatters.poom.pack.handler.pack.JsonPackager;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,7 @@ public class GetArtifactTest {
 
     @Before
     public void setUp() throws Exception {
+        JsonPackager.deleteFile();
         repositoryPath = Thread.currentThread().getContextClassLoader().getResource( "repository" ).getPath();
         getArtifact = new GetArtifact( repositoryPath );
     }
