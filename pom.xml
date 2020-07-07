@@ -12,7 +12,7 @@
 
     <groupId>org.codingmatters.poom.ci</groupId>
     <artifactId>poom-ci</artifactId>
-    <version>2.4.0-SNAPSHOT</version>
+    <version>2.4.0</version>
     <packaging>pom</packaging>
 
     <name>Poor Man's CI</name>
@@ -115,114 +115,114 @@
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-pack-composer-api</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-pack-composer-api-spec</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-pack-composer-client</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-pack-composer-service</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-stages</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-triggers</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-github-webhook</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-pipeline-api-spec</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-pipeline-api</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-pipeline-service</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-pipeline-api-client</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-ciphering</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-deployment</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-dependency-api-spec</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-dependency-api</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-dependency-client</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-utilities</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-utilities</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
                 <classifier>uber</classifier>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-dependency-processor</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
                 <artifactId>poom-ci-service-bundle</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
 
             <dependency>
                 <groupId>org.codingmatters.poom.ci.dependency.flat</groupId>
                 <artifactId>poom-ci-dependency-flat-domain</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.codingmatters.poom.ci.dependency.flat</groupId>
                 <artifactId>poom-ci-dependency-flat-handlers</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <version>2.4.0</version>
             </dependency>
             <!--// BOM-->
         </dependencies>
