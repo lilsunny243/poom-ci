@@ -36,9 +36,9 @@ public class SavePackageTest {
                         .xVendor( "vendor" )
                         .xArtifactId( "artifact" )
                         .xVersion( "1.0" )
-                        .payload( file->file.content( Content.from( "toto" ) ).contentType( "text/plain" ) )
+                        .payload( file -> file.content( Content.from( "toto" ) ).contentType( "text/plain" ) )
                         .build()
-        ).opt().status403().orElseThrow( ()->new AssertionError( "Should not upload something with bad api key" ) );
+        ).opt().status403().orElseThrow( () -> new AssertionError( "Should not upload something with bad api key" ) );
     }
 
     @Test
@@ -56,24 +56,24 @@ public class SavePackageTest {
                                 .contentType( "application/zip" )
                                 .build() )
                         .build()
-        ).opt().status201().orElseThrow( ()->new AssertionError( "Cannot save the artifact" ) );
+        ).opt().status201().orElseThrow( () -> new AssertionError( "Cannot save the artifact" ) );
 
-        java.io.File[] vendorDir = temp.getRoot().listFiles( ( dir, name )->name.equals( "flexio-services" ) );
+        java.io.File[] vendorDir = temp.getRoot().listFiles( ( dir, name ) -> name.equals( "flexio-services" ) );
         assertThat( vendorDir, notNullValue() );
         assertThat( vendorDir.length, is( 1 ) );
         assertThat( vendorDir[0].isDirectory(), is( true ) );
 
-        java.io.File[] packageDir = vendorDir[0].listFiles( ( dir, name )->name.equals( "flexio-tabular-php-client" ) );
+        java.io.File[] packageDir = vendorDir[0].listFiles( ( dir, name ) -> name.equals( "flexio-tabular-php-client" ) );
         assertThat( packageDir, notNullValue() );
         assertThat( packageDir.length, is( 1 ) );
         assertThat( packageDir[0].isDirectory(), is( true ) );
 
-        java.io.File[] versionDir = packageDir[0].listFiles( ( dir, name )->name.equals( "1.0.0-dev" ) );
+        java.io.File[] versionDir = packageDir[0].listFiles( ( dir, name ) -> name.equals( "1.0.0-dev" ) );
         assertThat( versionDir, notNullValue() );
         assertThat( versionDir.length, is( 1 ) );
         assertThat( vendorDir[0].isDirectory(), is( true ) );
 
-        java.io.File[] zipFile = versionDir[0].listFiles( ( dir, name )->"flexio-tabular-php-client-1.0.0-dev.zip".equals( name ) );
+        java.io.File[] zipFile = versionDir[0].listFiles( ( dir, name ) -> "flexio-tabular-php-client-1.0.0-dev.zip".equals( name ) );
         assertThat( zipFile, notNullValue() );
         assertThat( Files.readAllBytes( zipFile[0].toPath() ), is( content.asBytes() ) );
     }

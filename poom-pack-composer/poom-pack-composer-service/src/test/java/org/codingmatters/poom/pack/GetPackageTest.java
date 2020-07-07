@@ -4,8 +4,11 @@ package org.codingmatters.poom.pack;
 import org.codingmatters.poom.ci.api.PackagesGetRequest;
 import org.codingmatters.poom.ci.api.packagesgetresponse.Status200;
 import org.codingmatters.poom.pack.handler.GetPackage;
+import org.codingmatters.poom.pack.handler.pack.JsonPackageBuilder;
 import org.codingmatters.value.objects.values.ObjectValue;
 import org.junit.Test;
+
+import java.io.File;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,7 +18,8 @@ public class GetPackageTest {
     @Test
     public void testGetComposerJson() {
         String repositoryPath = Thread.currentThread().getContextClassLoader().getResource( "repository" ).getPath();
-        GetPackage getPackage = new GetPackage( repositoryPath, "http://service:456" );
+        final File repository = new File( repositoryPath );
+        GetPackage getPackage = new GetPackage( repository, "http://service:456" );
         Status200 response = getPackage.apply(
                 PackagesGetRequest.builder()
                         .build()
