@@ -129,6 +129,7 @@ public class PipelineJobProcessorTest {
             public StageTermination.Exit execute(StageHolder stage, StageLogListener logListener) throws IOException {
                 executedStages.add(stage.stage().name());
                 for (int i = 0; i < 3; i++) {
+                    System.out.println("logging  :: " + stage.stage().name() + " log " + (i+1));
                     logListener.logLine(stage.stage().name() + " log " + (i+1));
                 }
                 return StageTermination.Exit.SUCCESS;
