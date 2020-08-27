@@ -84,6 +84,10 @@ public class DirectStageLogger implements PipelineExecutor.StageLogListener, Aut
 
     @Override
     public void close() throws Exception {
+        long purgeStart = System.currentTimeMillis();
+        while((System.currentTimeMillis() - purgeStart < 2000) && ! this.lineQueue.isEmpty()) {
+            Thread.sleep(500);
+        }
         this.stop.set(true);
         this.pool.shutdown();
 
