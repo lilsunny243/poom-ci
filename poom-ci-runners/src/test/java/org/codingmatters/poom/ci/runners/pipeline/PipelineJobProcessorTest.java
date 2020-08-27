@@ -6,6 +6,7 @@ import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIHandlersClient;
 import org.codingmatters.poom.ci.pipeline.descriptors.Pipeline;
 import org.codingmatters.poom.ci.pipeline.descriptors.StageHolder;
+import org.codingmatters.poom.services.tests.Eventually;
 import org.codingmatters.poomjobs.api.types.Job;
 import org.codingmatters.poomjobs.api.types.job.Status;
 import org.junit.Rule;
@@ -20,6 +21,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -168,12 +170,13 @@ public class PipelineJobProcessorTest {
         assertThat(this.pipelinePatchCalls.get(1).pipelineId(), is("pipeline-id"));
         assertThat(this.pipelinePatchCalls.get(1).payload(), is(PipelineTermination.builder().exit(PipelineTermination.Exit.SUCCESS).build()));
 
-        Thread.sleep(2000L);
-        List<String> logs = new LinkedList<>();
-        this.logsPatchCalls.stream().map(request -> request.payload().stream().map(line -> line.content()).collect(Collectors.toList())).forEach(line -> logs.addAll(line));
+        Eventually.timeout(10, TimeUnit.SECONDS).assertThat(() -> {
+            List<String> logs = new LinkedList<>();
+            this.logsPatchCalls.stream().map(request -> request.payload().stream().map(line -> line.content()).collect(Collectors.toList())).forEach(line -> logs.addAll(line));
 
-        System.out.println(logs);
-        assertThat(logs, contains("stage1 log 1", "stage1 log 2", "stage1 log 3", "stage2 log 1", "stage2 log 2", "stage2 log 3"));
+            System.out.println(logs);
+            return logs;
+        }, contains("stage1 log 1", "stage1 log 2", "stage1 log 3", "stage2 log 1", "stage2 log 2", "stage2 log 3"));
 
         assertThat(job.status().run(), is(Status.Run.DONE));
         assertThat(job.status().exit(), is(Status.Exit.SUCCESS));
