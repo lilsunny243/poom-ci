@@ -129,6 +129,7 @@ public class PipelineJobProcessorTest {
             public StageTermination.Exit execute(StageHolder stage, StageLogListener logListener) throws IOException {
                 executedStages.add(stage.stage().name());
                 for (int i = 0; i < 3; i++) {
+                    System.out.println("logging  :: " + stage.stage().name() + " log " + (i+1));
                     logListener.logLine(stage.stage().name() + " log " + (i+1));
                 }
                 return StageTermination.Exit.SUCCESS;
@@ -170,7 +171,7 @@ public class PipelineJobProcessorTest {
         assertThat(this.pipelinePatchCalls.get(1).pipelineId(), is("pipeline-id"));
         assertThat(this.pipelinePatchCalls.get(1).payload(), is(PipelineTermination.builder().exit(PipelineTermination.Exit.SUCCESS).build()));
 
-        Eventually.timeout(10, TimeUnit.SECONDS).assertThat(() -> {
+        Eventually.timeout(30, TimeUnit.SECONDS).assertThat(() -> {
             List<String> logs = new LinkedList<>();
             this.logsPatchCalls.stream().map(request -> request.payload().stream().map(line -> line.content()).collect(Collectors.toList())).forEach(line -> logs.addAll(line));
 
