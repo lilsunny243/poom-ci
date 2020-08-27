@@ -34,22 +34,26 @@ public class DirectStageLogger implements PipelineExecutor.StageLogListener, Aut
 
     private void processLogs() {
         while(! this.stop.get()) {
-            try {
-                List<String> lines = new ArrayList<>(LOB_BATCH_SIZE);
-                String log = null;
-                do {
-                    log = this.lineQueue.poll(200, TimeUnit.MILLISECONDS);
-                    if(log != null) {
-                        lines.add(log);
-                    }
-                } while (log != null && lines.size() < LOB_BATCH_SIZE);
+            this.sendSomePendingLines();
+        }
+    }
 
-                if(! lines.isEmpty()) {
-                    this.sendLogs(lines);
+    private void sendSomePendingLines() {
+        try {
+            List<String> lines = new ArrayList<>(LOB_BATCH_SIZE);
+            String log = null;
+            do {
+                log = this.lineQueue.poll(200, TimeUnit.MILLISECONDS);
+                if(log != null) {
+                    lines.add(log);
                 }
-            } catch (InterruptedException e) {
-                log.error("error processing logs", e);
+            } while (log != null && lines.size() < LOB_BATCH_SIZE);
+
+            if(! lines.isEmpty()) {
+                this.sendLogs(lines);
             }
+        } catch (InterruptedException e) {
+            log.error("error processing logs", e);
         }
     }
 
@@ -85,15 +89,18 @@ public class DirectStageLogger implements PipelineExecutor.StageLogListener, Aut
     @Override
     public void close() throws Exception {
         long purgeStart = System.currentTimeMillis();
-        while((System.currentTimeMillis() - purgeStart < 2000) && ! this.lineQueue.isEmpty()) {
-            Thread.sleep(500);
-        }
         this.stop.set(true);
         this.pool.shutdown();
-
-        this.pool.awaitTermination(2, TimeUnit.MINUTES);
+        this.pool.awaitTermination(10, TimeUnit.SECONDS);
         if(! this.pool.isTerminated()) {
-            log.error("error sending remainig logs");
+            log.error("error stoping log pool");
+        }
+
+        while((System.currentTimeMillis() - purgeStart < 2 * 60 * 1000) && ! this.lineQueue.isEmpty()) {
+            this.sendSomePendingLines();
+        }
+        if(! this.lineQueue.isEmpty()) {
+            log.error("some logs cannot be sent : " + this.lineQueue);
         }
     }
 }
