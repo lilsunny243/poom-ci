@@ -15,6 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Arrays;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -22,8 +24,13 @@ public class DownstreamProcessorTest {
 
     public static final FullRepository A_REPO = FullRepository.builder().id("a-repo").name("ARepo").checkoutSpec("a/repo").build();
     public static final FullRepository B_REPO = FullRepository.builder().id("b-repo").name("BRepo").checkoutSpec("b/repo").build();
+    public static final FullRepository C_REPO = FullRepository.builder().id("c-repo").name("CRepo").checkoutSpec("c/repo").build();
+    public static final FullRepository D_REPO = FullRepository.builder().id("d-repo").name("DRepo").checkoutSpec("d/repo").build();
+
     private static final Module A_MODULE = Module.builder().spec("a").version("1").build();
     private static final Module B_MODULE = Module.builder().spec("b").version("1").build();
+    private static final Module C_MODULE = Module.builder().spec("c").version("1").build();
+    private static final Module D_MODULE = Module.builder().spec("d").version("1").build();
 
     private GraphManager graphManager = new GraphManager(
             InMemoryRepositoryWithPropertyQuery.validating(Repository.class),
@@ -63,6 +70,16 @@ public class DownstreamProcessorTest {
         this.graphManager.index(A_REPO.withProduces(new ValueList.Builder().with(A_MODULE).build()));
         this.graphManager.index(B_REPO.withDependencies(new ValueList.Builder().with(A_MODULE).build()));
 
+        assertThat(this.processor.downstream(A_REPO.id()), is(arrayContaining(this.from(B_REPO))));
+    }
+
+    @Test
+    public void givenRepositoryIndexed__whenRepositoryHasManyProductions_andOtherSameRepoDependsOnThem__thenThisRepoIsADownstreamOnce() throws Exception {
+        this.graphManager.index(A_REPO.withProduces(new ValueList.Builder().with(A_MODULE, B_MODULE).build()));
+        this.graphManager.index(B_REPO.withDependencies(new ValueList.Builder().with(A_MODULE, B_MODULE).build()));
+
+
+        System.out.println(Arrays.asList(this.processor.downstream(A_REPO.id())));
         assertThat(this.processor.downstream(A_REPO.id()), is(arrayContaining(this.from(B_REPO))));
     }
 

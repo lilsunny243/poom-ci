@@ -69,6 +69,37 @@ public class GraphManagerTest {
     }
 
     @Test
+    public void givenReposAreEmpty__whenIndexing_andHasDuplicateDependencies_andHasDuplicateProductions__thenRepoIsStored_andRelationsAreStoredOnce() throws Exception {
+        this.manager.index(FullRepository.builder()
+                .id(MY_REPO.id())
+                .name(MY_REPO.name())
+                .checkoutSpec(MY_REPO.checkoutSpec())
+                .dependencies(MODULE_1, MODULE_1)
+                .produces(MODULE_2, MODULE_2)
+                .build());
+
+        assertThat(this.repositories.all(0, 1000).valueList(), contains(MY_REPO));
+        System.out.println(this.dependsOnRelations.all(0, 1000).valueList());
+        assertThat(this.dependsOnRelations.all(0, 1000).valueList(), contains(DependsOnRelation.builder().repository(MY_REPO).module(MODULE_1).build()));
+        assertThat(this.producesRelations.all(0, 1000).valueList(), contains(ProducesRelation.builder().repository(MY_REPO).module(MODULE_2).build()));
+    }
+
+    @Test
+    public void givenReposAreEmpty__whenIndexing_andADependencyIsAProduction__thenRepoIsStored_andProductionIsStore_andDependencyIsIgnored() throws Exception {
+        this.manager.index(FullRepository.builder()
+                .id(MY_REPO.id())
+                .name(MY_REPO.name())
+                .checkoutSpec(MY_REPO.checkoutSpec())
+                .dependencies(MODULE_1)
+                .produces(MODULE_1)
+                .build());
+
+        assertThat(this.repositories.all(0, 1000).valueList(), contains(MY_REPO));
+        assertThat(this.dependsOnRelations.all(0, 1000).valueList(), is(empty()));
+        assertThat(this.producesRelations.all(0, 1000).valueList(), contains(ProducesRelation.builder().repository(MY_REPO).module(MODULE_1).build()));
+    }
+
+    @Test
     public void givenRepoAlreadyIndex__whenIndexingWithDifferentName__thenNameIsUpdated() throws Exception {
         this.repositories.createWithId(MY_REPO.id(), MY_REPO);
 

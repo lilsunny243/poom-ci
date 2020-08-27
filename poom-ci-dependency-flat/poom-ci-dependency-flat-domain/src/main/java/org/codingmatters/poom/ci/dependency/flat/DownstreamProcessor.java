@@ -3,8 +3,7 @@ package org.codingmatters.poom.ci.dependency.flat;
 import org.codingmatters.poom.ci.dependency.api.types.Module;
 import org.codingmatters.poom.ci.dependency.api.types.Repository;
 
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 
 public class DownstreamProcessor {
     private final GraphManager graphManager;
@@ -19,7 +18,7 @@ public class DownstreamProcessor {
             throw new NoSuchRepositoryException("no repository with id " + repositoryId);
         }
 
-        LinkedList<Repository> result = new LinkedList<>();
+        HashSet<Repository> result = new HashSet<>();
 
         for (Module module : this.graphManager.producedBy(repository.get())) {
             for (Repository dependentRepository : this.graphManager.dependentRepositories(module)) {

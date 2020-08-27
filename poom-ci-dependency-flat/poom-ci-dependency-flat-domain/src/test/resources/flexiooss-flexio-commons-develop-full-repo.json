@@ -1,0 +1,1649 @@
+{
+  "id": "flexiooss-flexio-commons-develop",
+  "name": "flexiooss/flexio-commons",
+  "checkoutSpec": "git|git@github.com:flexiooss/flexio-commons.git|develop",
+  "dependencies": [
+    {
+      "spec": "com.intuit.quickbooks-online:ipp-v3-java-data",
+      "version": "5.0.3"
+    },
+    {
+      "spec": "org.apache.santuario:xmlsec",
+      "version": "2.1.4"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-tomcat7-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.jboss.resteasy:resteasy-client",
+      "version": "3.9.1.Final"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-test-support",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-wildfly-server-subsystem",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-generation",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-support",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.jboss.resteasy:resteasy-undertow",
+      "version": "3.9.1.Final"
+    },
+    {
+      "spec": "com.openshift:openshift-restclient-java",
+      "version": "6.1.3.Final"
+    },
+    {
+      "spec": "commons-lang:commons-lang",
+      "version": "2.6"
+    },
+    {
+      "spec": "ch.qos.logback.contrib:logback-jackson",
+      "version": "0.1.5"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-logging",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.slf4j:slf4j-log4j12",
+      "version": "1.7.22"
+    },
+    {
+      "spec": "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-pcollections",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-undertow-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-adapter-feature-pack",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.jaxrs:jackson-jaxrs-smile-provider",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-js-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.intuit.quickbooks-online:oauth2-platform-api",
+      "version": "5.0.3"
+    },
+    {
+      "spec": "org.twitter4j:twitter4j-core",
+      "version": "4.0.4"
+    },
+    {
+      "spec": "org.keycloak:kcinit",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-paged-collection-handlers",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "com.sun.xml.bind.external:rngom",
+      "version": "2.3.1"
+    },
+    {
+      "spec": "org.subethamail:subethasmtp",
+      "version": "3.1.7"
+    },
+    {
+      "spec": "org.codingmatters.poom.apis.demo:poom-services-demo-api-processor",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "com.jcraft:jsch",
+      "version": "0.1.55"
+    },
+    {
+      "spec": "ch.qos.logback:logback-core",
+      "version": "1.2.3"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-tomcat-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.mongodb:mongodb-driver",
+      "version": "3.12.0"
+    },
+    {
+      "spec": "com.fasterxml.jackson.jr:jackson-jr-retrofit2",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer",
+      "version": "20180219.1"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-graylog-client",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-kotlin",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-tomcat-adapter-core",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-domain",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.apache.maven:maven-plugin-api",
+      "version": "3.6.3"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-paranamer",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.codingmatters.poom.apis.simple.demo:poom-services-simple-demo-api-client",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "com.fasterxml.jackson.core:jackson-annotations",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-antrun-plugin",
+      "version": "1.3"
+    },
+    {
+      "spec": "com.fasterxml.jackson.dataformat:jackson-dataformat-protobuf",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-jetty94-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "junit:junit",
+      "version": "4.13"
+    },
+    {
+      "spec": "com.github.relaxng:relaxngDatatype",
+      "version": "2.3.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-as7-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.httpcomponents:httpcore",
+      "version": "4.4.5"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-eap6-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-report-api-spec",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "net.sf.cssbox:cssbox",
+      "version": "4.14"
+    },
+    {
+      "spec": "org.keycloak:keycloak-client-cli-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-client-okhttp",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-api-generator",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.apache.directory.server:apacheds-server-annotations",
+      "version": "2.0.0-M21"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-jetty93-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-repository-in-memory",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-wildfly-elytron-oidc-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-as7-subsystem",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-json-org",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-paged-collection-processor",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-adapter-spi",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.ops4j.pax.web:pax-web-spi",
+      "version": "7.1.0"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-doc",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.wildfly.security.elytron-web:undertow-server",
+      "version": "1.6.0.Final"
+    },
+    {
+      "spec": "org.slf4j:slf4j-simple",
+      "version": "1.7.25"
+    },
+    {
+      "spec": "net.java.dev.jna:jna",
+      "version": "4.1.0"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-demo",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.jboss.spec.javax.servlet:jboss-servlet-api_3.0_spec",
+      "version": "1.0.2.Final"
+    },
+    {
+      "spec": "org.keycloak:keycloak-sssd-federation",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.freemarker:freemarker",
+      "version": "2.3.26-incubating"
+    },
+    {
+      "spec": "org.keycloak.example.demo:cxf-jaxws-example",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-tests-resources",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-raml-parser",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-report-api",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-dependencies-server-min",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.dataformat:jackson-dataformat-smile",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-tomcat-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.github.ua-parser:uap-java",
+      "version": "1.4.3"
+    },
+    {
+      "spec": "org.keycloak:keycloak-api-docs-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-wildfly-adapter-subsystem",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.poom.apis.simple.demo:poom-services-simple-demo-api-types",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-tomcat7-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-wildfly-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-jetty93-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-enforcer-plugin",
+      "version": "3.0.0-M2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-authz-policy-drools",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.core:jackson-core",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.google.guava:guava",
+      "version": "25.0-jre"
+    },
+    {
+      "spec": "org.keycloak:keycloak-services",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-tomcat7-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-json",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-ldap-federation",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-core",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.seleniumhq.selenium:selenium-java",
+      "version": "2.35.0"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-spec",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "com.sun.mail:javax.mail",
+      "version": "1.6.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-adapter-core",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-repository",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-installed-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.atlassian.commonmark:commonmark",
+      "version": "0.11.0"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-client-api",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-js",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-authz-policy-common",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.osgi:org.osgi.enterprise",
+      "version": "4.2.0"
+    },
+    {
+      "spec": "org.apache.maven:maven-artifact",
+      "version": "3.6.3"
+    },
+    {
+      "spec": "org.wildfly.core:wildfly-core-feature-pack",
+      "version": "10.0.3.Final"
+    },
+    {
+      "spec": "org.keycloak:keycloak-jaxrs-oauth-client",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-undertow-adapter-spi",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.directory.server:apacheds-interceptor-kerberos",
+      "version": "2.0.0-M21"
+    },
+    {
+      "spec": "org.wildfly.core:wildfly-subsystem-test-framework",
+      "version": "10.0.3.Final"
+    },
+    {
+      "spec": "io.undertow:undertow-core",
+      "version": "2.0.29.Final"
+    },
+    {
+      "spec": "com.sun.xml.ws:rt",
+      "version": "2.3.1"
+    },
+    {
+      "spec": "org.apache.poi:poi-ooxml",
+      "version": "4.0.0"
+    },
+    {
+      "spec": "org.jboss.resteasy:resteasy-jaxrs",
+      "version": "3.9.1.Final"
+    },
+    {
+      "spec": "com.sun.istack:istack-commons-runtime",
+      "version": "3.0.7"
+    },
+    {
+      "spec": "org.keycloak:keycloak-wildfly-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-server-overlay",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.osgi:org.osgi.core",
+      "version": "4.2.0"
+    },
+    {
+      "spec": "org.apache.maven:maven-core",
+      "version": "3.6.3"
+    },
+    {
+      "spec": "io.undertow:undertow-servlet",
+      "version": "2.0.29.Final"
+    },
+    {
+      "spec": "com.sun.istack:istack-commons-tools",
+      "version": "3.0.7"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-jsonSchema",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:launcher",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.xhtmlrenderer:flying-saucer-core",
+      "version": "9.1.18"
+    },
+    {
+      "spec": "org.aesh:aesh",
+      "version": "2.4"
+    },
+    {
+      "spec": "com.github.heremaps:oksse",
+      "version": "0.9.0"
+    },
+    {
+      "spec": "jakarta.persistence:jakarta.persistence-api",
+      "version": "2.2.3"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-site-plugin",
+      "version": "3.7.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-mrbean",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak.example.demo:customer-portal-example",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-php",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-subsystem",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.infinispan:infinispan-core",
+      "version": "9.4.16.Final"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-api-doc",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.dom4j:dom4j",
+      "version": "2.1.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-jetty92-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-jetty94-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-wildfly-subsystem",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.apache.httpcomponents:httpclient",
+      "version": "4.5.4"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-jetty92-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-plugin-plugin",
+      "version": "3.6.0"
+    },
+    {
+      "spec": "org.apache.maven.plugin-tools:maven-plugin-annotations",
+      "version": "3.6.0"
+    },
+    {
+      "spec": "ch.qos.logback.contrib:logback-json-classic",
+      "version": "0.1.5"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-source-plugin",
+      "version": "3.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-as7-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-adapter-core",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-guice",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-maven-plugin",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "jakarta.mail:jakarta.mail-api",
+      "version": "1.6.4"
+    },
+    {
+      "spec": "org.apache.directory.server:apacheds-core-annotations",
+      "version": "2.0.0-M21"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-adapter-api-public",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.bouncycastle:bcprov-jdk15on",
+      "version": "1.59"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-paged-collection-domain",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-tests-support",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.apache.james:apache-mime4j",
+      "version": "0.6"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-pmd-plugin",
+      "version": "3.11.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-tomcat-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.jboss.logging:jboss-logging",
+      "version": "3.4.1.Final"
+    },
+    {
+      "spec": "org.keycloak:keycloak-as7-modules",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.jboss.spec.javax.servlet:jboss-servlet-api_4.0_spec",
+      "version": "1.0.0.Final"
+    },
+    {
+      "spec": "org.keycloak:keycloak-osgi-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-util-embedded-ldap",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-report-service",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "com.fasterxml.jackson.dataformat:jackson-dataformat-xml",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-authz-client",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak.example.demo:product-portal-example",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.jr:jackson-jr-stree",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.fasterxml.jackson.dataformat:jackson-dataformat-csv",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-as7-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-maven-plugin",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-as7-modules",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-opentsdb-client",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-compiler-plugin",
+      "version": "3.8.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-server-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.wildfly:wildfly-web-common",
+      "version": "18.0.1.Final"
+    },
+    {
+      "spec": "org.keycloak:keycloak-client-registration-api",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-client-tests-support",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-joda",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.jboss.spec.javax.xml.bind:jboss-jaxb-api_2.3_spec",
+      "version": "2.0.0.Final"
+    },
+    {
+      "spec": "org.hibernate:hibernate-c3p0",
+      "version": "5.3.13.Final"
+    },
+    {
+      "spec": "org.hamcrest:hamcrest-library",
+      "version": "2.2"
+    },
+    {
+      "spec": "org.codehaus.mojo:build-helper-maven-plugin",
+      "version": "3.0.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-wildfly-subsystem",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-testsuite-tools",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.jaxrs:jackson-jaxrs-cbor-provider",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.liquibase:liquibase-core",
+      "version": "3.5.5"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-yaml-parser",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-wildfly-modules",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.ops4j.pax.web:pax-web-api",
+      "version": "7.1.0"
+    },
+    {
+      "spec": "mysql:mysql-connector-java",
+      "version": "8.0.18"
+    },
+    {
+      "spec": "com.fasterxml.jackson.jaxrs:jackson-jaxrs-base",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.hibernate:hibernate-core",
+      "version": "5.3.13.Final"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-values",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-wildfly-extensions",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "javax.activation:activation",
+      "version": "1.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.jr:jackson-jr-all",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-jboss-adapter-core",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.jboss.logging:jboss-logging-processor",
+      "version": "2.2.0.Final"
+    },
+    {
+      "spec": "org.infinispan:infinispan-cachestore-remote",
+      "version": "9.4.16.Final"
+    },
+    {
+      "spec": "org.wildfly:wildfly-web-feature-pack",
+      "version": "18.0.1.Final"
+    },
+    {
+      "spec": "org.codingmatters.poom.apis.demo:poom-services-demo-api-types",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.glassfish.jaxb:xsom",
+      "version": "2.3.1"
+    },
+    {
+      "spec": "org.jboss:jboss-dmr",
+      "version": "1.5.0.Final"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-hibernate3",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-core-public",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-scala_2.13",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.hamcrest:hamcrest-all",
+      "version": "1.3"
+    },
+    {
+      "spec": "com.github.librepdf:openpdf",
+      "version": "1.2.5"
+    },
+    {
+      "spec": "ch.qos.logback:logback-classic",
+      "version": "1.2.3"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-wildfly-elytron-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.picketlink:picketlink-wildfly-common",
+      "version": "2.7.0.Final"
+    },
+    {
+      "spec": "org.apache.pdfbox:pdfbox",
+      "version": "2.0.8"
+    },
+    {
+      "spec": "org.hamcrest:hamcrest",
+      "version": "2.2"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-install-plugin",
+      "version": "3.0.0-M1"
+    },
+    {
+      "spec": "net.sourceforge.plantuml:plantuml",
+      "version": "1.2019.13"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-afterburner",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-scala_2.12",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.fasterxml.jackson.dataformat:jackson-dataformat-properties",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.squareup:javapoet",
+      "version": "1.11.1"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-assembly-plugin",
+      "version": "3.1.1"
+    },
+    {
+      "spec": "org.apache.poi:poi",
+      "version": "4.0.0"
+    },
+    {
+      "spec": "com.fasterxml.jackson.core:jackson-databind",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-themes",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-dependency-plugin",
+      "version": "3.1.1"
+    },
+    {
+      "spec": "org.jboss.resteasy:resteasy-multipart-provider",
+      "version": "3.9.1.Final"
+    },
+    {
+      "spec": "org.keycloak:keycloak-spring-boot-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.fasterxml.jackson.jaxrs:jackson-jaxrs-xml-provider",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-scala_2.11",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-wildfly-adduser",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.antlr:antlr4-maven-plugin",
+      "version": "4.7.2"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-maven-plugin",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-generation-commons",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-spring-boot-2-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-servlet-filter-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-server-feature-pack",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.velocity:velocity",
+      "version": "1.7"
+    },
+    {
+      "spec": "org.apache.commons:commons-lang3",
+      "version": "3.9"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-mongo-tests",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.apis.simple.demo:poom-services-simple-demo-api-spec",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-client-registration-cli",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.glassfish:jakarta.json",
+      "version": "1.1.6"
+    },
+    {
+      "spec": "org.keycloak:keycloak-model-jpa",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.tinkerpop:gremlin-driver",
+      "version": "3.4.0"
+    },
+    {
+      "spec": "com.fasterxml.jackson.jaxrs:jackson-jaxrs-yaml-provider",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-scala_2.10",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.codingmatters.poom.services.simple.demo:poom-services-simple-demo-service-server-side-usage",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.wildfly.core:wildfly-server",
+      "version": "10.0.3.Final"
+    },
+    {
+      "spec": "io.dropwizard.metrics:metrics-jvm",
+      "version": "4.1.2"
+    },
+    {
+      "spec": "org.hsqldb:hsqldb",
+      "version": "2.4.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-core",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-jar-plugin",
+      "version": "3.1.2"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-release-plugin",
+      "version": "2.5.3"
+    },
+    {
+      "spec": "org.wildfly:wildfly-ee",
+      "version": "18.0.1.Final"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-jaxb-annotations",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-jetty92-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-guava",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-demo-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:kcinit-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.jboss.logging:jboss-logging-annotations",
+      "version": "2.2.0.Final"
+    },
+    {
+      "spec": "org.codehaus.mojo:exec-maven-plugin",
+      "version": "1.5.0"
+    },
+    {
+      "spec": "org.wildfly.core:wildfly-version",
+      "version": "10.0.3.Final"
+    },
+    {
+      "spec": "org.xhtmlrenderer:flying-saucer-pdf-openpdf",
+      "version": "9.1.18"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-as7-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.webauthn4j:webauthn4j-util",
+      "version": "0.9.14.RELEASE"
+    },
+    {
+      "spec": "com.intuit.quickbooks-online:ipp-v3-java-devkit",
+      "version": "5.0.3"
+    },
+    {
+      "spec": "org.keycloak:keycloak-server-spi",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-wildfly-modules",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-tomcat-adapter-spi",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.icegreen:greenmail",
+      "version": "1.3.1b"
+    },
+    {
+      "spec": "org.codingmatters.tests:codingmatters-reflect-unit",
+      "version": "1.15.0"
+    },
+    {
+      "spec": "org.codingmatters.poom.apis.demo:poom-services-demo-api-spec",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.services.simple.demo:poom-services-simple-demo-service-client-side-usage",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.api:poom-services-paged-collection-api-processor",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.apis.simple.demo:poom-services-simple-demo-api-processor",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.1_spec",
+      "version": "2.0.0.Final"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-logging-json-layout",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.wildfly:wildfly-dist",
+      "version": "18.0.1.Final"
+    },
+    {
+      "spec": "javax.xml.bind:jaxb-api",
+      "version": "2.3.1"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-api-client-generator-js",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "net.sf.jtidy:jtidy",
+      "version": "r938"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-javadoc-plugin",
+      "version": "3.0.1"
+    },
+    {
+      "spec": "org.wildfly.common:wildfly-common",
+      "version": "1.5.1.Final"
+    },
+    {
+      "spec": "org.wildfly:wildfly-undertow",
+      "version": "18.0.1.Final"
+    },
+    {
+      "spec": "org.jboss.resteasy:resteasy-jackson2-provider",
+      "version": "3.9.1.Final"
+    },
+    {
+      "spec": "org.mongodb:mongodb-driver-core",
+      "version": "3.12.0"
+    },
+    {
+      "spec": "com.h2database:h2",
+      "version": "1.4.193"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-gpg-plugin",
+      "version": "1.6"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-jdk8",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-spring-boot-adapter-core",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-js-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-parameter-names",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-values",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-admin-client",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-tomcat-core-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-dependencies-server-all",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-support",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.poom.apis.demo:poom-services-demo-api-client",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-admin-cli",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.jetbrains.kotlin:kotlin-stdlib",
+      "version": "1.3.50"
+    },
+    {
+      "spec": "org.keycloak:keycloak-as7-adapter-spi",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-kerberos-federation",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-surefire-plugin",
+      "version": "3.0.0-M3"
+    },
+    {
+      "spec": "org.keycloak:keycloak-jetty-core",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-servlet-adapter-spi",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-io",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.codingmatters.poom.demo:poom-services-demo-domain",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-api",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-generation-main",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.apache.httpcomponents:httpmime",
+      "version": "4.5.4"
+    },
+    {
+      "spec": "org.jboss.spec.javax.servlet.jsp:jboss-jsp-api_2.3_spec",
+      "version": "2.0.0.Final"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-paged-collection-generation-generators",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.dropwizard.metrics:metrics-core",
+      "version": "4.1.2"
+    },
+    {
+      "spec": "com.google.zxing:core",
+      "version": "3.2.1"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-api-client-generator-php",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "log4j:log4j",
+      "version": "1.2.17"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-commons",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-common",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-jaxrs",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-tomcat-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.maven:maven-compat",
+      "version": "3.6.3"
+    },
+    {
+      "spec": "org.apache.kerby:kerby-asn1",
+      "version": "2.0.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-examples-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.dataformat:jackson-dataformat-ion",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.slf4j:slf4j-api",
+      "version": "1.7.25"
+    },
+    {
+      "spec": "org.codingmatters.poom.demo:poom-services-demo-processor",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-archetype-plugin",
+      "version": "3.0.1"
+    },
+    {
+      "spec": "io.reformanda.semper:dependencyversion-maven-plugin",
+      "version": "1.0.1"
+    },
+    {
+      "spec": "org.jboss.aesh:aesh",
+      "version": "0.66.19"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-shade-plugin",
+      "version": "3.2.1"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-clean-plugin",
+      "version": "3.1.0"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-proxy-api",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.codingmatters.poom.demo:poom-services-demo-service",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.jboss.spec.javax.transaction:jboss-transaction-api_1.3_spec",
+      "version": "2.0.0.Final"
+    },
+    {
+      "spec": "com.google.zxing:javase",
+      "version": "3.2.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-jetty-adapter-core",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-jsr353",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.auth0:java-jwt",
+      "version": "3.3.0"
+    },
+    {
+      "spec": "org.codingmatters.rest:cdm-rest-undertow",
+      "version": "1.36.0"
+    },
+    {
+      "spec": "org.mongodb:bson",
+      "version": "3.12.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-client-api",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.wildfly.core:wildfly-subsystem-test",
+      "version": "10.0.3.Final"
+    },
+    {
+      "spec": "org.codingmatters.poom.api:poom-services-paged-collection-api-types",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.seleniumhq.selenium:selenium-chrome-driver",
+      "version": "2.35.0"
+    },
+    {
+      "spec": "org.raml:raml-parser-2",
+      "version": "1.0.47"
+    },
+    {
+      "spec": "org.wildfly.core:wildfly-controller",
+      "version": "10.0.3.Final"
+    },
+    {
+      "spec": "org.keycloak:keycloak-servlet-filter-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.wildfly.security:wildfly-elytron",
+      "version": "1.10.4.Final"
+    },
+    {
+      "spec": "xml-apis:xml-apis",
+      "version": "1.4.01"
+    },
+    {
+      "spec": "commons-io:commons-io",
+      "version": "2.6"
+    },
+    {
+      "spec": "org.keycloak:keycloak-jetty94-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.maven.plugin-testing:maven-plugin-testing-harness",
+      "version": "3.3.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-jetty94-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-paged-collection-generation-maven-plugin",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "com.sun.activation:jakarta.activation",
+      "version": "1.2.1"
+    },
+    {
+      "spec": "org.bouncycastle:bcpkix-jdk15on",
+      "version": "1.60"
+    },
+    {
+      "spec": "org.keycloak:keycloak-server-spi-private",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.fasterxml.jackson.dataformat:jackson-dataformat-avro",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-hppc",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.wildfly:wildfly-feature-pack",
+      "version": "18.0.1.Final"
+    },
+    {
+      "spec": "org.keycloak:keycloak-undertow-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.webauthn4j:webauthn4j-core",
+      "version": "0.9.14.RELEASE"
+    },
+    {
+      "spec": "org.apache.commons:commons-csv",
+      "version": "1.7"
+    },
+    {
+      "spec": "org.keycloak:keycloak-wildfly-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-docker-client",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-fuse-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.poom.api:poom-services-paged-collection-api-spec",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-as7-subsystem",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.jboss.resteasy:resteasy-jaxb-provider",
+      "version": "3.9.1.Final"
+    },
+    {
+      "spec": "org.apache.maven.plugins:maven-deploy-plugin",
+      "version": "3.0.0-M1"
+    },
+    {
+      "spec": "org.apache.tinkerpop:tinkergraph-gremlin",
+      "version": "3.4.0"
+    },
+    {
+      "spec": "com.fasterxml.jackson.datatype:jackson-datatype-jsr310",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.apache.directory.api:api-ldap-codec-standalone",
+      "version": "1.0.0-M33"
+    },
+    {
+      "spec": "com.fasterxml.jackson.jr:jackson-jr-objects",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.keycloak:keycloak-jetty92-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-tomcat7-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-eap6-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.apache.jmeter:ApacheJMeter_java",
+      "version": "2.10"
+    },
+    {
+      "spec": "org.keycloak:keycloak-jetty-adapter-spi",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-testsuite-utils",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.jsoup:jsoup",
+      "version": "1.11.3"
+    },
+    {
+      "spec": "com.fasterxml.jackson.module:jackson-module-osgi",
+      "version": "2.10.2"
+    },
+    {
+      "spec": "org.codingmatters.value.objects:cdm-value-objects-generation",
+      "version": "1.31.0"
+    },
+    {
+      "spec": "org.ops4j.pax.web:pax-web-runtime",
+      "version": "7.1.0"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-wildfly-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-paged-collection-generation-spec",
+      "version": "1.41.0-SNAPSHOT"
+    },
+    {
+      "spec": "org.keycloak:keycloak-model-infinispan",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-jetty93-adapter-dist",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "org.keycloak:keycloak-saml-jetty93-adapter",
+      "version": "8.0.1"
+    },
+    {
+      "spec": "com.squareup.okhttp3:okhttp",
+      "version": "4.3.1"
+    },
+    {
+      "spec": "org.antlr:antlr4-runtime",
+      "version": "4.7.1"
+    },
+    {
+      "spec": "org.codingmatters.poom:poom-services-production-support",
+      "version": "1.41.0-SNAPSHOT"
+    }
+  ],
+  "produces": [
+    {
+      "spec": "io.flexio.commons:flexio-graylog-client",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-values",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-repository",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-opentsdb-client",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-services-archetype",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-commons",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-docker-client",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-maven-plugin",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-generation",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io-support",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.commons:flexio-mongo-tests",
+      "version": "1.35.0-SNAPSHOT"
+    },
+    {
+      "spec": "io.flexio.io:flexio-mongo-io",
+      "version": "1.35.0-SNAPSHOT"
+    }
+  ]
+}
