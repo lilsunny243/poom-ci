@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.dependency.flat;
 
 import org.codingmatters.poom.ci.dependency.api.types.FullRepository;
 import org.codingmatters.poom.ci.dependency.api.types.Module;
+import org.codingmatters.poom.ci.dependency.api.types.ValueList;
 import org.codingmatters.poom.ci.dependency.flat.domain.spec.DependsOnRelation;
 import org.codingmatters.poom.ci.dependency.flat.domain.spec.ProducesRelation;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
@@ -10,6 +11,7 @@ import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.domain.repositories.RepositoryIterator;
 import org.codingmatters.poom.servives.domain.entities.Entity;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,19 +51,31 @@ public class GraphManager {
                     .build());
 
             if(fullRepository.produces() != null) {
+                HashSet<Module> alreadyIndexed = new HashSet<>();
                 for (Module produce : fullRepository.produces()) {
-                    this.producesRelation.create(ProducesRelation.builder()
-                            .repository(repositoryEntity.value())
-                            .module(produce)
-                            .build());
+                    if(! alreadyIndexed.contains(produce)) {
+                        this.producesRelation.create(ProducesRelation.builder()
+                                .repository(repositoryEntity.value())
+                                .module(produce)
+                                .build());
+                        alreadyIndexed.add(produce);
+                    }
                 }
             }
             if(fullRepository.dependencies() != null) {
-                for (Module produce : fullRepository.dependencies()) {
-                    this.dependsOnRelation.create(DependsOnRelation.builder()
-                            .repository(repositoryEntity.value())
-                            .module(produce)
-                            .build());
+                ValueList<Module> produced = fullRepository.opt().produces().orElseGet(() -> new ValueList.Builder<Module>().build());
+
+                HashSet<Module> alreadyIndexed = new HashSet<>();
+                for (Module dependency : fullRepository.dependencies()) {
+                    if(! alreadyIndexed.contains(dependency)) {
+                        if (!produced.contains(dependency)) {
+                            this.dependsOnRelation.create(DependsOnRelation.builder()
+                                    .repository(repositoryEntity.value())
+                                    .module(dependency)
+                                    .build());
+                        }
+                        alreadyIndexed.add(dependency);
+                    }
                 }
             }
 
