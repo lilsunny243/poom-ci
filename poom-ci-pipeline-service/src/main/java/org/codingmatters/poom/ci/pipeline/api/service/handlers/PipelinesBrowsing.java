@@ -8,10 +8,12 @@ import org.codingmatters.poom.ci.pipeline.api.types.Error;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.services.domain.exceptions.RepositoryException;
 import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
+import org.codingmatters.poom.services.domain.property.query.PropertyQueryParser;
 import org.codingmatters.poom.services.domain.repositories.Repository;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.paging.Rfc7233Pager;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class PipelinesBrowsing implements Function<PipelinesGetRequest, PipelinesGetResponse> {
@@ -26,6 +28,7 @@ public class PipelinesBrowsing implements Function<PipelinesGetRequest, Pipeline
 
     @Override
     public PipelinesGetResponse apply(PipelinesGetRequest request) {
+
         Rfc7233Pager<Pipeline, PropertyQuery>  pager = Rfc7233Pager
                 .forRequestedRange(request.range())
                 .unit("Pipeline")
@@ -33,7 +36,7 @@ public class PipelinesBrowsing implements Function<PipelinesGetRequest, Pipeline
                 .pager(this.repository);
 
         try {
-            Rfc7233Pager.Page<Pipeline> page = pager.page();
+            Rfc7233Pager.Page<Pipeline> page = pager.page(this.parseQuery(request));
             if(! page.isValid()) {
                 return this.invalidRange(request, page);
             } else {
@@ -41,6 +44,14 @@ public class PipelinesBrowsing implements Function<PipelinesGetRequest, Pipeline
             }
         } catch (RepositoryException e) {
             return this.repositoryException(e);
+        }
+    }
+
+    private Optional<PropertyQuery> parseQuery(PipelinesGetRequest request) {
+        if(request.opt().filter().isPresent() || request.opt().orderBy().isPresent()) {
+            return Optional.of(PropertyQuery.builder().filter(request.filter()).sort(request.orderBy()).build());
+        } else {
+            return Optional.empty();
         }
     }
 

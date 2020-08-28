@@ -43,10 +43,11 @@ mediaType: application/json
       queryParameters:
         trigger-name: string
         trigger-run-status: string
+        filter: string
+        order-by: string
       is: [{collectionPaging: {elementType: Pipeline}}]
    post:
       is: [{collectionElementCreation: {elementTypeCreationData: PipelineTrigger}}]
-
    /{pipeline-id}:
       displayName: Pipeline
       uriParameters:
@@ -125,6 +126,7 @@ types:
       properties:
          trigger-id: string
          name: string
+         checkout-spec: string
          type:
             enum: [GITHUB_PUSH, UPSTREAM_BUILD]
 
