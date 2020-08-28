@@ -38,6 +38,7 @@ public class GithubTriggerCreation implements Function<GithubTriggersPostRequest
                     .type(PipelineTrigger.Type.GITHUB_PUSH)
                     .triggerId(trigger.id())
                     .name(this.nameFrom(request.payload()))
+                    .checkoutSpec(this.checkoutSpecFrom(request.payload()))
                     .build());
             return GithubTriggersPostResponse.builder()
                     .status201(status -> status
@@ -67,5 +68,17 @@ public class GithubTriggerCreation implements Function<GithubTriggersPostRequest
                 event.after(),
                 authors
         );
+    }
+
+    private String checkoutSpecFrom(GithubPushEvent event) {
+        if(event.opt().repository().ssh_url().isPresent() && event.opt().ref().orElse("").startsWith("refs/heads/")) {
+            return String.format(
+                    "git|%s|%s",
+                    event.repository().ssh_url(),
+                    event.ref().substring("refs/heads/".length())
+            );
+        } else {
+            return null;
+        }
     }
 }

@@ -70,16 +70,14 @@
         <module>poom-ci-dependency-api</module>
         <module>poom-ci-dependency-client</module>
         <module>poom-ci-dependency-processor</module>
-<!--        <module>poom-ci-dependency-gremlin</module>-->
-
         <module>poom-ci-dependency-flat</module>
 
         <module>poom-ci-deployment</module>
         <module>poom-ci-service-bundle</module>
-
         <module>poom-ci-utilities</module>
-
         <module>poom-pack-composer</module>
+
+        <module>poom-ci-apps</module>
     </modules>
 
     <properties>
