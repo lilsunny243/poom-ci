@@ -1,12 +1,14 @@
 package org.codingmatters.poom.ci.apps.releaser;
 
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import static org.junit.Assert.*;
 
+@Ignore
 public class ReleaseTest {
 
     static private final String REPO_URL = "git@github.com:flexiooss/poom-ci-releaser-tests.git";
