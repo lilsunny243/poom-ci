@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.apps.releaser.git;
 
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
 import org.codingmatters.poom.ci.apps.releaser.command.exception.CommandFailed;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -19,6 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.hamcrest.io.FileMatchers.anExistingFile;
 
+@Ignore
 public class GitTest {
 
     static private final String REPO_URL = "git@github.com:flexiooss/poom-ci-releaser-tests.git";

@@ -4,6 +4,7 @@ import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -15,6 +16,7 @@ import java.io.InputStreamReader;
 
 import static org.junit.Assert.*;
 
+@Ignore
 public class FlexioFlowTest {
 
 

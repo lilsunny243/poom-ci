@@ -31,13 +31,18 @@ public class Pipeline {
         try {
             PipelinesGetResponse response = client.pipelines().get(PipelinesGetRequest.builder()
                     .range("0-99")
+                    .filter(String.format(
+                            "trigger.checkoutSpec == %s && (status.run == 'RUNNING' || status.run == 'RUNNING')",
+                            ""
+                    ))
+                    .orderBy("")
                     .build());
             System.out.println(response);
             if(response.opt().status200().isPresent() || response.opt().status206().isPresent()) {
                 ValueList<org.codingmatters.poom.ci.pipeline.api.types.Pipeline> pipelines = response.opt().status200().payload()
                         .orElseGet(() -> response.opt().status206().payload()
                                 .orElseGet(() -> new ValueList.Builder<org.codingmatters.poom.ci.pipeline.api.types.Pipeline>().build()));
-                System.out.println("LA");
+
                 for (org.codingmatters.poom.ci.pipeline.api.types.Pipeline pipeline : pipelines) {
                     System.out.println(pipeline);
                 }
