@@ -4,6 +4,7 @@ import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
 import org.codingmatters.poom.ci.apps.releaser.command.exception.CommandFailed;
 
 import java.io.File;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Git {
     private final File workspace;
@@ -23,8 +24,25 @@ public class Git {
         return new GitRepository(this.commandHelper, this.workspace);
     }
 
-    public String checkoutSpec() {
-        //git config --get remote.origin.url
+    public String branch() throws CommandFailed {
+        String[] lines = this.commandHelper.execWithStdout(new ProcessBuilder("git", "branch").directory(workspace), "git branch");
+        for (String line : lines) {
+            if(line.startsWith("*")) {
+                return line.replace("*", "").trim();
+            }
+        }
         return null;
+    }
+
+    public String remoteOrigin() throws CommandFailed {
+        String[] lines = this.commandHelper.execWithStdout(
+                new ProcessBuilder("git", "config", "--get", "remote.origin.url").directory(workspace),
+                "git config --get remote.origin.url"
+        );
+        return lines.length> 0 ? lines[0] : null;
+    }
+
+    public String checkoutSpec() throws CommandFailed {
+        return String.format("git|%s|%s", this.remoteOrigin(), this.branch());
     }
 }
