@@ -18,29 +18,17 @@ public class ReplaceProject {
     public ReplaceProject(String groupId, String artifactId, String version, String content) {
         this.content = content;
 
-        Range dependencyManagementRange = new Range(
-                this.content.indexOf("<dependencyManagement>"),
-                this.content.indexOf("</dependencyManagement>") + "</dependencyManagement>".length(),
-                true
-        );
+        Range dependencyManagementRange = Range.from(this.content, "<dependencyManagement>", "</dependencyManagement>", true);
         if(dependencyManagementRange.start() != -1) {
             ranges.add(dependencyManagementRange);
         }
-        Range buildRange = new Range(
-                this.content.indexOf("<build>"),
-                this.content.indexOf("</build>") + "</build>".length(),
-                true
-        );
+        Range buildRange = Range.from(this.content, "<build>", "</build>", true);
         if(buildRange.start() != -1) {
             ranges.add(buildRange);
         }
         Range dependenciesRange;
         if(dependencyManagementRange.start() == -1) {
-            dependenciesRange = new Range(
-                    this.content.indexOf("<dependencies>"),
-                    this.content.indexOf("</dependencies>") + "</dependencies>".length(),
-                    true
-            );
+            dependenciesRange = Range.from(this.content, "<dependencies>", "</dependencies>", true);
         } else {
             String beforeDM = this.content.substring(0, dependencyManagementRange.start());
             if(beforeDM.contains("<dependencies>")) {
@@ -132,7 +120,16 @@ public class ReplaceProject {
         return result;
     }
 
-    static private class Range {
+    static public class Range {
+
+        static public Range from(String content, String start, String end, boolean ignored) {
+            return new Range(
+                    content.indexOf(start),
+                    content.indexOf(end) + end.length(),
+                    ignored
+            );
+        }
+
         private final int start;
         private final int end;
         private final boolean ignored;
