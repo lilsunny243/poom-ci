@@ -4,5 +4,5 @@ import org.codingmatters.poom.ci.dependency.api.types.Repository;
 
 @FunctionalInterface
 public interface DownstreamWalkerListener {
-    void hasDownstream(Repository parent,Repository downstream, boolean cycleInduced);
+    void hasRelated(Repository parent, Repository related, boolean cycleInduced);
 }

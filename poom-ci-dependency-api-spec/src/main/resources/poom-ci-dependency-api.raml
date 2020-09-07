@@ -105,7 +105,20 @@ mediaType: application/json
                      body: Error
 
       /propagation-candidates:
-            displayName: Repository Propagation Candidates
+         displayName: Repository Propagation Candidates
+         get:
+            responses:
+               200:
+                  body: Repository[]
+               400:
+                  body: Error
+               404:
+                  body: Error
+               500:
+                  body: Error
+
+         /just-next:
+            displayName: Repository Just Next Propagation Candidates
             get:
                responses:
                   200:
@@ -116,7 +129,6 @@ mediaType: application/json
                      body: Error
                   500:
                      body: Error
-
 
 /graph:
   displayName: repository graph

@@ -15,14 +15,14 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 
 public class ReleaseTask implements Callable<TaskResult> {
-    private final String repositoryUrl;
     private final String repository;
+    private final String repositoryUrl;
     private final CommandHelper commandHelper;
     private final PoomCIPipelineAPIClient client;
 
-    public ReleaseTask(String repositoryUrl, String repository, CommandHelper commandHelper, PoomCIPipelineAPIClient client) {
-        this.repositoryUrl = repositoryUrl;
+    public ReleaseTask(String repository, CommandHelper commandHelper, PoomCIPipelineAPIClient client) {
         this.repository = repository;
+        this.repositoryUrl = String.format("git@github.com:%s.git", repository);
         this.commandHelper = commandHelper;
         this.client = client;
     }

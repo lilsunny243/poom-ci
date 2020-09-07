@@ -32,7 +32,7 @@ public class PropagationCandidates implements Function<RepositoryPropagationCand
         }
         try {
             return RepositoryPropagationCandidatesGetResponse.builder().status200(Status200.builder()
-                    .payload(new PropagationCandidatesProcessor(this.graphManager).candidates(request.repositoryId()))
+                    .payload(new PropagationCandidatesProcessor(this.graphManager).process(request.repositoryId()))
                     .build()).build();
         } catch (NoSuchRepositoryException e) {
             return RepositoryPropagationCandidatesGetResponse.builder().status404(Status404.builder().payload(Error.builder()

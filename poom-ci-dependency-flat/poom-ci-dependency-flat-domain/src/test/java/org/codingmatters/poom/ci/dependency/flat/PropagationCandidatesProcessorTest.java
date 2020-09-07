@@ -34,7 +34,7 @@ public class PropagationCandidatesProcessorTest {
         this.graphManager.index(A_REPO.withProduces(new ValueList.Builder().with(V2_MODULE).build()));
         this.graphManager.index(B_REPO.withDependencies(new ValueList.Builder().with(V1_MODULE).build()));
 
-        assertThat(this.processor.candidates(A_REPO.id()), is(arrayContaining(this.from(B_REPO))));
+        assertThat(this.processor.all(A_REPO.id()), is(arrayContaining(this.from(B_REPO))));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class PropagationCandidatesProcessorTest {
         this.graphManager.index(A_REPO.withProduces(new ValueList.Builder().with(V2_MODULE).build()));
         this.graphManager.index(B_REPO.withDependencies(new ValueList.Builder().with(V2_MODULE).build()));
 
-        assertThat(this.processor.candidates(A_REPO.id()), is(not(arrayContaining(this.from(B_REPO)))));
+        assertThat(this.processor.all(A_REPO.id()), is(not(arrayContaining(this.from(B_REPO)))));
     }
 
 

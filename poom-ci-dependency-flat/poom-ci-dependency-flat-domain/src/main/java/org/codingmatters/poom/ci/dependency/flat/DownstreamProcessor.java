@@ -5,7 +5,7 @@ import org.codingmatters.poom.ci.dependency.api.types.Repository;
 
 import java.util.*;
 
-public class DownstreamProcessor {
+public class DownstreamProcessor implements RelationProcessor{
     private final GraphManager graphManager;
 
     public DownstreamProcessor(GraphManager graphManager) {
@@ -27,5 +27,10 @@ public class DownstreamProcessor {
         }
 
         return result.toArray(new Repository[0]);
+    }
+
+    @Override
+    public Repository[] process(String repositoryId) throws NoSuchRepositoryException, GraphManagerException {
+        return this.downstream(repositoryId);
     }
 }

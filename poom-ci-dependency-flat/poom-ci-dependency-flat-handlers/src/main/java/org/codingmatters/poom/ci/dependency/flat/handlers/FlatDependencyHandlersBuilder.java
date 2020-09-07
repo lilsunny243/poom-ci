@@ -15,6 +15,7 @@ public class FlatDependencyHandlersBuilder extends PoomCIDependencyAPIHandlers.B
         this.repositoryDownstreamRepositoriesGetHandler(new RepositoryDownstreams(graphManager));
         this.repositoryJustNextDownstreamRepositoriesGetHandler(new RepositoryFirstLevelDownstream(graphManager));
         this.repositoryPropagationCandidatesGetHandler(new PropagationCandidates(graphManager));
+        this.repositoryJustNextPropagationCandidatesGetHandler(new PropagationCandidatesFirstLevel(graphManager));
         this.repositoryGraphGetHandler(new RepositoryGraphGet(graphManager));
     }
 }

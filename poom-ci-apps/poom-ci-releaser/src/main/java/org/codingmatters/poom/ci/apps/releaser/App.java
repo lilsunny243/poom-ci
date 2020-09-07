@@ -17,6 +17,10 @@ import java.io.PrintStream;
 public class App {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(App.class);
 
+    /**
+     * mvn exec:java -Dexec.mainClass=org.codingmatters.poom.ci.apps.releaser.App
+     * @param args
+     */
     public static void main(String[] args) {
         Arguments arguments = Arguments.from(args);
 
@@ -50,10 +54,9 @@ public class App {
             if(repository.get() == null) {
                 usageAndFail();
             }
-            String repositoryUrl = String.format("git@github.com:%s.git", repository.get());
 
             try {
-                TaskResult result = new ReleaseTask(repositoryUrl, repository.get(), commandHelper, client).call();
+                TaskResult result = new ReleaseTask(repository.get(), commandHelper, client).call();
                 if(result.exitStatus().equals(TaskResult.ExitStatus.SUCCESS)) {
                     System.out.println(result.message());
                     System.exit(0);
