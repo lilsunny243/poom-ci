@@ -104,6 +104,20 @@ mediaType: application/json
                   500:
                      body: Error
 
+      /propagation-candidates:
+            displayName: Repository Propagation Candidates
+            get:
+               responses:
+                  200:
+                     body: Repository[]
+                  400:
+                     body: Error
+                  404:
+                     body: Error
+                  500:
+                     body: Error
+
+
 /graph:
   displayName: repository graph
   get:
