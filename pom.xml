@@ -109,6 +109,12 @@
                 <type>pom</type>
             </dependency>
 
+            <dependency>
+                <groupId>com.fasterxml.woodstox</groupId>
+                <artifactId>woodstox-core</artifactId>
+                <version>6.0.3</version>
+            </dependency>
+
             <!--BOM-->
             <dependency>
                 <groupId>org.codingmatters.poom.ci</groupId>
