@@ -37,7 +37,7 @@ public class PropagationCandidatesProcessor implements RelationProcessor {
 
     public Repository[] firstLevel(String repositoryId) throws NoSuchRepositoryException, GraphManagerException {
         LinkedList<Repository> result = new LinkedList<>();
-        new RelationProcessorWalker(this.graphManager, this, (parent, downstream, cycleInduced) -> {
+        new RelationProcessorWalker(this.graphManager, repoId -> this.all(repoId), (parent, downstream, cycleInduced) -> {
             if(! cycleInduced) {
                 if(parent.id().equals(repositoryId)) {
                     result.add(downstream);
