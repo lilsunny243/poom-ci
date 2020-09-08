@@ -27,7 +27,7 @@ public class PropagationCandidatesProcessorTest {
             InMemoryRepositoryWithPropertyQuery.validating(DependsOnRelation.class)
     );
 
-    private final PropagationCandidatesProcessor processor = new PropagationCandidatesProcessor(this.graphManager);
+    private final PropagationCandidatesProcessor processor = new PropagationCandidatesProcessor(this.graphManager, PropagationCandidatesProcessor.Restriction.NONE);
 
     @Test
     public void givenRepositoryProducesAModule__whenARepositoryDependsOnAnotherVersion__thenARepositoryIsAPropagationCandidate() throws Exception {

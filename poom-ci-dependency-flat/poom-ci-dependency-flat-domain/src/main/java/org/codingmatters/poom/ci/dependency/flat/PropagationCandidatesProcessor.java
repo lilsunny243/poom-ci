@@ -16,9 +16,6 @@ public class PropagationCandidatesProcessor implements RelationProcessor {
     private final GraphManager graphManager;
     private final Restriction restriction;
 
-    public PropagationCandidatesProcessor(GraphManager graphManager) {
-        this(graphManager, Restriction.NONE);
-    }
     public PropagationCandidatesProcessor(GraphManager graphManager, Restriction restriction) {
         this.graphManager = graphManager;
         this.restriction = restriction;

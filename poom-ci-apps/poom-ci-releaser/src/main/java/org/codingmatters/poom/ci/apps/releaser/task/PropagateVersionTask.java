@@ -1,4 +1,4 @@
-package org.codingmatters.poom.ci.apps.releaser;
+package org.codingmatters.poom.ci.apps.releaser.task;
 
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
 import org.codingmatters.poom.ci.apps.releaser.task.TaskResult;

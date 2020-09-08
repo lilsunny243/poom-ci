@@ -32,7 +32,7 @@ public class PropagationCandidatesFirstLevel implements Function<RepositoryJustN
         }
         try {
             return RepositoryJustNextPropagationCandidatesGetResponse.builder().status200(Status200.builder()
-                    .payload(new PropagationCandidatesProcessor(this.graphManager).process(request.repositoryId()))
+                    .payload(new PropagationCandidatesProcessor(this.graphManager, PropagationCandidatesProcessor.Restriction.FIRST_LEVEL).process(request.repositoryId()))
                     .build()).build();
         } catch (NoSuchRepositoryException e) {
             return RepositoryJustNextPropagationCandidatesGetResponse.builder().status404(Status404.builder().payload(Error.builder()
