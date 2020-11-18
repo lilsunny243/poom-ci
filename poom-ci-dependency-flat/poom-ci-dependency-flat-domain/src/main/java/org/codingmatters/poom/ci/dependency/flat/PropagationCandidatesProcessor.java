@@ -39,7 +39,7 @@ public class PropagationCandidatesProcessor implements RelationProcessor {
         LinkedList<Repository> result = new LinkedList<>();
         new RelationProcessorWalker(this.graphManager, repoId -> this.all(repoId), (parent, downstream, cycleInduced) -> {
             if(! cycleInduced) {
-                if(parent.id().equals(repositoryId)) {
+                if(parent.id().equals(repositoryId)) {https://trello.com/c/hflny4it/41-bridge-corrections-api
                     result.add(downstream);
                 } else if(result.contains(downstream)) {
                     // downstream is downstream of a downstream, it is not a first level downstream

@@ -1,6 +1,8 @@
 package org.codingmatters.poom.ci.apps.releaser;
 
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
+import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
+import org.codingmatters.poom.ci.apps.releaser.maven.pom.ArtifactCoordinates;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,8 +20,8 @@ public class ReleaseTest {
 
     @Test
     public void givenExistingRepo__whenReleasing__thenReleased() throws Exception {
-        Release release = new Release(REPO_URL, new CommandHelper(line -> System.out.println(line), line -> System.err.println(line)));
-        String version = release.initiate();
+        Release release = new Release(REPO_URL, new PropagationContext(), new CommandHelper(line -> System.out.println(line), line -> System.err.println(line)));
+        ArtifactCoordinates version = release.initiate();
         System.out.println(version + " released");
     }
 }

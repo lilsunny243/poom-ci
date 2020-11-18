@@ -3,35 +3,40 @@ package org.codingmatters.poom.ci.apps.releaser.task;
 import org.codingmatters.poom.ci.apps.releaser.Release;
 import org.codingmatters.poom.ci.apps.releaser.RepositoryPipeline;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
-import org.codingmatters.poom.ci.apps.releaser.command.exception.CommandFailed;
+import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
+import org.codingmatters.poom.ci.apps.releaser.maven.pom.ArtifactCoordinates;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.services.support.date.UTC;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
-public class ReleaseTask implements Callable<TaskResult> {
+public class ReleaseTask implements Callable<ReleaseTaskResult> {
     private final String repository;
     private final String repositoryUrl;
+    private final PropagationContext propagationContext;
     private final CommandHelper commandHelper;
     private final PoomCIPipelineAPIClient client;
 
     public ReleaseTask(String repository, CommandHelper commandHelper, PoomCIPipelineAPIClient client) {
+        this(repository, new PropagationContext(), commandHelper, client);
+    }
+    public ReleaseTask(String repository, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client) {
         this.repository = repository;
         this.repositoryUrl = String.format("git@github.com:%s.git", repository);
+        this.propagationContext = propagationContext;
         this.commandHelper = commandHelper;
         this.client = client;
     }
 
     @Override
-    public TaskResult call() throws Exception {
+    public ReleaseTaskResult call() throws Exception {
         LocalDateTime start = UTC.now();
 
-        String releasedVersion = new Release(this.repositoryUrl, this.commandHelper).initiate();
+        ArtifactCoordinates releasedCoordinates = new Release(this.repositoryUrl, this.propagationContext, this.commandHelper).initiate();
         System.out.println("waiting for release pipeline to finish...");
 
         RepositoryPipeline pipeline = new RepositoryPipeline(this.repository, "master", this.client);
@@ -50,11 +55,11 @@ public class ReleaseTask implements Callable<TaskResult> {
         }
 
         if (pipe.get().status().exit().equals(Status.Exit.SUCCESS)) {
-            return new TaskResult(TaskResult.ExitStatus.SUCCESS, String.format("%s released to version %s", this.repository, releasedVersion));
+            return new ReleaseTaskResult(ReleaseTaskResult.ExitStatus.SUCCESS, String.format("%s released to version %s", this.repository, releasedCoordinates), releasedCoordinates);
         } else {
-            System.err.println("relese failed !!");
+            System.err.println("release failed !!");
             System.exit(1);
-            return new TaskResult(TaskResult.ExitStatus.FAILURE, String.format("%s release failed", this.repository));
+            return new ReleaseTaskResult(ReleaseTaskResult.ExitStatus.FAILURE, String.format("%s release failed", this.repository), null);
         }
     }
 }

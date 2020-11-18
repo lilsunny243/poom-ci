@@ -155,6 +155,15 @@ public class Pom {
         return version;
     }
 
+    public void writeTo(Writer writer) throws IOException {
+        try(Reader reader = this.source.reader()) {
+            char[] buffer = new char[1024];
+            for (int read = reader.read(buffer) ; read != -1 ; read = reader.read(buffer)) {
+                writer.write(buffer, 0, read);
+            }
+        }
+    }
+
 
     private Optional<String> rawPluginVersion(String groupId, String pluginId) {
         Optional<String> version = this.pluginManagementVersion(groupId, pluginId);

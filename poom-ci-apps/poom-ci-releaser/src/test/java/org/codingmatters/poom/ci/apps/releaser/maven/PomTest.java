@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.CharBuffer;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -207,6 +208,16 @@ public class PomTest {
         Pom pom = Pom.from(Thread.currentThread().getContextClassLoader().getResourceAsStream("poms/snapshot-dep-mgmt-property-pom.xml"));
 
         Pom.PomSource changedPomSource = pom.withDependencyVersion("org.codingmatters.test", "test-dep", "1.2.3");
+        try(Reader reader = changedPomSource.reader()) {
+            char[] buffer = new char[1024];
+            StringBuilder changedPom = new StringBuilder();
+            for(int read = reader.read(buffer); read != -1 ; read = reader.read(buffer)) {
+                changedPom.append(buffer, 0, read);
+            }
+            System.out.println("#######################################");
+            System.out.println(changedPom.toString());
+            System.out.println("#######################################");
+        }
 
         assertThat(new Pom(changedPomSource).dependencyVersion("org.codingmatters.test", "test-dep").get(), is("1.2.3"));
         assertThat(new Pom(changedPomSource).property("test-dep.version").get(), is("1.2.3"));

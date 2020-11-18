@@ -1,0 +1,7 @@
+---
+
+RepositoryGraph:
+  repositories:
+    $list: string
+  then:
+    $list: $RepositoryGraph
