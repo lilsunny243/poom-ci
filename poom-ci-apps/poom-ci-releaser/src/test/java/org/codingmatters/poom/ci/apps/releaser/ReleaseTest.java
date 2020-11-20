@@ -20,7 +20,12 @@ public class ReleaseTest {
 
     @Test
     public void givenExistingRepo__whenReleasing__thenReleased() throws Exception {
-        Release release = new Release(REPO_URL, new PropagationContext(), new CommandHelper(line -> System.out.println(line), line -> System.err.println(line)));
+        Release release = new Release(
+                REPO_URL,
+                new PropagationContext(),
+                new CommandHelper(line -> System.out.println(line), line -> System.err.println(line)),
+                new Workspace(this.dir.getRoot())
+        );
         ArtifactCoordinates version = release.initiate();
         System.out.println(version + " released");
     }

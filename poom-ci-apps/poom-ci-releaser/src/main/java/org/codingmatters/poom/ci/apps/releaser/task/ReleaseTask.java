@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.apps.releaser.task;
 
 import org.codingmatters.poom.ci.apps.releaser.Release;
 import org.codingmatters.poom.ci.apps.releaser.RepositoryPipeline;
+import org.codingmatters.poom.ci.apps.releaser.Workspace;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
 import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
 import org.codingmatters.poom.ci.apps.releaser.maven.pom.ArtifactCoordinates;
@@ -20,23 +21,25 @@ public class ReleaseTask implements Callable<ReleaseTaskResult> {
     private final PropagationContext propagationContext;
     private final CommandHelper commandHelper;
     private final PoomCIPipelineAPIClient client;
+    private final Workspace workspace;
 
-    public ReleaseTask(String repository, CommandHelper commandHelper, PoomCIPipelineAPIClient client) {
-        this(repository, new PropagationContext(), commandHelper, client);
+    public ReleaseTask(String repository, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
+        this(repository, new PropagationContext(), commandHelper, client, workspace);
     }
-    public ReleaseTask(String repository, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client) {
+    public ReleaseTask(String repository, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
         this.repository = repository;
         this.repositoryUrl = String.format("git@github.com:%s.git", repository);
         this.propagationContext = propagationContext;
         this.commandHelper = commandHelper;
         this.client = client;
+        this.workspace = workspace;
     }
 
     @Override
     public ReleaseTaskResult call() throws Exception {
         LocalDateTime start = UTC.now();
 
-        ArtifactCoordinates releasedCoordinates = new Release(this.repositoryUrl, this.propagationContext, this.commandHelper).initiate();
+        ArtifactCoordinates releasedCoordinates = new Release(this.repositoryUrl, this.propagationContext, this.commandHelper, this.workspace).initiate();
         System.out.println("waiting for release pipeline to finish...");
 
         RepositoryPipeline pipeline = new RepositoryPipeline(this.repository, "master", this.client);

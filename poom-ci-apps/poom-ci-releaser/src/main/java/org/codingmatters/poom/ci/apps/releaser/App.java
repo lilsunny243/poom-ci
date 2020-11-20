@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
 import org.codingmatters.poom.ci.apps.releaser.command.exception.CommandFailed;
 import org.codingmatters.poom.ci.apps.releaser.git.Git;
@@ -75,98 +76,107 @@ public class App {
                 pipelineUrl
         );
 
-        if(arguments.arguments().get(0).equals("release")) {
-            Arguments.OptionValue repository = arguments.option("repository");
-            if(! repository.isPresent()) {
-                usageAndFail(args);
-            }
-            if(repository.get() == null) {
-                usageAndFail(args);
-            }
-
-            try {
-                ReleaseTaskResult result = new ReleaseTask(repository.get(), commandHelper, client).call();
-                if(result.exitStatus().equals(ReleaseTaskResult.ExitStatus.SUCCESS)) {
-                    System.out.println(result.message());
-                    System.exit(0);
-                } else {
-                    System.err.println(result.message());
-                    System.exit(2);
+        Workspace workspace = Workspace.temporary();
+        try {
+            if (arguments.arguments().get(0).equals("release")) {
+                Arguments.OptionValue repository = arguments.option("repository");
+                if (!repository.isPresent()) {
+                    usageAndFail(args);
                 }
-            } catch (Exception e) {
-                log.error("failed executing release", e);
-                System.exit(3);
-            }
-        } else if(arguments.arguments().get(0).equals("release-graph")) {
-            if(arguments.argumentCount() < 1) {
-                usageAndFail(args);
-            }
-            try {
-                List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
-                System.out.println("Will release dependency graphs : " + descriptorList);
-                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "START", formattedRepositoryList(descriptorList), arguments.option("bearer"));
-
-                ExecutorService pool = Executors.newFixedThreadPool(10);
-                GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> new ReleaseTask(repository, context, commandHelper, client);
-
-                PropagationContext propagationContext = new PropagationContext();
-                for (RepositoryGraphDescriptor descriptor : descriptorList) {
-                    walkGraph(descriptor, propagationContext, pool, walkerTaskProvider);
+                if (repository.get() == null) {
+                    usageAndFail(args);
                 }
 
-                System.out.println("\n\n\n\n####################################################################################");
-                System.out.println("####################################################################################");
-                System.out.printf("Finished releasing graphs, released versions are :\n");
-                System.out.println(propagationContext.text());
-                System.out.println("####################################################################################");
-                System.out.println("####################################################################################\n\n");
-
-                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "DONE", propagationContext.text(), arguments.option("bearer"));
-                System.exit(0);
-            } catch (Exception e) {
-                log.error("failed executing release-graph", e);
-                notifyError(arguments.arguments().get(0), "FAILURE", e, arguments, commandHelper, jsonFactory, httpClientWrapper);
-                System.exit(3);
-            }
-        } else if(arguments.arguments().get(0).equals("propagate-versions")) {
-            if(arguments.argumentCount() < 1) {
-                usageAndFail(args);
-            }
-            try {
-                List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
-                System.out.println("Will propagate develop version for dependency graph : " + descriptorList);
-                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "START", formattedRepositoryList(descriptorList), arguments.option("bearer"));
-                ExecutorService pool = Executors.newFixedThreadPool(10);
-
-                GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> {
-                    String branch = "develop";
-                    if(arguments.option("branch").isPresent()) {
-                        branch = arguments.option("branch").get();
+                try {
+                    ReleaseTaskResult result = new ReleaseTask(repository.get(), commandHelper, client, workspace).call();
+                    if (result.exitStatus().equals(ReleaseTaskResult.ExitStatus.SUCCESS)) {
+                        System.out.println(result.message());
+                        System.exit(0);
+                    } else {
+                        System.err.println(result.message());
+                        System.exit(2);
                     }
-                    return new PropagateVersionsTask(repository, branch, context, commandHelper, client);
-                };
-
-                PropagationContext propagationContext = new PropagationContext();
-                for (RepositoryGraphDescriptor descriptor : descriptorList) {
-                    walkGraph(descriptor, propagationContext, pool, walkerTaskProvider);
+                } catch (Exception e) {
+                    log.error("failed executing release", e);
+                    System.exit(3);
                 }
+            } else if (arguments.arguments().get(0).equals("release-graph")) {
+                if (arguments.argumentCount() < 1) {
+                    usageAndFail(args);
+                }
+                try {
+                    List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
+                    System.out.println("Will release dependency graphs : " + descriptorList);
+                    notify(arguments.arguments().get(0), "START", formattedRepositoryList(descriptorList), httpClientWrapper, jsonFactory, commandHelper, arguments);
 
-                System.out.println("\n\n\n\n####################################################################################");
-                System.out.println("####################################################################################");
-                System.out.printf("Finished propagating versions, propagated versions are :\n");
-                System.out.println(propagationContext.text());
-                System.out.println("####################################################################################");
-                System.out.println("####################################################################################\n\n");
+                    ExecutorService pool = Executors.newFixedThreadPool(10);
+                    GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> new ReleaseTask(repository, context, commandHelper, client, workspace);
 
-                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "DONE", propagationContext.text(), arguments.option("bearer"));
-                System.exit(0);
-            } catch (Exception e) {
-                log.error("failed executing release-graph", e);
-                notifyError(arguments.arguments().get(0), "FAILURE", e, arguments, commandHelper, jsonFactory, httpClientWrapper);
-                System.exit(3);
+                    PropagationContext propagationContext = new PropagationContext();
+                    for (RepositoryGraphDescriptor descriptor : descriptorList) {
+                        walkGraph(descriptor, propagationContext, pool, walkerTaskProvider);
+                    }
+
+                    System.out.println("\n\n\n\n####################################################################################");
+                    System.out.println("####################################################################################");
+                    System.out.printf("Finished releasing graphs, released versions are :\n");
+                    System.out.println(propagationContext.text());
+                    System.out.println("####################################################################################");
+                    System.out.println("####################################################################################\n\n");
+
+                    notify(arguments.arguments().get(0), "DONE", propagationContext.text(), httpClientWrapper, jsonFactory, commandHelper, arguments);
+                    System.exit(0);
+                } catch (Exception e) {
+                    log.error("failed executing release-graph", e);
+                    notifyError(arguments.arguments().get(0), "FAILURE", e, arguments, commandHelper, jsonFactory, httpClientWrapper);
+                    System.exit(3);
+                }
+            } else if (arguments.arguments().get(0).equals("propagate-versions")) {
+                if (arguments.argumentCount() < 1) {
+                    usageAndFail(args);
+                }
+                try {
+                    List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
+                    System.out.println("Will propagate develop version for dependency graph : " + descriptorList);
+                    notify(arguments.arguments().get(0), "START", formattedRepositoryList(descriptorList), httpClientWrapper, jsonFactory, commandHelper, arguments);
+                    ExecutorService pool = Executors.newFixedThreadPool(10);
+
+                    GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> {
+                        String branch = "develop";
+                        if (arguments.option("branch").isPresent()) {
+                            branch = arguments.option("branch").get();
+                        }
+                        return new PropagateVersionsTask(repository, branch, context, commandHelper, client, workspace);
+                    };
+
+                    PropagationContext propagationContext = new PropagationContext();
+                    for (RepositoryGraphDescriptor descriptor : descriptorList) {
+                        walkGraph(descriptor, propagationContext, pool, walkerTaskProvider);
+                    }
+
+                    System.out.println("\n\n\n\n####################################################################################");
+                    System.out.println("####################################################################################");
+                    System.out.printf("Finished propagating versions, propagated versions are :\n");
+                    System.out.println(propagationContext.text());
+                    System.out.println("####################################################################################");
+                    System.out.println("####################################################################################\n\n");
+
+                    notify(arguments.arguments().get(0), "DONE", propagationContext.text(), httpClientWrapper, jsonFactory, commandHelper, arguments);
+                    System.exit(0);
+                } catch (Exception e) {
+                    log.error("failed executing release-graph", e);
+                    notifyError(arguments.arguments().get(0), "FAILURE", e, arguments, commandHelper, jsonFactory, httpClientWrapper);
+                    System.exit(3);
+                }
+            } else {
+                usageAndFail(args);
             }
-        } else {
-            usageAndFail(args);
+        } finally {
+            if(arguments.option("keep-workspace").isPresent()) {
+                System.out.println("workspace kept in : " + workspace.path());
+            } else {
+                workspace.delete();
+            }
         }
     }
 
@@ -175,7 +185,7 @@ public class App {
             e.printStackTrace(stream);
             stream.flush();
             stream.close();
-            notify(httpClientWrapper, jsonFactory, commandHelper, action, stage, out.toString(), arguments.option("bearer"));
+            notify(action, stage, out.toString(), httpClientWrapper, jsonFactory, commandHelper, arguments);
         } catch (IOException ioException) {
             log.warn("error notifying error...", ioException);
         }
@@ -264,14 +274,22 @@ public class App {
         where.println("      propagate versions in the repository graphs (version from preceding repos are propagated to following)");
         where.println("      --from   : using the from option, one can start propagating from one point in the graph");
         where.println("      --branch : by default, repos develop branch are used, one can change the branch using this option");
+        where.println("");
+        where.println("other options :");
+        where.println("    --notify-url changes the default notify url");
+        where.println("    --notify-bearer changes the default notify bearer");
     }
 
-    private static void notify(HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, CommandHelper commandHelper, String action, String stage, String message, Arguments.OptionValue bearerOption) throws IOException {
+    private static void notify(String action, String stage, String message, HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, CommandHelper commandHelper, Arguments arguments) throws IOException {
         String url = "https://api.flexio.io/httpin/my/in/5fb7be31a6a8c401ab4f4664";
         String bearer = "2379dfa2-4747-42c0-baa5-bca448426ef4";
-        if(bearerOption.isPresent()) {
-            bearer = bearerOption.get();
+        if(arguments.option("notify-bearer").isPresent()) {
+            bearer = arguments.option("notify-bearer").get();
         }
+        if(arguments.option("notify-url").isPresent()) {
+            url = arguments.option("notify-url").get();
+        }
+
         System.out.println("notifying...");
 
         Git git = new Git(new File("/tmp"), commandHelper);
@@ -286,11 +304,16 @@ public class App {
         } catch (CommandFailed e) {
             log.warn("failed getting username / email", e);
         }
-        httpClientWrapper.execute(new Request.Builder()
+        try(Response response = httpClientWrapper.execute(new Request.Builder()
                 .url(url)
                 .addHeader("Authorization", "Bearer: " + bearer)
                 .post(RequestBody.create(new ObjectMapper(jsonFactory).writeValueAsBytes(payload)))
-                .build());
+                .build())) {
+            if(response.code() != 200 && response.code() != 204) {
+                System.err.println("whlie notifying got status code " + response.code());
+                System.err.println("response was : " + response);
+            }
+        }
 
     }
 }

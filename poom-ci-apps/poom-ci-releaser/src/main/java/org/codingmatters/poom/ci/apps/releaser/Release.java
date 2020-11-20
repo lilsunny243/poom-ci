@@ -16,23 +16,25 @@ public class Release {
     private final String repositoryUrl;
     private final PropagationContext propagationContext;
     private final CommandHelper commandHelper;
+    private final Workspace workspace;
 
-    public Release(String repositoryUrl, PropagationContext propagationContext, CommandHelper commandHelper) {
+    public Release(String repositoryUrl, PropagationContext propagationContext, CommandHelper commandHelper, Workspace workspace) {
         this.repositoryUrl = repositoryUrl;
         this.propagationContext = propagationContext;
         this.commandHelper = commandHelper;
+        this.workspace = workspace;
     }
 
     public ArtifactCoordinates initiate() throws CommandFailed {
-        File workspace = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
-        workspace.mkdir();
+        File repoDir = workspace.mkdir(UUID.randomUUID().toString());
+        repoDir.mkdir();
 
-        GitRepository repository = new Git(workspace, this.commandHelper).clone(this.repositoryUrl);
-        FlexioFlow flow = new FlexioFlow(workspace, this.commandHelper);
+        GitRepository repository = new Git(repoDir, this.commandHelper).clone(this.repositoryUrl);
+        FlexioFlow flow = new FlexioFlow(repoDir, this.commandHelper);
         repository.checkout("master");
         repository.checkout("develop");
 
-        ArtifactCoordinates coordinates = this.readPom(workspace).project();
+        ArtifactCoordinates coordinates = this.readPom(repoDir).project();
 
         System.out.println("\n\n\n\n####################################################################################");
         System.out.printf("Starting release of %s with context :\n", coordinates.coodinates());
@@ -44,13 +46,13 @@ public class Release {
         repository.merge("master", "release auto merge");
         if(! this.propagationContext.iEmpty()) {
             try {
-                Pom currentPom = this.readPom(workspace);
+                Pom currentPom = this.readPom(repoDir);
                 Pom upgradedPom = this.propagationContext.applyTo(currentPom);
                 if(upgradedPom.changedFrom(currentPom)) {
                     System.out.println("\n\n####################################################################################");
                     System.out.println("Versions propagated, need to write and commit");
                     System.out.println("####################################################################################\n\n");
-                    this.writePom(workspace, upgradedPom);
+                    this.writePom(repoDir, upgradedPom);
                     repository.commit("propagating versions : \n" + this.propagationContext.text());
                 }
             } catch (IOException e) {

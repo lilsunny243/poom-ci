@@ -1,6 +1,7 @@
 package org.codingmatters.poom.ci.apps.releaser.task;
 
 import org.codingmatters.poom.ci.apps.releaser.RepositoryPipeline;
+import org.codingmatters.poom.ci.apps.releaser.Workspace;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
 import org.codingmatters.poom.ci.apps.releaser.command.exception.CommandFailed;
 import org.codingmatters.poom.ci.apps.releaser.flow.FlexioFlow;
@@ -29,18 +30,20 @@ public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
     private final PropagationContext propagationContext;
     private final CommandHelper commandHelper;
     private final PoomCIPipelineAPIClient client;
+    private final Workspace workspace;
 
 
-    public PropagateVersionsTask(String repository, String branch, CommandHelper commandHelper, PoomCIPipelineAPIClient client) {
-        this(repository, branch, new PropagationContext(), commandHelper, client);
+    public PropagateVersionsTask(String repository, String branch, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
+        this(repository, branch, new PropagationContext(), commandHelper, client, workspace);
     }
-    public PropagateVersionsTask(String repository, String branch, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client) {
+    public PropagateVersionsTask(String repository, String branch, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
         this.repository = repository;
         this.repositoryUrl = String.format("git@github.com:%s.git", repository);
         this.branch = branch;
         this.propagationContext = propagationContext;
         this.commandHelper = commandHelper;
         this.client = client;
+        this.workspace = workspace;
     }
 
     @Override
@@ -52,21 +55,21 @@ public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
             System.out.println(this.propagationContext.text());
             System.out.println("####################################################################################");
 //        1. checkout this.branch
-            File workspace = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
-            workspace.mkdir();
+            File repoDir = this.workspace.mkdir(UUID.randomUUID().toString());
+            repoDir.mkdir();
 
-            GitRepository repository = new Git(workspace, this.commandHelper).clone(this.repositoryUrl);
-            FlexioFlow flow = new FlexioFlow(workspace, this.commandHelper);
+            GitRepository repository = new Git(repoDir, this.commandHelper).clone(this.repositoryUrl);
+            FlexioFlow flow = new FlexioFlow(repoDir, this.commandHelper);
             repository.checkout(this.branch);
 
 //        1. read pom
-            Pom currentPom = this.readPom(workspace);
+            Pom currentPom = this.readPom(repoDir);
 //        2. upgrade parent, deps and plugins
             Pom upgradedPom = this.propagationContext.applyTo(currentPom);
 //            2.1. if propagationContext has updates
             if (upgradedPom.changedFrom(currentPom)) {
 //            2.2. commit and wait for build
-                this.writePom(workspace, upgradedPom);
+                this.writePom(repoDir, upgradedPom);
                 flow.commit("propagating versions : \n" + this.propagationContext.text());
                 this.waitForBuild(start);
             }
