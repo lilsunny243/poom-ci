@@ -72,9 +72,6 @@ public class App {
                 pipelineUrl
         );
 
-        System.out.println("Releaser version " + App.class.getPackage().getImplementationVersion());
-
-
         if(arguments.arguments().get(0).equals("release")) {
             Arguments.OptionValue repository = arguments.option("repository");
             if(! repository.isPresent()) {
@@ -115,7 +112,7 @@ public class App {
 
                 System.out.println("\n\n\n\n####################################################################################");
                 System.out.println("####################################################################################");
-                System.out.printf("Finished releaseing graphs, released versions are : :\n");
+                System.out.printf("Finished releasing graphs, released versions are :\n");
                 System.out.println(propagationContext.text());
                 System.out.println("####################################################################################");
                 System.out.println("####################################################################################\n\n");
@@ -146,6 +143,14 @@ public class App {
                 for (RepositoryGraphDescriptor descriptor : descriptorList) {
                     walkGraph(descriptor, propagationContext, pool, walkerTaskProvider);
                 }
+
+                System.out.println("\n\n\n\n####################################################################################");
+                System.out.println("####################################################################################");
+                System.out.printf("Finished propagating versions, propagated versions are :\n");
+                System.out.println(propagationContext.text());
+                System.out.println("####################################################################################");
+                System.out.println("####################################################################################\n\n");
+
                 System.exit(0);
             } catch (Exception e) {
                 log.error("failed executing release-graph", e);
@@ -205,6 +210,7 @@ public class App {
     }
 
     private static void usage(PrintStream where, String[] args) {
+        where.println("Usage :");
         where.println("   version");
         where.println("      prints the version");
         where.println("   help");
