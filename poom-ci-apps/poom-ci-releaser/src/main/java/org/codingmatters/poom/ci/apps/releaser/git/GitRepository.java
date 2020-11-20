@@ -35,6 +35,6 @@ public class GitRepository {
                 .directory(this.repository)
                 .command("git", "commit", "-am", message)
                 ;
-        this.commandHelper.exec(processBuilder, "git commit");
+        this.commandHelper.exec(processBuilder, "git commit -am \"" + message + "\"");
     }
 }

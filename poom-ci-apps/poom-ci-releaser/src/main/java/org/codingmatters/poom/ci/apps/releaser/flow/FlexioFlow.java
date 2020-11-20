@@ -39,4 +39,12 @@ public class FlexioFlow {
                 ;
         this.commandHelper.exec(processBuilder, "flexio-flow release finish -D");
     }
+
+    public void commit(String message) throws CommandFailed {
+        ProcessBuilder processBuilder = new ProcessBuilder()
+                .directory(this.repository)
+                .command("flexio-flow", "commit", "--message", message)
+                ;
+        this.commandHelper.exec(processBuilder, "flexio-flow commit --message \"" + message + "\"");
+    }
 }

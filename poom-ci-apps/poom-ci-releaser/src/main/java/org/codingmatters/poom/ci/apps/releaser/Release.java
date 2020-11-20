@@ -32,26 +32,44 @@ public class Release {
         repository.checkout("develop");
 
         ArtifactCoordinates coordinates = this.readPom(workspace).project();
-        System.out.println("releasing " + flow.version());
+
+        System.out.println("\n\n\n\n####################################################################################");
+        System.out.printf("Starting release of %s with context :\n", coordinates.coodinates());
+        System.out.println(this.propagationContext.text());
+        System.out.println("####################################################################################\n\n");
 
         flow.startRelease();
         String releaseVersion = flow.version();
         repository.merge("master", "release auto merge");
         if(! this.propagationContext.iEmpty()) {
-            System.out.println("####################################################################################");
-            System.out.println("Propagating versions from context :");
-            System.out.println(this.propagationContext.text());
-            System.out.println("####################################################################################");
             try {
-                this.writePom(workspace, this.propagationContext.applyTo(this.readPom(workspace)));
+                Pom currentPom = this.readPom(workspace);
+                Pom upgradedPom = this.propagationContext.applyTo(currentPom);
+                if(upgradedPom.changedFrom(currentPom)) {
+                    System.out.println("\n\n####################################################################################");
+                    System.out.println("Versions propagated, need to write and commit");
+                    System.out.println("####################################################################################\n\n");
+                    this.writePom(workspace, upgradedPom);
+                    repository.commit("propagating versions : \n" + this.propagationContext.text());
+                }
             } catch (IOException e) {
                 throw new CommandFailed("failed propagating versions", e);
             }
-            repository.commit("propagating versions from context");
         }
+
+        System.out.println("\n\n####################################################################################");
+        System.out.println("Ready for release...");
+        System.out.println("####################################################################################\n\n");
+
         flow.finishRelease();
 
-        return new ArtifactCoordinates(coordinates.getGroupId(), coordinates.getArtifactId(), releaseVersion);
+        ArtifactCoordinates result = new ArtifactCoordinates(coordinates.getGroupId(), coordinates.getArtifactId(), releaseVersion);
+
+        System.out.println("\n\n####################################################################################");
+        System.out.printf("%s released.\n", result.coodinates());
+        System.out.println("####################################################################################\n\n\n\n");
+
+        return result;
     }
 
     private Pom readPom(File workspace) throws CommandFailed {

@@ -18,11 +18,13 @@ public class GraphWalker implements Callable<GraphWalkResult> {
     }
 
     private final RepositoryGraphDescriptor repositoryGraph;
+    private final PropagationContext propagationContext;
     private final WalkerTaskProvider walkerTaskProvider;
     private final ExecutorService pool;
 
-    public GraphWalker(RepositoryGraphDescriptor repositoryGraph, WalkerTaskProvider walkerTaskProvider, ExecutorService pool) {
+    public GraphWalker(RepositoryGraphDescriptor repositoryGraph, PropagationContext propagationContext, WalkerTaskProvider walkerTaskProvider, ExecutorService pool) {
         this.repositoryGraph = repositoryGraph;
+        this.propagationContext = propagationContext;
         this.walkerTaskProvider = walkerTaskProvider;
         this.pool = pool;
     }
@@ -30,17 +32,16 @@ public class GraphWalker implements Callable<GraphWalkResult> {
     @Override
     public GraphWalkResult call() throws Exception {
         RepositoryGraph root = this.repositoryGraph.graph();
-        PropagationContext context = new PropagationContext();
-        Optional<GraphWalkResult> result = this.walk(root, context);
+        Optional<GraphWalkResult> result = this.walk(root);
         return result.orElseGet(() -> new GraphWalkResult(ReleaseTaskResult.ExitStatus.SUCCESS, "graph processed"));
     }
 
-    private Optional<GraphWalkResult> walk(RepositoryGraph root, PropagationContext context) throws ExecutionException, InterruptedException {
+    private Optional<GraphWalkResult> walk(RepositoryGraph root) throws ExecutionException, InterruptedException {
         if(root.opt().repositories().isPresent()) {
             for (String repository : root.repositories()) {
-                ReleaseTaskResult result = this.pool.submit(this.walkerTaskProvider.create(repository, context)).get();
+                ReleaseTaskResult result = this.pool.submit(this.walkerTaskProvider.create(repository, this.propagationContext)).get();
                 if (result.exitStatus().equals(ReleaseTaskResult.ExitStatus.SUCCESS)) {
-                    context.addPropagatedArtifact(result.releasedVersion());
+                    this.propagationContext.addPropagatedArtifact(result.releasedVersion());
                 } else {
                     return Optional.of(new GraphWalkResult(ReleaseTaskResult.ExitStatus.FAILURE, result.message()));
                 }
@@ -50,7 +51,7 @@ public class GraphWalker implements Callable<GraphWalkResult> {
         List<Future<GraphWalkResult>> subtasks = new LinkedList<>();
         if(root.opt().then().isPresent()) {
             for (RepositoryGraph graph : root.then()) {
-                subtasks.add(this.pool.submit(new GraphWalker(new RepositoryGraphDescriptor(graph), this.walkerTaskProvider, this.pool)));
+                subtasks.add(this.pool.submit(new GraphWalker(new RepositoryGraphDescriptor(graph), this.propagationContext, this.walkerTaskProvider, this.pool)));
             }
         }
 

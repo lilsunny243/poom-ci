@@ -212,6 +212,21 @@ public class Pom {
         return result.toString();
     }
 
+    public boolean changedFrom(Pom pom) throws IOException {
+        return ! pomAsString(this).equals(pomAsString(pom));
+    }
+
+    static private String pomAsString(Pom pom) throws IOException {
+        StringBuilder result = new StringBuilder();
+        try(Reader reader = pom.source.reader()) {
+            char[] buffer = new char[1024];
+            for(int read = reader.read(buffer) ; read != -1 ; read = reader.read(buffer)) {
+                result.append(buffer, 0, read);
+            }
+        }
+        return result.toString();
+    }
+
     @FunctionalInterface
     public interface PomSource {
         Reader reader() throws IOException;

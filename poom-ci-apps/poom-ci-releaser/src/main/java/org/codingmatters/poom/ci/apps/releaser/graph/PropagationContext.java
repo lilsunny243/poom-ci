@@ -11,11 +11,11 @@ public class PropagationContext {
 
     private final Map<String, ArtifactCoordinates> propagatedArtifactVersions = new LinkedHashMap<>();
 
-    public void addPropagatedArtifact(ArtifactCoordinates propagated) {
+    public synchronized void addPropagatedArtifact(ArtifactCoordinates propagated) {
         this.propagatedArtifactVersions.put(propagated.getGroupId() + ":" + propagated.getArtifactId(), propagated);
     }
 
-    public Pom applyTo(Pom pom) throws IOException {
+    public synchronized Pom applyTo(Pom pom) throws IOException {
         for (ArtifactCoordinates artifact : this.propagatedArtifactVersions.values()) {
             pom = this.propagate(artifact, pom);
         }
@@ -38,11 +38,11 @@ public class PropagationContext {
         return a1.getGroupId().equals(a2.getGroupId()) && a1.getArtifactId().equals(a2.getArtifactId());
     }
 
-    public boolean iEmpty() {
+    public synchronized boolean iEmpty() {
         return this.propagatedArtifactVersions.isEmpty();
     }
 
-    public String text() {
+    public synchronized String text() {
         StringBuilder result = new StringBuilder();
         for (ArtifactCoordinates coordinates : this.propagatedArtifactVersions.values()) {
             result.append(" - ")

@@ -1,0 +1,116 @@
+package org.codingmatters.poom.ci.apps.releaser.task;
+
+import org.codingmatters.poom.ci.apps.releaser.RepositoryPipeline;
+import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
+import org.codingmatters.poom.ci.apps.releaser.command.exception.CommandFailed;
+import org.codingmatters.poom.ci.apps.releaser.flow.FlexioFlow;
+import org.codingmatters.poom.ci.apps.releaser.git.Git;
+import org.codingmatters.poom.ci.apps.releaser.git.GitRepository;
+import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
+import org.codingmatters.poom.ci.apps.releaser.maven.Pom;
+import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
+import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
+import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
+import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.services.support.date.UTC;
+
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+
+public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
+    static private CategorizedLogger log = CategorizedLogger.getLogger(PropagateVersionsTask.class);
+
+    private final String repository;
+    private final String repositoryUrl;
+    private final String branch;
+    private final PropagationContext propagationContext;
+    private final CommandHelper commandHelper;
+    private final PoomCIPipelineAPIClient client;
+
+
+    public PropagateVersionsTask(String repository, String branch, CommandHelper commandHelper, PoomCIPipelineAPIClient client) {
+        this(repository, branch, new PropagationContext(), commandHelper, client);
+    }
+    public PropagateVersionsTask(String repository, String branch, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client) {
+        this.repository = repository;
+        this.repositoryUrl = String.format("git@github.com:%s.git", repository);
+        this.branch = branch;
+        this.propagationContext = propagationContext;
+        this.commandHelper = commandHelper;
+        this.client = client;
+    }
+
+    @Override
+    public ReleaseTaskResult call() throws Exception {
+        LocalDateTime start = UTC.now();
+        try {
+            System.out.println("####################################################################################");
+            System.out.printf("Propagating versions for %s/%s with context :\n", this.repository, this.branch);
+            System.out.println(this.propagationContext.text());
+            System.out.println("####################################################################################");
+//        1. checkout this.branch
+            File workspace = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
+            workspace.mkdir();
+
+            GitRepository repository = new Git(workspace, this.commandHelper).clone(this.repositoryUrl);
+            FlexioFlow flow = new FlexioFlow(workspace, this.commandHelper);
+            repository.checkout(this.branch);
+
+//        1. read pom
+            Pom currentPom = this.readPom(workspace);
+//        2. upgrade parent, deps and plugins
+            Pom upgradedPom = this.propagationContext.applyTo(currentPom);
+//            2.1. if propagationContext has updates
+            if (upgradedPom.changedFrom(currentPom)) {
+//            2.2. commit and wait for build
+                this.writePom(workspace, upgradedPom);
+                flow.commit("propagating versions : \n" + this.propagationContext.text());
+                this.waitForBuild(start);
+            }
+//        3. add coordinates to propagationContext
+            this.propagationContext.addPropagatedArtifact(currentPom.project());
+
+            return new ReleaseTaskResult(ReleaseTaskResult.ExitStatus.SUCCESS, "versions propagated to " + this.repository + "/" + this.branch, currentPom.project());
+        } catch (CommandFailed e) {
+
+            return new ReleaseTaskResult(ReleaseTaskResult.ExitStatus.FAILURE, "failure propagating versions to " + this.repository + "/" + this.branch, null);
+        }
+
+    }
+
+    private void waitForBuild(LocalDateTime start) throws IOException, InterruptedException {
+        RepositoryPipeline pipeline = new RepositoryPipeline(this.repository, this.branch, this.client);
+        Optional<Pipeline> pipe = pipeline.last(start);
+        if (!pipe.isPresent()) {
+            System.out.println("Waiting for build pipeline to start...");
+            do {
+                Thread.sleep(2000L);
+                pipe = pipeline.last(start);
+            } while (!pipe.isPresent());
+        }
+
+        while (!pipe.get().opt().status().run().orElse(Status.Run.PENDING).equals(Status.Run.DONE)) {
+            Thread.sleep(2000L);
+            pipe = pipeline.last(start);
+        }
+    }
+
+    private Pom readPom(File workspace) throws CommandFailed {
+        try(InputStream pomFile = new FileInputStream(new File(workspace, "pom.xml"))) {
+            return Pom.from(pomFile);
+        } catch (IOException e) {
+            throw new CommandFailed("failed reading pom for " + this.repositoryUrl, e);
+        }
+    }
+
+    private void writePom(File workspace, Pom pom) throws CommandFailed {
+        try(Writer writer = new FileWriter(new File(workspace, "pom.xml"))) {
+            pom.writeTo(writer);
+        } catch (IOException e) {
+            throw new CommandFailed("failed writing pom", e);
+        }
+    }
+}

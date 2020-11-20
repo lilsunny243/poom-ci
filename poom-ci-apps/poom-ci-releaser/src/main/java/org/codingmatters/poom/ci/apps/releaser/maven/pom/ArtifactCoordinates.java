@@ -63,4 +63,8 @@ public class ArtifactCoordinates {
                 ", version='" + version + '\'' +
                 '}';
     }
+
+    public String coodinates() {
+        return String.format("%s:%s:%s", this.getGroupId(), this.getArtifactId(), this.getVersion());
+    }
 }
