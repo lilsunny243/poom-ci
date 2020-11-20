@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
+import org.codingmatters.poom.ci.apps.releaser.command.exception.CommandFailed;
+import org.codingmatters.poom.ci.apps.releaser.git.Git;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalkResult;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalker;
 import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
@@ -23,10 +25,7 @@ import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -105,7 +104,7 @@ public class App {
             try {
                 List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                 System.out.println("Will release dependency graphs : " + descriptorList);
-                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), "DONE", formattedRepositoryList(descriptorList), arguments.option("bearer"));
+                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "DONE", formattedRepositoryList(descriptorList), arguments.option("bearer"));
 
                 ExecutorService pool = Executors.newFixedThreadPool(10);
                 GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> new ReleaseTask(repository, context, commandHelper, client);
@@ -122,7 +121,7 @@ public class App {
                 System.out.println("####################################################################################");
                 System.out.println("####################################################################################\n\n");
 
-                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), "DONE", propagationContext.text(), arguments.option("bearer"));
+                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "DONE", propagationContext.text(), arguments.option("bearer"));
                 System.exit(0);
             } catch (Exception e) {
                 log.error("failed executing release-graph", e);
@@ -135,7 +134,7 @@ public class App {
             try {
                 List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                 System.out.println("Will propagate develop version for dependency graph : " + descriptorList);
-                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), "DONE", formattedRepositoryList(descriptorList), arguments.option("bearer"));
+                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "DONE", formattedRepositoryList(descriptorList), arguments.option("bearer"));
                 ExecutorService pool = Executors.newFixedThreadPool(10);
 
                 GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> {
@@ -158,7 +157,7 @@ public class App {
                 System.out.println("####################################################################################");
                 System.out.println("####################################################################################\n\n");
 
-                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), "DONE", propagationContext.text(), arguments.option("bearer"));
+                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "DONE", propagationContext.text(), arguments.option("bearer"));
                 System.exit(0);
             } catch (Exception e) {
                 log.error("failed executing release-graph", e);
@@ -254,7 +253,7 @@ public class App {
         where.println("      --branch : by default, repos develop branch are used, one can change the branch using this option");
     }
 
-    private static void notify(HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, String action, String stage, String message, Arguments.OptionValue bearerOption) throws IOException {
+    private static void notify(HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, CommandHelper commandHelper, String action, String stage, String message, Arguments.OptionValue bearerOption) throws IOException {
         String url = "https://api.flexio.io/httpin/my/in/5fb7942fa6a8c401ab4f4663";
         String bearer = "d9969c28-a6f4-48d3-85e0-89d3c8ae4e93";
         if(bearerOption.isPresent()) {
@@ -262,11 +261,18 @@ public class App {
         }
         System.out.println("notifying...");
 
+        Git git = new Git(new File("/tmp"), commandHelper);
+
         Map<String, Object> payload = new HashMap<>();
         payload.put("action", action);
         payload.put("stage", stage);
         payload.put("message", message);
-
+        try {
+            payload.put("username", git.username());
+            payload.put("email", git.email());
+        } catch (CommandFailed e) {
+            log.warn("failed getting username / email", e);
+        }
         httpClientWrapper.execute(new Request.Builder()
                 .url(url)
                 .addHeader("Authorization", "Bearer: " + bearer)

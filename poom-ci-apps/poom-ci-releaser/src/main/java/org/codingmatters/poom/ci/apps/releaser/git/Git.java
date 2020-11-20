@@ -42,6 +42,23 @@ public class Git {
         return lines.length> 0 ? lines[0] : null;
     }
 
+    public String username() throws CommandFailed {
+        String[] lines = this.commandHelper.execWithStdout(
+                new ProcessBuilder("git", "config", "user.name").directory(workspace),
+                "git config user.name"
+        );
+        return lines.length> 0 ? lines[0] : null;
+    }
+
+    public String email() throws CommandFailed {
+        String[] lines = this.commandHelper.execWithStdout(
+                new ProcessBuilder("git", "config", "user.email").directory(workspace),
+                "git config user.name"
+        );
+        return lines.length> 0 ? lines[0] : null;
+    }
+
+
     public String checkoutSpec() throws CommandFailed {
         return String.format("git|%s|%s", this.remoteOrigin(), this.branch());
     }

@@ -29,6 +29,7 @@ public class Release {
 
         GitRepository repository = new Git(workspace, this.commandHelper).clone(this.repositoryUrl);
         FlexioFlow flow = new FlexioFlow(workspace, this.commandHelper);
+        repository.checkout("master");
         repository.checkout("develop");
 
         ArtifactCoordinates coordinates = this.readPom(workspace).project();
