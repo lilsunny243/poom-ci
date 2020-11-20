@@ -254,8 +254,8 @@ public class App {
     }
 
     private static void notify(HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, CommandHelper commandHelper, String action, String stage, String message, Arguments.OptionValue bearerOption) throws IOException {
-        String url = "https://api.flexio.io/httpin/my/in/5fb7942fa6a8c401ab4f4663";
-        String bearer = "d9969c28-a6f4-48d3-85e0-89d3c8ae4e93";
+        String url = "https://api.flexio.io/httpin/my/in/5fb7be31a6a8c401ab4f4664";
+        String bearer = "2379dfa2-4747-42c0-baa5-bca448426ef4";
         if(bearerOption.isPresent()) {
             bearer = bearerOption.get();
         }
