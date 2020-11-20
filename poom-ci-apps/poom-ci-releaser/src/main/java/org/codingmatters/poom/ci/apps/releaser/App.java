@@ -281,8 +281,8 @@ public class App {
     }
 
     private static void notify(String action, String stage, String message, HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, CommandHelper commandHelper, Arguments arguments) throws IOException {
-        String url = "https://api.flexio.io/httpin/my/in/5fb7be31a6a8c401ab4f4664";
-        String bearer = "2379dfa2-4747-42c0-baa5-bca448426ef4";
+        String url = "https://api.flexio.io/httpin/my/in/5fb7c9b2a6a8c401ab4f4665";
+        String bearer = "fd62b406-9ccd-4bb5-89a9-3868c395a15e";
         if(arguments.option("notify-bearer").isPresent()) {
             bearer = arguments.option("notify-bearer").get();
         }
@@ -306,7 +306,7 @@ public class App {
         }
         try(Response response = httpClientWrapper.execute(new Request.Builder()
                 .url(url)
-                .addHeader("Authorization", "Bearer: " + bearer)
+                .addHeader("Authorization", "Bearer " + bearer)
                 .post(RequestBody.create(new ObjectMapper(jsonFactory).writeValueAsBytes(payload)))
                 .build())) {
             if(response.code() != 200 && response.code() != 204) {
