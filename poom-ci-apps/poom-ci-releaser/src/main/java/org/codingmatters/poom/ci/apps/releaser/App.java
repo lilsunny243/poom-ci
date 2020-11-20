@@ -1,7 +1,6 @@
 package org.codingmatters.poom.ci.apps.releaser;
 
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -9,6 +8,7 @@ import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalkResult;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalker;
 import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
+import org.codingmatters.poom.ci.apps.releaser.graph.descriptors.RepositoryGraph;
 import org.codingmatters.poom.ci.apps.releaser.graph.descriptors.RepositoryGraphDescriptor;
 import org.codingmatters.poom.ci.apps.releaser.task.PropagateVersionsTask;
 import org.codingmatters.poom.ci.apps.releaser.task.ReleaseTask;
@@ -105,6 +105,7 @@ public class App {
             try {
                 List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                 System.out.println("Will release dependency graphs : " + descriptorList);
+                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), "DONE", formattedRepositoryList(descriptorList), arguments.option("bearer"));
 
                 ExecutorService pool = Executors.newFixedThreadPool(10);
                 GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> new ReleaseTask(repository, context, commandHelper, client);
@@ -121,7 +122,7 @@ public class App {
                 System.out.println("####################################################################################");
                 System.out.println("####################################################################################\n\n");
 
-                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), propagationContext, arguments.option("bearer"));
+                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), "DONE", propagationContext.text(), arguments.option("bearer"));
                 System.exit(0);
             } catch (Exception e) {
                 log.error("failed executing release-graph", e);
@@ -134,6 +135,7 @@ public class App {
             try {
                 List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                 System.out.println("Will propagate develop version for dependency graph : " + descriptorList);
+                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), "DONE", formattedRepositoryList(descriptorList), arguments.option("bearer"));
                 ExecutorService pool = Executors.newFixedThreadPool(10);
 
                 GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> {
@@ -156,7 +158,7 @@ public class App {
                 System.out.println("####################################################################################");
                 System.out.println("####################################################################################\n\n");
 
-                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), propagationContext, arguments.option("bearer"));
+                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), "DONE", propagationContext.text(), arguments.option("bearer"));
                 System.exit(0);
             } catch (Exception e) {
                 log.error("failed executing release-graph", e);
@@ -165,8 +167,28 @@ public class App {
         } else {
             usageAndFail(args);
         }
+    }
 
+    private static String formattedRepositoryList(List<RepositoryGraphDescriptor> descriptorList) {
+        StringBuilder result = new StringBuilder();
+        result.append("Repositories :");
+        for (RepositoryGraphDescriptor descriptor : descriptorList) {
+            appendRepos(result, descriptor.graph());
+        }
+        return result.toString();
+    }
 
+    private static void appendRepos(StringBuilder result, RepositoryGraph graph) {
+        if(graph.opt().repositories().isPresent()) {
+            for (String repository : graph.repositories()) {
+                result.append("\n   - ").append(repository);
+            }
+        }
+        if(graph.opt().then().isPresent()) {
+            for (RepositoryGraph repositoryGraph : graph.then()) {
+                appendRepos(result, repositoryGraph);
+            }
+        }
     }
 
     @NotNull
@@ -232,7 +254,7 @@ public class App {
         where.println("      --branch : by default, repos develop branch are used, one can change the branch using this option");
     }
 
-    private static void notify(HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, String action, PropagationContext propagationContext, Arguments.OptionValue bearerOption) throws IOException {
+    private static void notify(HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, String action, String stage, String message, Arguments.OptionValue bearerOption) throws IOException {
         String url = "https://api.flexio.io/httpin/my/in/5fb7942fa6a8c401ab4f4663";
         String bearer = "d9969c28-a6f4-48d3-85e0-89d3c8ae4e93";
         if(bearerOption.isPresent()) {
@@ -242,7 +264,8 @@ public class App {
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("action", action);
-        payload.put("message", propagationContext.text());
+        payload.put("stage", stage);
+        payload.put("message", message);
 
         httpClientWrapper.execute(new Request.Builder()
                 .url(url)
