@@ -104,7 +104,7 @@ public class App {
             try {
                 List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                 System.out.println("Will release dependency graphs : " + descriptorList);
-                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "DONE", formattedRepositoryList(descriptorList), arguments.option("bearer"));
+                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "START", formattedRepositoryList(descriptorList), arguments.option("bearer"));
 
                 ExecutorService pool = Executors.newFixedThreadPool(10);
                 GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> new ReleaseTask(repository, context, commandHelper, client);
@@ -125,6 +125,7 @@ public class App {
                 System.exit(0);
             } catch (Exception e) {
                 log.error("failed executing release-graph", e);
+                notifyError(arguments.arguments().get(0), "FAILURE", e, arguments, commandHelper, jsonFactory, httpClientWrapper);
                 System.exit(3);
             }
         } else if(arguments.arguments().get(0).equals("propagate-versions")) {
@@ -134,7 +135,7 @@ public class App {
             try {
                 List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                 System.out.println("Will propagate develop version for dependency graph : " + descriptorList);
-                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "DONE", formattedRepositoryList(descriptorList), arguments.option("bearer"));
+                notify(httpClientWrapper, jsonFactory, commandHelper, arguments.arguments().get(0), "START", formattedRepositoryList(descriptorList), arguments.option("bearer"));
                 ExecutorService pool = Executors.newFixedThreadPool(10);
 
                 GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> {
@@ -161,10 +162,22 @@ public class App {
                 System.exit(0);
             } catch (Exception e) {
                 log.error("failed executing release-graph", e);
+                notifyError(arguments.arguments().get(0), "FAILURE", e, arguments, commandHelper, jsonFactory, httpClientWrapper);
                 System.exit(3);
             }
         } else {
             usageAndFail(args);
+        }
+    }
+
+    private static void notifyError(String action, String stage, Exception e, Arguments arguments, CommandHelper commandHelper, JsonFactory jsonFactory, HttpClientWrapper httpClientWrapper) {
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream() ; PrintStream stream = new PrintStream(out)) {
+            e.printStackTrace(stream);
+            stream.flush();
+            stream.close();
+            notify(httpClientWrapper, jsonFactory, commandHelper, action, stage, out.toString(), arguments.option("bearer"));
+        } catch (IOException ioException) {
+            log.warn("error notifying error...", ioException);
         }
     }
 
