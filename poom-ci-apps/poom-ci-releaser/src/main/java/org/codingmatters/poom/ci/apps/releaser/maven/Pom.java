@@ -3,13 +3,14 @@ package org.codingmatters.poom.ci.apps.releaser.maven;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.codingmatters.poom.ci.apps.releaser.ProjectDescriptor;
 import org.codingmatters.poom.ci.apps.releaser.maven.pom.ArtifactCoordinates;
 import org.codingmatters.poom.ci.apps.releaser.maven.pom.Project;
 
 import java.io.*;
 import java.util.Optional;
 
-public class Pom {
+public class Pom implements ProjectDescriptor {
 
     static private ObjectMapper MAPPER = new XmlMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -29,6 +30,7 @@ public class Pom {
         return this.descriptor.getParent();
     }
 
+    @Override
     public ArtifactCoordinates project() {
         return this.descriptor;
     }
@@ -155,6 +157,7 @@ public class Pom {
         return version;
     }
 
+    @Override
     public void writeTo(Writer writer) throws IOException {
         try(Reader reader = this.source.reader()) {
             char[] buffer = new char[1024];
@@ -163,6 +166,23 @@ public class Pom {
             }
         }
     }
+
+    @Override
+    public ProjectDescriptor changeVersion(ArtifactCoordinates artifact) throws IOException {
+        Pom pom = this;
+        if(pom.parent() != null) {
+            if (artifact.matches(pom.parent())) {
+                pom = new Pom(pom.withParentVersion(artifact.getVersion()));
+            }
+        }
+        pom = new Pom(pom.withDependencyVersion(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion()));
+        pom = new Pom(pom.withPluginVersion(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion()));
+
+        return pom;
+    }
+
+
+
 
 
     private Optional<String> rawPluginVersion(String groupId, String pluginId) {
@@ -212,8 +232,18 @@ public class Pom {
         return result.toString();
     }
 
-    public boolean changedFrom(Pom pom) throws IOException {
-        return ! pomAsString(this).equals(pomAsString(pom));
+    @Override
+    public boolean changedFrom(ProjectDescriptor pom) throws IOException {
+        if(pom instanceof Pom) {
+            return ! pomAsString(this).equals(pomAsString((Pom) pom));
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public String defaultFilename() {
+        return "pom.xml";
     }
 
     static private String pomAsString(Pom pom) throws IOException {

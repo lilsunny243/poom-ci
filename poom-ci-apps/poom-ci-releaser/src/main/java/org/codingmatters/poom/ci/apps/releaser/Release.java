@@ -34,7 +34,7 @@ public class Release {
         repository.checkout("master");
         repository.checkout("develop");
 
-        ArtifactCoordinates coordinates = this.readPom(repoDir).project();
+        ArtifactCoordinates coordinates = this.readProjectDescriptor(repoDir).project();
 
         System.out.println("\n\n\n\n####################################################################################");
         System.out.printf("Starting release of %s with context :\n", coordinates.coodinates());
@@ -46,13 +46,13 @@ public class Release {
         repository.merge("master", "release auto merge");
         if(! this.propagationContext.iEmpty()) {
             try {
-                Pom currentPom = this.readPom(repoDir);
-                Pom upgradedPom = this.propagationContext.applyTo(currentPom);
+                ProjectDescriptor currentPom = this.readProjectDescriptor(repoDir);
+                ProjectDescriptor upgradedPom = this.propagationContext.applyTo(currentPom);
                 if(upgradedPom.changedFrom(currentPom)) {
                     System.out.println("\n\n####################################################################################");
                     System.out.println("Versions propagated, need to write and commit");
                     System.out.println("####################################################################################\n\n");
-                    this.writePom(repoDir, upgradedPom);
+                    this.writeProjectDescriptor(repoDir, upgradedPom);
                     repository.commit("propagating versions : \n" + this.propagationContext.text());
                 }
             } catch (IOException e) {
@@ -75,17 +75,21 @@ public class Release {
         return result;
     }
 
-    private Pom readPom(File workspace) throws CommandFailed {
-        try(InputStream pomFile = new FileInputStream(new File(workspace, "pom.xml"))) {
-            return Pom.from(pomFile);
-        } catch (IOException e) {
-            throw new CommandFailed("failed reading pom for " + this.repositoryUrl, e);
+    private ProjectDescriptor readProjectDescriptor(File workspace) throws CommandFailed {
+        if(new File(workspace, "pom.xml").exists()) {
+            try (InputStream pjDescFile = new FileInputStream(new File(workspace, "pom.xml"))) {
+                return Pom.from(pjDescFile);
+            } catch (IOException e) {
+                throw new CommandFailed("failed reading pom for " + this.repositoryUrl, e);
+            }
+        } else {
+            return null;
         }
     }
 
-    private void writePom(File workspace, Pom pom) throws CommandFailed {
-        try(Writer writer = new FileWriter(new File(workspace, "pom.xml"))) {
-            pom.writeTo(writer);
+    private void writeProjectDescriptor(File workspace, ProjectDescriptor projectDescriptor) throws CommandFailed {
+        try(Writer writer = new FileWriter(new File(workspace, projectDescriptor.defaultFilename()))) {
+            projectDescriptor.writeTo(writer);
         } catch (IOException e) {
             throw new CommandFailed("failed writing pom", e);
         }

@@ -1,5 +1,6 @@
 package org.codingmatters.poom.ci.apps.releaser.task;
 
+import org.codingmatters.poom.ci.apps.releaser.ProjectDescriptor;
 import org.codingmatters.poom.ci.apps.releaser.RepositoryPipeline;
 import org.codingmatters.poom.ci.apps.releaser.Workspace;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
@@ -63,13 +64,13 @@ public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
             repository.checkout(this.branch);
 
 //        1. read pom
-            Pom currentPom = this.readPom(repoDir);
+            ProjectDescriptor currentPom = this.readProjectDescriptor(repoDir);
 //        2. upgrade parent, deps and plugins
-            Pom upgradedPom = this.propagationContext.applyTo(currentPom);
+            ProjectDescriptor upgradedPom = this.propagationContext.applyTo(currentPom);
 //            2.1. if propagationContext has updates
             if (upgradedPom.changedFrom(currentPom)) {
 //            2.2. commit and wait for build
-                this.writePom(repoDir, upgradedPom);
+                this.writeProjectDescriptor(repoDir, upgradedPom);
                 flow.commit("propagating versions : \n" + this.propagationContext.text());
                 this.waitForBuild(start);
             }
@@ -101,17 +102,21 @@ public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
         }
     }
 
-    private Pom readPom(File workspace) throws CommandFailed {
-        try(InputStream pomFile = new FileInputStream(new File(workspace, "pom.xml"))) {
-            return Pom.from(pomFile);
-        } catch (IOException e) {
-            throw new CommandFailed("failed reading pom for " + this.repositoryUrl, e);
+    private ProjectDescriptor readProjectDescriptor(File workspace) throws CommandFailed {
+        if(new File(workspace, "pom.xml").exists()) {
+            try (InputStream pjDescFile = new FileInputStream(new File(workspace, "pom.xml"))) {
+                return Pom.from(pjDescFile);
+            } catch (IOException e) {
+                throw new CommandFailed("failed reading pom for " + this.repositoryUrl, e);
+            }
+        } else {
+            return null;
         }
     }
 
-    private void writePom(File workspace, Pom pom) throws CommandFailed {
-        try(Writer writer = new FileWriter(new File(workspace, "pom.xml"))) {
-            pom.writeTo(writer);
+    private void writeProjectDescriptor(File workspace, ProjectDescriptor projectDescriptor) throws CommandFailed {
+        try(Writer writer = new FileWriter(new File(workspace, projectDescriptor.defaultFilename()))) {
+            projectDescriptor.writeTo(writer);
         } catch (IOException e) {
             throw new CommandFailed("failed writing pom", e);
         }

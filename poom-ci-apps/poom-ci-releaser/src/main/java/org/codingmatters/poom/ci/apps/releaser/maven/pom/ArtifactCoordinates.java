@@ -67,4 +67,8 @@ public class ArtifactCoordinates {
     public String coodinates() {
         return String.format("%s:%s:%s", this.getGroupId(), this.getArtifactId(), this.getVersion());
     }
+
+    public boolean matches(ArtifactCoordinates a) {
+        return this.getGroupId().equals(a.getGroupId()) && this.getArtifactId().equals(a.getArtifactId());
+    }
 }
