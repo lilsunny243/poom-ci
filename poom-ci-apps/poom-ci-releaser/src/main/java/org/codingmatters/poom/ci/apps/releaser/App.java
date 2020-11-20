@@ -43,13 +43,16 @@ public class App {
     public static void main(String[] args) {
         Arguments arguments = Arguments.from(args);
 
-        if(arguments.argumentCount() < 1) {
-            usageAndFail(args);
-        }
-
-        if(arguments.arguments().get(0).equals("version")) {
+        if(arguments.argumentCount() >= 1 && arguments.arguments().get(0).equals("version")) {
             System.out.println(App.class.getPackage().getImplementationVersion());
             System.exit(0);
+        }
+
+        System.out.println("Releaser version : " + App.class.getPackage().getImplementationVersion());
+        System.out.println("Called with : " + (args == null ? "" : Arrays.stream(args).collect(Collectors.joining(" "))));
+
+        if(arguments.argumentCount() < 1) {
+            usageAndFail(args);
         }
 
         if(arguments.arguments().get(0).equals("help")) {
@@ -68,6 +71,8 @@ public class App {
                 jsonFactory,
                 pipelineUrl
         );
+
+        System.out.println("Releaser version " + App.class.getPackage().getImplementationVersion());
 
 
         if(arguments.arguments().get(0).equals("release")) {
@@ -200,8 +205,6 @@ public class App {
     }
 
     private static void usage(PrintStream where, String[] args) {
-        where.println("Releaser version : " + App.class.getPackage().getImplementationVersion());
-        where.println("Called with : " + args == null ? "" : Arrays.stream(args).collect(Collectors.joining(" ")));
         where.println("   version");
         where.println("      prints the version");
         where.println("   help");
