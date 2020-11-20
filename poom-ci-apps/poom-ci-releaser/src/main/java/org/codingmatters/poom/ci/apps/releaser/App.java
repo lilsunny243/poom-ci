@@ -47,6 +47,11 @@ public class App {
             usageAndFail(args);
         }
 
+        if(arguments.arguments().get(0).equals("version")) {
+            System.out.println(App.class.getPackage().getImplementationVersion());
+            System.exit(0);
+        }
+
         if(arguments.arguments().get(0).equals("help")) {
             usage(System.out, args);
             System.exit(0);
@@ -195,7 +200,10 @@ public class App {
     }
 
     private static void usage(PrintStream where, String[] args) {
+        where.println("Releaser version : " + App.class.getPackage().getImplementationVersion());
         where.println("Called with : " + args == null ? "" : Arrays.stream(args).collect(Collectors.joining(" ")));
+        where.println("   version");
+        where.println("      prints the version");
         where.println("   help");
         where.println("      prints this usage message");
         where.println("   release --repository <repository, i.e. flexiooss/poom-ci>");
