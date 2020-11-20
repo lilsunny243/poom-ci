@@ -1,6 +1,10 @@
 package org.codingmatters.poom.ci.apps.releaser;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalkResult;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalker;
@@ -14,6 +18,7 @@ import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIRequesterClien
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Arguments;
 import org.codingmatters.poom.services.support.Env;
+import org.codingmatters.rest.api.client.okhttp.HttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
 import org.jetbrains.annotations.NotNull;
@@ -22,9 +27,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -66,8 +69,9 @@ public class App {
         String pipelineUrl = Env.optional("PIPELINES_URL")
                 .orElseGet(() -> new Env.Var("https://pipelines.ci.flexio.io/pipelines")).asString() ;
 
+        HttpClientWrapper httpClientWrapper = OkHttpClientWrapper.build();
         PoomCIPipelineAPIClient client = new PoomCIPipelineAPIRequesterClient(
-                new OkHttpRequesterFactory(OkHttpClientWrapper.build(), () -> pipelineUrl),
+                new OkHttpRequesterFactory(httpClientWrapper, () -> pipelineUrl),
                 jsonFactory,
                 pipelineUrl
         );
@@ -117,6 +121,7 @@ public class App {
                 System.out.println("####################################################################################");
                 System.out.println("####################################################################################\n\n");
 
+                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), propagationContext, arguments.option("bearer"));
                 System.exit(0);
             } catch (Exception e) {
                 log.error("failed executing release-graph", e);
@@ -151,6 +156,7 @@ public class App {
                 System.out.println("####################################################################################");
                 System.out.println("####################################################################################\n\n");
 
+                notify(httpClientWrapper, jsonFactory, arguments.arguments().get(0), propagationContext, arguments.option("bearer"));
                 System.exit(0);
             } catch (Exception e) {
                 log.error("failed executing release-graph", e);
@@ -224,5 +230,25 @@ public class App {
         where.println("      propagate versions in the repository graphs (version from preceding repos are propagated to following)");
         where.println("      --from   : using the from option, one can start propagating from one point in the graph");
         where.println("      --branch : by default, repos develop branch are used, one can change the branch using this option");
+    }
+
+    private static void notify(HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, String action, PropagationContext propagationContext, Arguments.OptionValue bearerOption) throws IOException {
+        String url = "https://api.flexio.io/httpin/my/in/5fb7942fa6a8c401ab4f4663";
+        String bearer = "d9969c28-a6f4-48d3-85e0-89d3c8ae4e93";
+        if(bearerOption.isPresent()) {
+            bearer = bearerOption.get();
+        }
+        System.out.println("notifying...");
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("action", action);
+        payload.put("message", propagationContext.text());
+
+        httpClientWrapper.execute(new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer: " + bearer)
+                .post(RequestBody.create(new ObjectMapper(jsonFactory).writeValueAsBytes(payload)))
+                .build());
+
     }
 }
