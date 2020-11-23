@@ -17,12 +17,28 @@ public class Pom implements ProjectDescriptor {
     private final PomSource source;
     private final Project descriptor;
     private final PomFragments fragments;
+    private final ArtifactCoordinates project;
 
     public Pom(PomSource source) throws IOException {
         this.source = source;
         this.fragments = new PomFragments(source);
         try(Reader reader = this.source.reader()) {
             this.descriptor = MAPPER.readValue(reader, Project.class);
+
+            String groupId = null;
+            if(this.descriptor.getGroupId() != null) {
+                groupId = this.descriptor.getGroupId();
+            } else if(this.descriptor.getParent() != null) {
+                groupId = this.descriptor.getParent().getGroupId();
+            }
+            String version = null;
+            if(this.descriptor.getVersion() != null) {
+                version = this.descriptor.getVersion();
+            } else if(this.descriptor.getParent() != null) {
+                version = this.descriptor.getParent().getVersion();
+            }
+
+            this.project = new ArtifactCoordinates(groupId, this.descriptor.getArtifactId(), version);
         }
     }
 
