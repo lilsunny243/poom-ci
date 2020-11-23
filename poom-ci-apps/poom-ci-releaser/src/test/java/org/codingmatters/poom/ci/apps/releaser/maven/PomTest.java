@@ -345,15 +345,12 @@ public class PomTest {
         assertThat(new Pom(changedPomSource).property("test-plugin.version").get(), is("1.2.3"));
     }
 
+    @Test
+    public void givenRealPom__whenNoGroupIp__thenParentGroiupIdUsedInstead() throws Exception {
+        Pom pom = Pom.from(Thread.currentThread().getContextClassLoader().getResourceAsStream("poms/poomjobs-pom.xml"));
 
-
-
-
-
-
-
-
-
+        assertThat(pom.project().getGroupId(), is("org.codingmatters.poom"));
+    }
 
     private String content(String resource) throws IOException {
         try(Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream(resource))) {

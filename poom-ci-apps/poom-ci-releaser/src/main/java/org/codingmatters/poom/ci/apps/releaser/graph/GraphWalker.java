@@ -59,7 +59,7 @@ public class GraphWalker implements Callable<GraphWalkResult> {
         StringBuilder failureMessages = new StringBuilder();
         for (Future<GraphWalkResult> subtask : subtasks) {
             GraphWalkResult result = subtask.get();
-            if(! result.exitStatus().equals(ReleaseTaskResult.ExitStatus.FAILURE)) {
+            if(! result.exitStatus().equals(ReleaseTaskResult.ExitStatus.SUCCESS    )) {
                 failures = true;
                 failureMessages.append("- ").append(result.message()).append("\n");
             }

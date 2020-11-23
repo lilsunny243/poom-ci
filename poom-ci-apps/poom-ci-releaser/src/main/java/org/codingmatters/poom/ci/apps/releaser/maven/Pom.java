@@ -48,7 +48,7 @@ public class Pom implements ProjectDescriptor {
 
     @Override
     public ArtifactCoordinates project() {
-        return this.descriptor;
+        return this.project;
     }
 
     public PomSource withVersion(String newVersion) throws IOException {

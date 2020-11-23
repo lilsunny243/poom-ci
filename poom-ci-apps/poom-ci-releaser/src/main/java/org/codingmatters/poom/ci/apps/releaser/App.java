@@ -249,7 +249,7 @@ public class App {
         if(result.exitStatus().equals(ReleaseTaskResult.ExitStatus.SUCCESS)) {
             System.out.println(result.message());
         } else {
-            System.err.println(result.message());
+            System.err.println(result);
             System.exit(2);
         }
     }
@@ -314,6 +314,5 @@ public class App {
                 System.err.println("response was : " + response);
             }
         }
-
     }
 }
