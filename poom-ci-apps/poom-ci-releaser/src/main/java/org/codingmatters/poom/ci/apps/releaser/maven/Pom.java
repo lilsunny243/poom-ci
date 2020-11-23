@@ -242,6 +242,11 @@ public class Pom implements ProjectDescriptor {
     }
 
     @Override
+    public Reader reader() throws IOException {
+        return this.source.reader();
+    }
+
+    @Override
     public String defaultFilename() {
         return "pom.xml";
     }

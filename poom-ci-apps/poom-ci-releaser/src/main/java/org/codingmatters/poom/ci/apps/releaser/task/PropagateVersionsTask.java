@@ -9,6 +9,7 @@ import org.codingmatters.poom.ci.apps.releaser.flow.FlexioFlow;
 import org.codingmatters.poom.ci.apps.releaser.git.Git;
 import org.codingmatters.poom.ci.apps.releaser.git.GitRepository;
 import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
+import org.codingmatters.poom.ci.apps.releaser.hb.JsPackage;
 import org.codingmatters.poom.ci.apps.releaser.maven.Pom;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
@@ -106,6 +107,13 @@ public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
         if(new File(workspace, "pom.xml").exists()) {
             try (InputStream pjDescFile = new FileInputStream(new File(workspace, "pom.xml"))) {
                 return Pom.from(pjDescFile);
+            } catch (IOException e) {
+                throw new CommandFailed("failed reading pom for " + this.repositoryUrl, e);
+            }
+        } else
+        if(new File(workspace, "package.json").exists()) {
+            try (InputStream pjDescFile = new FileInputStream(new File(workspace, "package.json"))) {
+                return JsPackage.read(pjDescFile);
             } catch (IOException e) {
                 throw new CommandFailed("failed reading pom for " + this.repositoryUrl, e);
             }
