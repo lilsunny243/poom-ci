@@ -12,24 +12,30 @@ import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Arguments;
 import org.codingmatters.rest.api.client.okhttp.HttpClientWrapper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Notifier {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(Notifier.class);
 
-    static public Notifier fromArguments(Arguments arguments) {
-        String url = "https://api.flexio.io/httpin/my/in/5fb7c9b2a6a8c401ab4f4665";
-        String bearer = "fd62b406-9ccd-4bb5-89a9-3868c395a15e";
+    public static final String DEFAULT_URL = "https://api.flexio.io/httpin/my/in/5fb7c9b2a6a8c401ab4f4665";
+    public static final String DEFAULT_BEARER = "fd62b406-9ccd-4bb5-89a9-3868c395a15e";
+
+    static public Notifier fromArguments(HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, CommandHelper commandHelper, Arguments arguments) {
+        String url = DEFAULT_URL;
+        String bearer = DEFAULT_BEARER;
+
         if(arguments.option("notify-bearer").isPresent()) {
             bearer = arguments.option("notify-bearer").get();
         }
         if(arguments.option("notify-url").isPresent()) {
             url = arguments.option("notify-url").get();
         }
-        return null;
+        return new Notifier(httpClientWrapper, jsonFactory, commandHelper, url, bearer);
     }
 
     private final HttpClientWrapper httpClientWrapper;
@@ -46,9 +52,7 @@ public class Notifier {
         this.bearer = bearer;
     }
 
-    public void notify(String action, String stage, String message, Arguments arguments) throws IOException {
-
-
+    public void notify(String action, String stage, String message) throws IOException {
         System.out.println("notifying...");
 
         Git git = new Git(new File("/tmp"), commandHelper);
@@ -72,6 +76,17 @@ public class Notifier {
                 System.err.println("whlie notifying got status code " + response.code());
                 System.err.println("response was : " + response);
             }
+        }
+    }
+
+    public void notifyError(String action, String stage, Exception e) {
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream(); PrintStream stream = new PrintStream(out)) {
+            e.printStackTrace(stream);
+            stream.flush();
+            stream.close();
+            this.notify(action, stage, out.toString());
+        } catch (IOException ioException) {
+            log.warn("error notifying error...", ioException);
         }
     }
 }
