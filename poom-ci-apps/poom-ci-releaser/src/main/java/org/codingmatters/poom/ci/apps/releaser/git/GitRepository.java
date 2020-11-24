@@ -22,10 +22,19 @@ public class GitRepository {
         this.commandHelper.exec(processBuilder, "git checkout " + branch);
     }
 
-    public void merge(String withBranch, String message) {
+    public void merge(String withBranch, String message) throws CommandFailed {
         ProcessBuilder processBuilder = new ProcessBuilder()
                 .directory(this.repository)
                 .command("git", "merge", withBranch, "-m", message)
                 ;
+        this.commandHelper.exec(processBuilder, "git merge " + withBranch);
+    }
+
+    public void commit(String message) throws CommandFailed {
+        ProcessBuilder processBuilder = new ProcessBuilder()
+                .directory(this.repository)
+                .command("git", "commit", "-am", message)
+                ;
+        this.commandHelper.exec(processBuilder, "git commit -am \"" + message + "\"");
     }
 }

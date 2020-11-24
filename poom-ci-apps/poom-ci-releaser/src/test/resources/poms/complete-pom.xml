@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.codingmatters.poom</groupId>
+        <artifactId>poom-services</artifactId>
+        <version>1.40.0</version>
+    </parent>
+
+    <groupId>org.codingmatters.poom.ci</groupId>
+    <artifactId>poom-ci</artifactId>
+    <version>2.9.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Poor Man's CI</name>
+    <description>Continuous Integration Using Poomjobs</description>
+    <url>https://github.com/flexiooss/poom-ci</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Nel Taurisson</name>
+            <organization>Flexio</organization>
+            <organizationUrl>http://www.flexio.fr</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:flexiooss/poom-ci</connection>
+        <developerConnection>scm:git:git@github.com:flexiooss/poom-ci.git</developerConnection>
+        <url>git@github.com:flexiooss/poom-ci.git</url>
+    </scm>
+
+    <repositories>
+        <repository>
+            <id>codingmatters-snapshots</id>
+            <url>http://maven.ci.flexio.io:8080/repository/codingmatters-snapshots/</url>
+            <releases><enabled>false</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>codingmatters-releases</id>
+            <url>http://maven.ci.flexio.io:8080/repository/codingmatters-releases/</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+    </repositories>
+
+    <modules>
+        <module>poom-ci-triggers</module>
+        <module>poom-ci-stages</module>
+        <module>poom-ci-github-webhook</module>
+        <module>poom-ci-pipeline-api</module>
+        <module>poom-ci-pipeline-api-spec</module>
+        <module>poom-ci-pipeline-service</module>
+        <module>poom-ci-pipeline-api-client</module>
+        <module>poom-ci-runners</module>
+        <module>poom-ci-ciphering</module>
+
+        <module>poom-ci-dependency-api-spec</module>
+        <module>poom-ci-dependency-api</module>
+        <module>poom-ci-dependency-client</module>
+        <module>poom-ci-dependency-processor</module>
+        <module>poom-ci-dependency-flat</module>
+
+        <module>poom-ci-deployment</module>
+        <module>poom-ci-service-bundle</module>
+        <module>poom-ci-utilities</module>
+        <module>poom-pack-composer</module>
+
+        <module>poom-ci-apps</module>
+    </modules>
+
+    <properties>
+        <flexio-commons.version>1.34.0</flexio-commons.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.codingmatters.poom</groupId>
+            <artifactId>poom-services-logging</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.codingmatters.poom</groupId>
+                <artifactId>poomjobs</artifactId>
+                <version>1.37.0</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>io.flexio.commons</groupId>
+                <artifactId>flexio-commons</artifactId>
+                <version>${flexio-commons.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <!--BOM-->
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-pack-composer-api</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-pack-composer-api-spec</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-pack-composer-client</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-pack-composer-service</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-stages</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-triggers</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-github-webhook</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-pipeline-api-spec</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-pipeline-api</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-pipeline-service</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-pipeline-api-client</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-ciphering</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-deployment</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-dependency-api-spec</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-dependency-api</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-dependency-client</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-utilities</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-utilities</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+                <classifier>uber</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-dependency-processor</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci</groupId>
+                <artifactId>poom-ci-service-bundle</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codingmatters.poom.ci.dependency.flat</groupId>
+                <artifactId>poom-ci-dependency-flat-domain</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom.ci.dependency.flat</groupId>
+                <artifactId>poom-ci-dependency-flat-handlers</artifactId>
+                <version>2.9.0-SNAPSHOT</version>
+            </dependency>
+            <!--// BOM-->
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.flexio.io</groupId>
+                    <artifactId>flexio-mongo-io-maven-plugin</artifactId>
+                    <version>${flexio-commons.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

@@ -1,0 +1,7 @@
+{
+  "name":"@flexio-oss/hotballoon",
+  "version":"0.4.2-dev",
+  "devDependencies": {
+    "@flexio-corp/component-commons-bundle": "1.0.0"
+  }
+}

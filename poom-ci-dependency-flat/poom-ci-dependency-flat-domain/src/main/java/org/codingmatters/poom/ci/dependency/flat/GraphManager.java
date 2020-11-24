@@ -178,4 +178,16 @@ public class GraphManager {
         ).build();
     }
 
+    public org.codingmatters.poom.ci.dependency.api.types.Repository[] dependentOnSpecRepositories(Module module) {
+        return RepositoryIterator.searchStreamed(this.dependsOnRelation, this.relatedToModuleSpecWithDifferentVersion(module), this.pageSize)
+                .map(rel -> rel.value().repository())
+                .toArray(size -> new org.codingmatters.poom.ci.dependency.api.types.Repository[size])
+                ;
+    }
+
+    public PropertyQuery relatedToModuleSpecWithDifferentVersion(Module module) {
+        return PropertyQuery.builder().filter(
+                String.format("module.spec == '%s' && module.version != '%s'", module.spec(), module.version())
+        ).build();
+    }
 }

@@ -1,0 +1,9 @@
+{
+  "name": "@flexio-corp/js-hotballoon-parent",
+  "version": "1.4.0",
+  "dependencies": {
+    "@flexio-oss/js-style-bundle": "1.4.0-dev",
+    "@flexio-oss/hotballoon": "0.7.0",
+    "@flexio-oss/js-commons-bundle": "1.3.0"
+  }
+}

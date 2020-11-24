@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.codingmatters.poom</groupId>
+        <artifactId>poom-services</artifactId>
+        <version>1.53.0</version>
+    </parent>
+
+    <artifactId>poomjobs</artifactId>
+    <version>1.52.0-SNAPSHOT</version>
+
+    <name>Poor Man's Jobs</name>
+    <description>Distributed Job Queue Framework</description>
+    <packaging>pom</packaging>
+    <url>https://github.com/flexiooss/poomjobs</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Nel Taurisson</name>
+            <email>nel@flexio.fr</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:flexiooss/poomjobs</connection>
+        <developerConnection>scm:git:git@github.com:flexiooss/poomjobs.git</developerConnection>
+        <url>git@github.com:flexiooss/poomjobs.git</url>
+    </scm>
+
+    <repositories>
+        <repository>
+            <id>codingmatters-snapshots</id>
+            <url>http://maven.ci.flexio.io:8080/repository/codingmatters-snapshots/</url>
+            <releases><enabled>false</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>codingmatters-releases</id>
+            <url>http://maven.ci.flexio.io:8080/repository/codingmatters-releases/</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>codingmatters-snapshots</id>
+            <url>http://maven.ci.flexio.io:8080/repository/codingmatters-snapshots/</url>
+            <releases><enabled>false</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>codingmatters-releases</id>
+            <url>http://maven.ci.flexio.io:8080/repository/codingmatters-releases/</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <modules>
+        <module>poomjobs-domain</module>
+        <module>poomjobs-api-spec</module>
+        <module>poomjobs-api</module>
+        <module>poomjobs-service</module>
+        <module>poomjobs-clients</module>
+        <module>poomjobs-runner</module>
+        <module>poomjobs-runner-manager</module>
+        <module>poomjobs-registries-service</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.codingmatters.poom</groupId>
+            <artifactId>poom-services-test-support</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <flexio-commons.version>1.47.0</flexio-commons.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.flexio.commons</groupId>
+                <artifactId>flexio-commons</artifactId>
+                <version>${flexio-commons.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <!--BOM-->
+            <dependency>
+                <groupId>org.codingmatters.poom</groupId>
+                <artifactId>poomjobs-domain</artifactId>
+                <version>1.52.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom</groupId>
+                <artifactId>poomjobs-api-spec</artifactId>
+                <version>1.52.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom</groupId>
+                <artifactId>poomjobs-api</artifactId>
+                <version>1.52.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom</groupId>
+                <artifactId>poomjobs-service</artifactId>
+                <version>1.52.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom</groupId>
+                <artifactId>poomjobs-clients</artifactId>
+                <version>1.52.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom</groupId>
+                <artifactId>poomjobs-runner</artifactId>
+                <version>1.52.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom</groupId>
+                <artifactId>poomjobs-runner-manager</artifactId>
+                <version>1.52.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codingmatters.poom</groupId>
+                <artifactId>poomjobs-registries-service</artifactId>
+                <version>1.52.0-SNAPSHOT</version>
+            </dependency>
+            <!--// BOM-->
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.flexio.io</groupId>
+                    <artifactId>flexio-mongo-io-maven-plugin</artifactId>
+                    <version>${flexio-commons.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
