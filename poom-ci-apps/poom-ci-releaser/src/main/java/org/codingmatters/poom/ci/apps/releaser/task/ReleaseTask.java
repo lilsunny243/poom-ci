@@ -40,7 +40,6 @@ public class ReleaseTask implements Callable<ReleaseTaskResult> {
         LocalDateTime start = UTC.now();
 
         ArtifactCoordinates releasedCoordinates = new Release(this.repositoryUrl, this.propagationContext, this.commandHelper, this.workspace).initiate();
-        System.out.println("waiting for release pipeline to finish...");
 
         RepositoryPipeline pipeline = new RepositoryPipeline(this.repository, "master", this.client);
         Optional<Pipeline> pipe = pipeline.last(start);
@@ -52,6 +51,7 @@ public class ReleaseTask implements Callable<ReleaseTaskResult> {
             } while (!pipe.isPresent());
         }
 
+        System.out.println("waiting for release pipeline to finish...");
         while (!pipe.get().opt().status().run().orElse(Status.Run.PENDING).equals(Status.Run.DONE)) {
             Thread.sleep(2000L);
             pipe = pipeline.last(start);

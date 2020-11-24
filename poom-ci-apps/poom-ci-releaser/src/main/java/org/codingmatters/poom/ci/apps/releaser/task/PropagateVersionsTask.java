@@ -97,6 +97,7 @@ public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
             } while (!pipe.isPresent());
         }
 
+        System.out.println("waiting for release pipeline to finish...");
         while (!pipe.get().opt().status().run().orElse(Status.Run.PENDING).equals(Status.Run.DONE)) {
             Thread.sleep(2000L);
             pipe = pipeline.last(start);
