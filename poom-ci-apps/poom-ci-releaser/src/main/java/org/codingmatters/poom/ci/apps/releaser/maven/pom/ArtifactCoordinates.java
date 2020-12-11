@@ -69,6 +69,20 @@ public class ArtifactCoordinates {
     }
 
     public boolean matches(ArtifactCoordinates a) {
-        return this.getGroupId().equals(a.getGroupId()) && this.getArtifactId().equals(a.getArtifactId());
+        if(this.getGroupId() == null) {
+            if(a.getGroupId() != null) {
+                return false;
+            }
+        } else {
+            if(! this.getGroupId().equals(a.getGroupId())) {
+                return false;
+            }
+        }
+
+        if(this.getArtifactId() == null) {
+            return a.getArtifactId() == null;
+        } else {
+            return this.getArtifactId().equals(a.getArtifactId());
+        }
     }
 }
