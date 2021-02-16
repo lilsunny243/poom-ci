@@ -14,7 +14,12 @@ keytool -export -alias poom-ci-secret-1 -keystore poomci-private-store.p12 -file
 _____________
 CIPHER A FILE
 
-java -jar poom-ci-ciphering-0.0.1-SNAPSHOT-cipher-client.jar
+java -jar poom-ci-ciphering-2.12.0-SNAPSHOT-cipher-client.jar
+
+_______________
+UNCIPHER A FILE
+
+java -cp poom-ci-ciphering-2.12.0-SNAPSHOT-cipher-client.jar org.codingmatters.poom.ci.ciphering.app.FileUncipherer
 
 _______________________________________
 CREATE AND DISTRIBUTE A PGP SIGNING KEY
