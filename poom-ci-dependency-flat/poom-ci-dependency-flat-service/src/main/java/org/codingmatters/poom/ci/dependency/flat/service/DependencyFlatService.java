@@ -95,38 +95,29 @@ public class DependencyFlatService {
 
     public static org.codingmatters.poom.services.domain.repositories.Repository<Repository, PropertyQuery> repositoriesMongoRepository(MongoClient mongoClient, String database) {
         RepositoryMongoMapper mapper = new RepositoryMongoMapper();
-        PropertyQuerier querier = new PropertyQuerier();
 
         return MongoCollectionRepository.<Repository, PropertyQuery>repository(database, "repositories")
                 .withToDocument(mapper::toDocument)
                 .withToValue(mapper::toValue)
-                .withFilter(querier.filterer())
-                .withSort(querier.sorter())
-                .build(mongoClient);
+                .buildWithPropertyQuery(mongoClient);
     }
 
     public static org.codingmatters.poom.services.domain.repositories.Repository<ProducesRelation, PropertyQuery> producesRelationRepository(MongoClient mongoClient, String database) {
         ProducesRelationMongoMapper mapper = new ProducesRelationMongoMapper();
-        PropertyQuerier querier = new PropertyQuerier();
 
         return MongoCollectionRepository.<ProducesRelation, PropertyQuery>repository(database, "produces_relation")
                 .withToDocument(mapper::toDocument)
                 .withToValue(mapper::toValue)
-                .withFilter(querier.filterer())
-                .withSort(querier.sorter())
-                .build(mongoClient);
+                .buildWithPropertyQuery(mongoClient);
     }
 
     public static org.codingmatters.poom.services.domain.repositories.Repository<DependsOnRelation, PropertyQuery> dependsOnRelationRepository(MongoClient mongoClient, String database) {
         DependsOnRelationMongoMapper mapper = new DependsOnRelationMongoMapper();
-        PropertyQuerier querier = new PropertyQuerier();
 
         return MongoCollectionRepository.<DependsOnRelation, PropertyQuery>repository(database, "dependson_relation")
                 .withToDocument(mapper::toDocument)
                 .withToValue(mapper::toValue)
-                .withFilter(querier.filterer())
-                .withSort(querier.sorter())
-                .build(mongoClient);
+                .buildWithPropertyQuery(mongoClient);
     }
 
 
