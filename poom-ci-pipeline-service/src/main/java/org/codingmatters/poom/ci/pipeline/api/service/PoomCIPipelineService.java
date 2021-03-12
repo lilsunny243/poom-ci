@@ -103,62 +103,47 @@ public class PoomCIPipelineService {
 
     public static Repository<Pipeline, PropertyQuery> pipelineRepository(MongoClient mongoClient, String database) {
         PipelineMongoMapper mapper = new PipelineMongoMapper();
-        PropertyQuerier querier = new PropertyQuerier();
 
         return MongoCollectionRepository.<Pipeline, PropertyQuery>repository(database, "pipelines")
                 .withToDocument(mapper::toDocument)
                 .withToValue(mapper::toValue)
-                .withFilter(querier.filterer())
-                .withSort(querier.sorter())
-                .build(mongoClient);
+                .buildWithPropertyQuery(mongoClient);
     }
 
     public static Repository<GithubPushEvent, PropertyQuery> githubPushEventRepository(MongoClient mongoClient, String database) {
         GithubPushEventMongoMapper mapper = new GithubPushEventMongoMapper();
-        PropertyQuerier querier = new PropertyQuerier();
 
         return MongoCollectionRepository.<GithubPushEvent, PropertyQuery>repository(database, "githib_push_events")
                 .withToDocument(mapper::toDocument)
                 .withToValue(mapper::toValue)
-                .withFilter(querier.filterer())
-                .withSort(querier.sorter())
-                .build(mongoClient);
+                .buildWithPropertyQuery(mongoClient);
     }
 
     public static Repository<UpstreamBuild, PropertyQuery> upstreamBuildRepository(MongoClient mongoClient, String database) {
         UpstreamBuildMongoMapper mapper = new UpstreamBuildMongoMapper();
-        PropertyQuerier querier = new PropertyQuerier();
 
         return MongoCollectionRepository.<UpstreamBuild, PropertyQuery>repository(database, "upstream_builds")
                 .withToDocument(mapper::toDocument)
                 .withToValue(mapper::toValue)
-                .withFilter(querier.filterer())
-                .withSort(querier.sorter())
-                .build(mongoClient);
+                .buildWithPropertyQuery(mongoClient);
     }
 
 
     public static Repository<PipelineStage, PropertyQuery> pipelineStageRepository(MongoClient mongoClient, String database) {
         PipelineStageMongoMapper mapper = new PipelineStageMongoMapper();
-        PropertyQuerier querier = new PropertyQuerier();
 
         return MongoCollectionRepository.<PipelineStage, PropertyQuery>repository(database, "pipeline_stages")
                 .withToDocument(mapper::toDocument)
                 .withToValue(mapper::toValue)
-                .withFilter(querier.filterer())
-                .withSort(querier.sorter())
-                .build(mongoClient);
+                .buildWithPropertyQuery(mongoClient);
     }
 
     private static Repository<StageLog, PropertyQuery> stagelogRepository(MongoClient mongoClient, String database) {
         StageLogMongoMapper mapper = new StageLogMongoMapper();
-        PropertyQuerier querier = new PropertyQuerier();
 
         return MongoCollectionRepository.<StageLog, PropertyQuery>repository(database, "stage_logs")
                 .withToDocument(mapper::toDocument)
                 .withToValue(mapper::toValue)
-                .withFilter(querier.filterer())
-                .withSort(querier.sorter())
-                .build(mongoClient);
+                .buildWithPropertyQuery(mongoClient);
     }
 }

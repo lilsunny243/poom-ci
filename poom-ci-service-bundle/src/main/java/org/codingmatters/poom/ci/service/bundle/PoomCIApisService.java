@@ -93,7 +93,9 @@ public class PoomCIApisService {
                 clientPool
         );
         return new PoomjobsJobRegistryAPI(
-                jobRepository, new RunnerInvokerListener(runnerRegistryClient, new DefaultRunnerClientFactory(jsonFactory, client))
+                jobRepository,
+                new RunnerInvokerListener(runnerRegistryClient, new DefaultRunnerClientFactory(jsonFactory, client)),
+                null
         );
     }
 
