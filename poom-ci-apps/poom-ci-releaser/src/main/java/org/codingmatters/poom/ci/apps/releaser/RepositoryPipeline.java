@@ -36,8 +36,8 @@ public class RepositoryPipeline {
                 tries++;
                 response = this.client.pipelines().get(PipelinesGetRequest.builder()
                         .filter(String.format(
-                                "trigger.checkoutSpec == 'git|git@github.com:%s.git|%s' && status.triggered > 2020-08-28T12:00:00.000",
-                                this.repo, this.branch
+                                "trigger.checkoutSpec == 'git|git@github.com:%s.git|%s' && status.triggered > Y-m-dTH:M:00.000",
+                                this.repo, this.branch, after
                         ))
                         .orderBy("status.triggered desc")
                         .build());

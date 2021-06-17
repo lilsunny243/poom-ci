@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.codingmatters.poom</groupId>
         <artifactId>poom-services</artifactId>
-        <version>1.71.0</version>
+        <version>1.84.0</version>
     </parent>
 
     <groupId>org.codingmatters.poom.ci</groupId>
@@ -18,6 +18,11 @@
     <name>Poor Man's CI</name>
     <description>Continuous Integration Using Poomjobs</description>
     <url>https://github.com/flexiooss/poom-ci</url>
+
+    <properties>
+        <flexio-commons.version>1.85.0</flexio-commons.version>
+        <poomjobs.version>1.89.0</poomjobs.version>
+    </properties>
 
     <licenses>
         <license>
@@ -80,9 +85,6 @@
         <module>poom-ci-apps</module>
     </modules>
 
-    <properties>
-        <flexio-commons.version>1.70.0</flexio-commons.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -96,7 +98,7 @@
             <dependency>
                 <groupId>org.codingmatters.poom</groupId>
                 <artifactId>poomjobs</artifactId>
-                <version>1.76.0</version>
+                <version>${poomjobs.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
