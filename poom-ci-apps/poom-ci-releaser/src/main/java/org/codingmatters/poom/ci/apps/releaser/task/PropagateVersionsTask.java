@@ -88,6 +88,7 @@ public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
 
     private void waitForBuild(LocalDateTime start) throws IOException, InterruptedException {
         RepositoryPipeline pipeline = new RepositoryPipeline(this.repository, this.branch, this.client);
+        Thread.sleep(2000L);
         Optional<Pipeline> pipe = pipeline.last(start);
         if (!pipe.isPresent()) {
             System.out.println("Waiting for build pipeline to start...");
@@ -97,7 +98,7 @@ public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
             } while (!pipe.isPresent());
         }
 
-        System.out.println("waiting for release pipeline to finish...");
+        System.out.printf("waiting for pipeline %s to finish...\n", pipe.get().opt().id().orElse("NONE"));
         while (!pipe.get().opt().status().run().orElse(Status.Run.PENDING).equals(Status.Run.DONE)) {
             Thread.sleep(2000L);
             pipe = pipeline.last(start);

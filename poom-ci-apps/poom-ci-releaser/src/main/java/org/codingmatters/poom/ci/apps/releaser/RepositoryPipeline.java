@@ -34,11 +34,12 @@ public class RepositoryPipeline {
         do {
             try {
                 tries++;
+                String pipelineFilter = String.format(
+                        "trigger.checkoutSpec == 'git|git@github.com:%s.git|%s' && status.triggered >= %3$tY-%3$tm-%3$tdT%3$tH:%3$tM:00.000",
+                        this.repo, this.branch, after
+                );
                 response = this.client.pipelines().get(PipelinesGetRequest.builder()
-                        .filter(String.format(
-                                "trigger.checkoutSpec == 'git|git@github.com:%s.git|%s' && status.triggered > 2020-08-28T12:00:00.000",
-                                this.repo, this.branch
-                        ))
+                        .filter(pipelineFilter)
                         .orderBy("status.triggered desc")
                         .build());
                 if (response.opt().status200().isPresent() || response.opt().status206().isPresent()) {
