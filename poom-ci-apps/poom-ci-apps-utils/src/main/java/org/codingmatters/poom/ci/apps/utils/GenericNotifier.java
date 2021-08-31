@@ -21,7 +21,7 @@ public class GenericNotifier {
     }
 
     public void notify(String payload) throws IOException {
-        System.out.println("notifying...");
+        System.out.printf("notifying %s...\n", payload);
         Request.Builder request = new Request.Builder()
                 .url(this.url);
         if(this.bearer != null) {
