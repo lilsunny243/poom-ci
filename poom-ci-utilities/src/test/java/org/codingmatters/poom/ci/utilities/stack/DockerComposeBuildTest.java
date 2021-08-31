@@ -11,7 +11,7 @@ public class DockerComposeBuildTest {
     @Test
     public void images() throws Exception {
         assertThat(
-                new DockerComposeBuild(Thread.currentThread().getContextClassLoader().getResourceAsStream("image-build/docker-compose-build.yml"))
+                new DockerComposeBuild(Thread.currentThread().getContextClassLoader().getResourceAsStream("image-build/test-docker-compose-build.yml"))
                         .builds(),
                 arrayContaining(
                     ImageDescriptor.builder().image("codingmatters/poom-ci-runners").version("2.14.0-SNAPSHOT").build(),
