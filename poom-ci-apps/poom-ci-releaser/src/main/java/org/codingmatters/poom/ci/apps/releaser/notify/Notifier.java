@@ -73,7 +73,7 @@ public class Notifier {
                 .post(RequestBody.create(new ObjectMapper(jsonFactory).writeValueAsBytes(payload)))
                 .build())) {
             if(response.code() != 200 && response.code() != 204) {
-                System.err.println("whlie notifying got status code " + response.code());
+                System.err.println("while notifying got status code " + response.code());
                 System.err.println("response was : " + response);
             }
         }

@@ -15,7 +15,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>poom-ci-apps-utils</module>
         <module>poom-ci-releaser</module>
+        <module>poom-ci-notifiers</module>
     </modules>
     
 </project>

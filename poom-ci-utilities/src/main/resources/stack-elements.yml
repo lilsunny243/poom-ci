@@ -1,0 +1,21 @@
+---
+AnsiblePlaybook:
+  name: string
+  vars:
+    $value-object: org.codingmatters.value.objects.values.ObjectValue
+  roles:
+    $list: string
+
+
+StackDescriptor:
+  name: string
+  services:
+    $list: $ServiceDescriptor
+
+ServiceDescriptor:
+  name: string
+  image: string
+
+ImageDescriptor:
+  image: string
+  version: string

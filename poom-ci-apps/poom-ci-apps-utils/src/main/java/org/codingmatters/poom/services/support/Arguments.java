@@ -32,6 +32,14 @@ public class Arguments {
         return this.options.getOrDefault(name, OptionValue.NONE);
     }
 
+    @Override
+    public String toString() {
+        return "Arguments{" +
+                "arguments=" + arguments +
+                ", options=" + options +
+                '}';
+    }
+
     static private class Builder {
         private final List<String> arguments = new LinkedList<>();
         private final Map<String, OptionValue> options = new HashMap<>();

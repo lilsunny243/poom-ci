@@ -1,0 +1,12 @@
+---
+
+StackServiceNotification:
+  repository: string
+  stack: string
+  service: string
+  image: string
+  version: string
+
+ImageNotification:
+  image: string
+  version: String
