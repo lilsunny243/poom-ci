@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.utilities.stack;
 import org.codingmatters.poom.ci.utilities.stack.descriptors.ServiceDescriptor;
 import org.codingmatters.poom.ci.utilities.stack.descriptors.StackDescriptor;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -18,6 +19,7 @@ import java.util.zip.ZipFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+@Ignore
 public class SwarmStackDeploymentRepositoryTest {
 
     @Rule
