@@ -19,7 +19,6 @@ import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.rest.api.client.okhttp.HttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpClientWrapper;
 import org.codingmatters.rest.api.client.okhttp.OkHttpRequesterFactory;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -204,7 +203,6 @@ public class App {
         }
     }
 
-    @NotNull
     private static List<RepositoryGraphDescriptor> buildFilteredGraphDescriptorList(Arguments arguments) throws IOException {
         List<RepositoryGraphDescriptor> descriptorList = new LinkedList<>();
         boolean searchStartFrom = arguments.option("from").isPresent();

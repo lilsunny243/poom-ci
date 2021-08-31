@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.codingmatters.poom.ci</groupId>
         <artifactId>poom-ci</artifactId>
-        <version>2.13.0</version>
+        <version>2.14.0</version>
     </parent>
 
     <artifactId>poom-ci-utilities</artifactId>
@@ -26,6 +26,19 @@
             <groupId>org.codingmatters.rest</groupId>
             <artifactId>cdm-rest-client-okhttp</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -42,6 +55,42 @@
                         <configuration>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedClassifierName>uber</shadedClassifierName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codingmatters.value.objects</groupId>
+                <artifactId>cdm-value-objects-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>stages-spec</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                            <goal>json</goal>
+                        </goals>
+                        <configuration>
+                            <destination-package>org.codingmatters.poom.ci.utilities.stack.descriptors</destination-package>
+                            <input-spec>src/main/resources/stack-elements.yml</input-spec>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources</source>
+                            </sources>
                         </configuration>
                     </execution>
                 </executions>

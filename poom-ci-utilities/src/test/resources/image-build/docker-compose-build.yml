@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+
+  service0:
+    build: .
+    image: codingmatters/poom-ci-runners:2.14.0-SNAPSHOT
+  service1:
+    build: .
+    image: localhost/codingmatters/poom-ci-runners:2.14.0-dev
+  service2:
+    build: .
+    image: harbor.ci.flexio.io/flexio/flexio-usage-audit-service:5.2
+  service3:
+    build: .
+    image: localhost:5000/codingmatters/poom-ci-runners:2.14.0-SNAPSHOT
