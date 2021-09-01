@@ -5,4 +5,4 @@ from:
   - url: git@github.com:Flexio-corp/pipeline-oss-settings.git
     branch: develop
   - url: git@github.com:Flexio-corp/pipeline-maven.git
-    branch: feature/ava-13-migration-1.0.0-dev#2
+    branch: develop

@@ -48,7 +48,7 @@ public class SwarmStackDeploymentRepository {
         try(JsonParser parser = factory.createParser(this.mainYaml)) {
             AnsiblePlaybook[] palybooks = new AnsiblePlaybookReader().readArray(parser);
             for (AnsiblePlaybook palybook : palybooks) {
-                if(palybook.vars().has("stack_name")) {
+                if(palybook.opt().vars().isPresent() && palybook.vars().has("stack_name")) {
                     results.add(palybook);
                 }
             }

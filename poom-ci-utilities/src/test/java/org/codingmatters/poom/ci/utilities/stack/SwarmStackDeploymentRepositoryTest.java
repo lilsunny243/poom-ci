@@ -140,6 +140,16 @@ public class SwarmStackDeploymentRepositoryTest {
         assertThat(stack, is(nullValue()));
     }
 
+    @Test
+    public void deploymentVpnsServices() throws Exception {
+        this.importZipResource("deployment-vpns-services.zip");
+        File deployment = new File(this.folder.getRoot(), "deployment-vpns-services");
+
+        StackDescriptor stack = new SwarmStackDeploymentRepository(deployment).buildStackDescriptor();
+
+        assertThat(stack, is(nullValue()));
+    }
+
 
     private void importZipResource(String zipResource) throws IOException {
         File zipTemporary = this.folder.newFile(zipResource);
