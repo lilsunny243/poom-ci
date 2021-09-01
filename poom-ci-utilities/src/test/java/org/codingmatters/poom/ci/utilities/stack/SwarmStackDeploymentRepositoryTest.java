@@ -130,6 +130,16 @@ public class SwarmStackDeploymentRepositoryTest {
         );
     }
 
+    @Test
+    public void deploymentKeystore() throws Exception {
+        this.importZipResource("deployment-keystore.zip");
+        File deployment = new File(this.folder.getRoot(), "deployment-keystore");
+
+        StackDescriptor stack = new SwarmStackDeploymentRepository(deployment).buildStackDescriptor();
+
+        assertThat(stack, is(nullValue()));
+    }
+
 
     private void importZipResource(String zipResource) throws IOException {
         File zipTemporary = this.folder.newFile(zipResource);
