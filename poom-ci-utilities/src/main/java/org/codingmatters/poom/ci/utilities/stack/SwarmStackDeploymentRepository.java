@@ -61,7 +61,7 @@ public class SwarmStackDeploymentRepository {
 
         Map<String, StringBuilder> serviceCandidateChunks = new LinkedHashMap<>();
         try(BufferedReader reader = new BufferedReader(new StringReader(content))) {
-            this.readUntil(reader, Pattern.compile("services:\\s+$"));
+            this.readUntil(reader, Pattern.compile("services:\\s*$"));
             Pattern firstServicePattern = Pattern.compile("^(\\s+)([A-Za-z-_]+):\\s*$");
             String firstService = this.readUntil(reader, firstServicePattern);
 
@@ -101,8 +101,15 @@ public class SwarmStackDeploymentRepository {
         -> harbor.ci.flexio.io/flexio/flexio-usage-audit-service
          */
         Matcher fullImageWithREGISTRYVarriableMatcher = Pattern.compile("\\$\\{[^:]+:-([^}]+)}(.*):").matcher(from);
+        /*
+        ${CODINGMATTERS_REGISTRY}codingmatters/poom-ci-github-webhook:{{ image_tags['codingmatters/poom-ci-github-webhook'] }}
+        -> codingmatters/poom-ci-github-webhook
+         */
+        Matcher fullImageWithoutREGISTRYVarriableMatcher = Pattern.compile("\\$\\{([^}]+)}(.*):").matcher(from);
         if(fullImageWithREGISTRYVarriableMatcher.matches()) {
             return fullImageWithREGISTRYVarriableMatcher.group(1) + fullImageWithREGISTRYVarriableMatcher.group(2);
+        }else if(fullImageWithoutREGISTRYVarriableMatcher.matches()) {
+            return fullImageWithoutREGISTRYVarriableMatcher.group(2);
         } else {
             /*
             grafana/grafana: -> grafana/grafana
