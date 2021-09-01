@@ -76,14 +76,18 @@ public class StackDeploymentNotifier {
 
     public void notifyServices() throws IOException {
         StackDescriptor stack = new SwarmStackDeploymentRepository(this.projectDir).buildStackDescriptor();
-        for (ServiceDescriptor service : stack.services()) {
-            this.notifyService(notification -> notification
-                    .repository(this.repository)
-                    .stack(stack.name())
-                    .version(this.version)
-                    .service(service.name())
-                    .image(service.image())
-            );
+        if(stack != null) {
+            for (ServiceDescriptor service : stack.services()) {
+                this.notifyService(notification -> notification
+                        .repository(this.repository)
+                        .stack(stack.name())
+                        .version(this.version)
+                        .service(service.name())
+                        .image(service.image())
+                );
+            }
+        } else {
+            log.info("no stack found");
         }
     }
 
