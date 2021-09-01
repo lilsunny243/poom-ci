@@ -19,7 +19,6 @@ import java.util.zip.ZipFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@Ignore
 public class SwarmStackDeploymentRepositoryTest {
 
     @Rule
@@ -100,6 +99,32 @@ public class SwarmStackDeploymentRepositoryTest {
                         .name("widget-ui")
                         .services(
                                 ServiceDescriptor.builder().name("flexio-widget-ui").image("harbor.ci.flexio.io/flexio/flexio-widget-client-ui").build()
+                        )
+                        .build())
+        );
+    }
+
+    @Test
+    public void deploymentCi() throws Exception {
+        this.importZipResource("deployment-ci.zip");
+        File deployment = new File(this.folder.getRoot(), "deployment-ci");
+
+        StackDescriptor stack = new SwarmStackDeploymentRepository(deployment).buildStackDescriptor();
+
+        assertThat(
+                stack,
+                is(StackDescriptor.builder()
+                        .name("ci")
+                        .services(
+                                ServiceDescriptor.builder().name("github-webhook").image("codingmatters/poom-ci-github-webhook").build(),
+                                ServiceDescriptor.builder().name("pipelines").image("codingmatters/poom-ci-pipeline-service").build(),
+                                ServiceDescriptor.builder().name("dependencies").image("codingmatters/poom-ci-dependency-flat-service").build(),
+                                ServiceDescriptor.builder().name("jobs").image("codingmatters/poom-ci-service-bundle").build(),
+                                ServiceDescriptor.builder().name("maven-repository").image("codingmatters/archiva").build(),
+                                ServiceDescriptor.builder().name("mongo").image("mongo").build(),
+                                ServiceDescriptor.builder().name("poom-pack").image("codingmatters/poom-pack-composer-service").build(),
+                                ServiceDescriptor.builder().name("verdaccio").image("codingmatters/poom-verdaccio").build(),
+                                ServiceDescriptor.builder().name("flexio-ci-client").image("harbor.ci.flexio.io/flexio/flexio-ci-client").build()
                         )
                         .build())
         );
