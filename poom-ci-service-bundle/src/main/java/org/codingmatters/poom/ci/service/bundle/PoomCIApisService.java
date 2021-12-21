@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.service.bundle;
 import com.fasterxml.jackson.core.JsonFactory;
 import io.flexio.services.support.mondo.MongoProvider;
 import io.undertow.Undertow;
+import org.codingmatters.poom.services.domain.property.query.PropertyQuery;
 import org.codingmatters.poomjobs.client.PoomjobsRunnerRegistryAPIHandlersClient;
 import org.codingmatters.poom.poomjobs.domain.jobs.repositories.JobRepository;
 import org.codingmatters.poom.poomjobs.domain.runners.repositories.RunnerRepository;
@@ -78,7 +79,7 @@ public class PoomCIApisService {
     }
 
     static public PoomjobsJobRegistryAPI jobRegistryAPI(PoomjobsRunnerRegistryAPI runnerRegistryApi, ExecutorService clientPool, JsonFactory jsonFactory, HttpClientWrapper client) {
-        Repository<JobValue, JobQuery> jobRepository;
+        Repository<JobValue, PropertyQuery> jobRepository;
         if(MongoProvider.isAvailable()) {
             jobRepository = JobRepository.createMongo(
                     MongoProvider.fromEnv(),

@@ -1,9 +1,8 @@
 package org.codingmatters.poom.ci.pipeline.api.service;
 
 import com.fasterxml.jackson.core.JsonFactory;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import io.flexio.io.mongo.repository.MongoCollectionRepository;
-import io.flexio.io.mongo.repository.property.query.PropertyQuerier;
 import io.flexio.services.support.mondo.MongoProvider;
 import io.undertow.Undertow;
 import org.codingmatters.poom.ci.pipeline.api.service.repository.LogStore;
