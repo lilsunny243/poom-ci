@@ -2,7 +2,7 @@ package org.codingmatters.poom.ci.dependency.flat.service;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import io.flexio.docker.DockerResource;
 import io.flexio.services.tests.mongo.MongoResource;
 import io.flexio.services.tests.mongo.MongoTest;

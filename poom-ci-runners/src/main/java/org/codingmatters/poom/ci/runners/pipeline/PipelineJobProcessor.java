@@ -59,7 +59,7 @@ public class PipelineJobProcessor implements JobProcessor {
                 if (status.equals(PipelineTermination.Exit.SUCCESS)) {
                     status = this.executeStages(context, context.onSuccessStages(), executor);
                 } else {
-                    status = this.executeStages(context, context.onErrorStages(), executor);
+                    this.executeStages(context, context.onErrorStages(), executor);
                 }
             } finally {
                 this.executeStages(context, context.cleanupStages(), executor);

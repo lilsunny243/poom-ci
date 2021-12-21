@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.codingmatters.poom</groupId>
         <artifactId>poom-services</artifactId>
-        <version>1.90.0</version>
+        <version>1.96.0</version>
     </parent>
 
     <groupId>org.codingmatters.poom.ci</groupId>
@@ -20,8 +20,8 @@
     <url>https://github.com/flexiooss/poom-ci</url>
 
     <properties>
-        <flexio-commons.version>1.85.0</flexio-commons.version>
-        <poomjobs.version>1.89.0</poomjobs.version>
+        <flexio-commons.version>1.103.0</flexio-commons.version>
+        <poomjobs.version>1.113.0</poomjobs.version>
     </properties>
 
     <licenses>
