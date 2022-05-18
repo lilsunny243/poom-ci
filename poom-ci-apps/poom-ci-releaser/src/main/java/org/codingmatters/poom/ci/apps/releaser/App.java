@@ -8,9 +8,7 @@ import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
 import org.codingmatters.poom.ci.apps.releaser.graph.descriptors.RepositoryGraph;
 import org.codingmatters.poom.ci.apps.releaser.graph.descriptors.RepositoryGraphDescriptor;
 import org.codingmatters.poom.ci.apps.releaser.notify.Notifier;
-import org.codingmatters.poom.ci.apps.releaser.task.PropagateVersionsTask;
-import org.codingmatters.poom.ci.apps.releaser.task.ReleaseTask;
-import org.codingmatters.poom.ci.apps.releaser.task.ReleaseTaskResult;
+import org.codingmatters.poom.ci.apps.releaser.task.*;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIRequesterClient;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
@@ -27,6 +25,7 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -108,28 +107,18 @@ public class App {
                 try {
                     List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                     System.out.println("Will release dependency graphs : " + descriptorList);
-                    notifier.notify(arguments.arguments().get(0), "START", formattedRepositoryList(descriptorList));
 
-                    ExecutorService pool = Executors.newFixedThreadPool(10);
-                    GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> new ReleaseTask(repository, context, commandHelper, client, workspace);
-
-                    PropagationContext propagationContext = new PropagationContext();
-                    for (RepositoryGraphDescriptor descriptor : descriptorList) {
-                        walkGraph(descriptor, propagationContext, pool, walkerTaskProvider);
-                    }
-
+                    GraphTaskResult result = new ReleaseGraphTask(descriptorList, commandHelper, client, workspace, notifier).call();
                     System.out.println("\n\n\n\n####################################################################################");
                     System.out.println("####################################################################################");
-                    System.out.printf("Finished releasing graphs, released versions are :\n");
-                    System.out.println(propagationContext.text());
+                    System.out.printf("%s, released versions are :\n", result.message());
+                    System.out.println(result.propagationContext().text());
                     System.out.println("####################################################################################");
                     System.out.println("####################################################################################\n\n");
-
-                    notifier.notify(arguments.arguments().get(0), "DONE", propagationContext.text());
                     System.exit(0);
                 } catch (Exception e) {
                     log.error("failed executing release-graph", e);
-                    notifier.notifyError(arguments.arguments().get(0), "FAILURE", e);
+                    notifier.notifyError("release-graph", "FAILURE", e);
                     System.exit(3);
                 }
             } else if (arguments.arguments().get(0).equals("propagate-versions")) {
@@ -139,34 +128,20 @@ public class App {
                 try {
                     List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                     System.out.println("Will propagate develop version for dependency graph : " + descriptorList);
-                    notifier.notify(arguments.arguments().get(0), "START", formattedRepositoryList(descriptorList));
-                    ExecutorService pool = Executors.newFixedThreadPool(10);
 
-                    GraphWalker.WalkerTaskProvider walkerTaskProvider = (repository, context) -> {
-                        String branch = "develop";
-                        if (arguments.option("branch").isPresent()) {
-                            branch = arguments.option("branch").get();
-                        }
-                        return new PropagateVersionsTask(repository, branch, context, commandHelper, client, workspace);
-                    };
-
-                    PropagationContext propagationContext = new PropagationContext();
-                    for (RepositoryGraphDescriptor descriptor : descriptorList) {
-                        walkGraph(descriptor, propagationContext, pool, walkerTaskProvider);
-                    }
+                    GraphTaskResult result = new PropagateGraphVersionsTask(descriptorList, Optional.ofNullable(arguments.option("branch").get()), commandHelper, client, workspace, notifier).call();
 
                     System.out.println("\n\n\n\n####################################################################################");
                     System.out.println("####################################################################################");
-                    System.out.printf("Finished propagating versions, propagated versions are :\n");
-                    System.out.println(propagationContext.text());
+                    System.out.printf("%s, propagated versions are :\n", result.message());
+                    System.out.println(result.propagationContext().text());
                     System.out.println("####################################################################################");
                     System.out.println("####################################################################################\n\n");
 
-                    notifier.notify(arguments.arguments().get(0), "DONE", propagationContext.text());
                     System.exit(0);
                 } catch (Exception e) {
                     log.error("failed executing release-graph", e);
-                    notifier.notifyError(arguments.arguments().get(0), "FAILURE", e);
+                    notifier.notifyError("propagate-versions", "FAILURE", e);
                     System.exit(3);
                 }
             } else {

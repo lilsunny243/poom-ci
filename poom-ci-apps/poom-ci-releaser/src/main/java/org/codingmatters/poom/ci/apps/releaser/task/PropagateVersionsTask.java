@@ -34,10 +34,10 @@ public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
     private final PoomCIPipelineAPIClient client;
     private final Workspace workspace;
 
-
     public PropagateVersionsTask(String repository, String branch, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
         this(repository, branch, new PropagationContext(), commandHelper, client, workspace);
     }
+
     public PropagateVersionsTask(String repository, String branch, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
         this.repository = repository;
         this.repositoryUrl = String.format("git@github.com:%s.git", repository);
