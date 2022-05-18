@@ -16,7 +16,6 @@
 
     <modules>
         <module>poom-ci-releases-commons</module>
-        <module>poom-ci-releases-jobs</module>
     </modules>
     
 </project>
