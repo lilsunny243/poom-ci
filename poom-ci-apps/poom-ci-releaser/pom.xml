@@ -14,6 +14,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.codingmatters.poom.ci.releases</groupId>
+            <artifactId>poom-ci-releases-commons</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.codingmatters.poom</groupId>
             <artifactId>poom-services-support</artifactId>
         </dependency>
@@ -68,43 +73,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codingmatters.value.objects</groupId>
-                <artifactId>cdm-value-objects-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>stages-spec</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                            <goal>json</goal>
-                        </goals>
-                        <configuration>
-                            <destination-package>org.codingmatters.poom.ci.apps.releaser.graph.descriptors</destination-package>
-                            <input-spec>${project.basedir}/src/main/resources/repository-graph.yaml</input-spec>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>target/generated-sources</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
@@ -118,7 +86,7 @@
                             <shadedClassifierName>uber</shadedClassifierName>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.codingmatters.poom.ci.apps.releaser.App</mainClass>
+                                    <mainClass>org.codingmatters.poom.ci.apps.App</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

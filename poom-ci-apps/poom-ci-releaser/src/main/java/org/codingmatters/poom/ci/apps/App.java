@@ -1,6 +1,7 @@
-package org.codingmatters.poom.ci.apps.releaser;
+package org.codingmatters.poom.ci.apps;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import org.codingmatters.poom.ci.apps.releaser.Workspace;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalkResult;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalker;
@@ -27,7 +28,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class App {
@@ -35,10 +35,10 @@ public class App {
 
     /**
      * RELEASE GRAPH
-     * mvn exec:java -Dexec.mainClass=org.codingmatters.poom.ci.apps.releaser.App -Dexec.args="release-graph /tmp/playground/graph.yml"
+     * mvn exec:java -Dexec.mainClass=org.codingmatters.poom.ci.apps.App -Dexec.args="release-graph /tmp/playground/graph.yml"
      *
      * PROPAGATE VERSIONS
-     * mvn exec:java -Dexec.mainClass=org.codingmatters.poom.ci.apps.releaser.App -Dexec.args="propagate-versions /tmp/playground/graph.yml"
+     * mvn exec:java -Dexec.mainClass=org.codingmatters.poom.ci.apps.App -Dexec.args="propagate-versions /tmp/playground/graph.yml"
      * @param args
      */
     public static void main(String[] args) {
