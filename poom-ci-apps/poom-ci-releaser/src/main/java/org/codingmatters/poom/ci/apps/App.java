@@ -180,41 +180,17 @@ public class App {
 
     private static List<RepositoryGraphDescriptor> buildFilteredGraphDescriptorList(Arguments arguments) throws IOException {
         List<RepositoryGraphDescriptor> descriptorList = new LinkedList<>();
-        boolean searchStartFrom = arguments.option("from").isPresent();
         for (int i = 1; i < arguments.argumentCount(); i++) {
             String graphFilePath = arguments.arguments().get(i);
-            RepositoryGraphDescriptor descriptor;
             try (InputStream in = new FileInputStream(graphFilePath)) {
-                descriptor = RepositoryGraphDescriptor.fromYaml(in);
-                if(searchStartFrom) {
-                    if (descriptor.containsRepository(arguments.option("from").get())) {
-                        descriptor = descriptor.subgraph(arguments.option("from").get());
-                        descriptorList.add(descriptor);
-                        searchStartFrom = false;
-                    } else {
-                        continue;
-                    }
-                } else {
-                    descriptorList.add(descriptor);
-                }
+                descriptorList.add(RepositoryGraphDescriptor.fromYaml(in));
             }
         }
-        return descriptorList;
-    }
 
-    private static void walkGraph(RepositoryGraphDescriptor descriptor, PropagationContext propagationContext, ExecutorService pool, GraphWalker.WalkerTaskProvider walkerTaskProvider) throws InterruptedException, java.util.concurrent.ExecutionException {
-        GraphWalker walker = new GraphWalker(
-                descriptor,
-                propagationContext,
-                walkerTaskProvider,
-                pool
-        );
-        GraphWalkResult result = pool.submit(walker).get();
-        if(result.exitStatus().equals(ReleaseTaskResult.ExitStatus.SUCCESS)) {
-            System.out.println(result.message());
+        if(arguments.option("from").isPresent()) {
+            return RepositoryGraphDescriptor.filterFrom(arguments.option("from").get(), descriptorList);
         } else {
-            System.err.println(result);
-            System.exit(2);
+            return descriptorList;
         }
     }
 
