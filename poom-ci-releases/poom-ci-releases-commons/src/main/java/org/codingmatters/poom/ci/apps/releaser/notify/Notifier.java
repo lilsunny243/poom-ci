@@ -10,6 +10,7 @@ import org.codingmatters.poom.ci.apps.releaser.command.exception.CommandFailed;
 import org.codingmatters.poom.ci.apps.releaser.git.Git;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Arguments;
+import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.rest.api.client.okhttp.HttpClientWrapper;
 
 import java.io.ByteArrayOutputStream;
@@ -21,6 +22,9 @@ import java.util.Map;
 
 public class Notifier {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(Notifier.class);
+
+    public static final String NOTIFIER_URL = "NOTIFIER_URL";
+    public static final String NOTIFIER_BEARER = "NOTIFIER_BEARER";
 
     public static final String DEFAULT_URL = "https://api.flexio.io/httpin/my/in/5fb7c9b2a6a8c401ab4f4665";
     public static final String DEFAULT_BEARER = "fd62b406-9ccd-4bb5-89a9-3868c395a15e";
@@ -36,6 +40,13 @@ public class Notifier {
             url = arguments.option("notify-url").get();
         }
         return new Notifier(httpClientWrapper, jsonFactory, commandHelper, url, bearer);
+    }
+
+    static public Notifier fromEnv(HttpClientWrapper httpClientWrapper, JsonFactory jsonFactory, CommandHelper commandHelper) {
+        return new Notifier(httpClientWrapper, jsonFactory, commandHelper,
+                Env.optional(NOTIFIER_URL).orElse(new Env.Var(DEFAULT_URL)).asString(),
+                Env.optional(NOTIFIER_BEARER).orElse(new Env.Var(DEFAULT_BEARER)).asString()
+        );
     }
 
     private final HttpClientWrapper httpClientWrapper;
