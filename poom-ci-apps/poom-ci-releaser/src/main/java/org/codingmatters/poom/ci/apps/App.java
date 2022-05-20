@@ -3,6 +3,7 @@ package org.codingmatters.poom.ci.apps;
 import com.fasterxml.jackson.core.JsonFactory;
 import org.codingmatters.poom.ci.apps.releaser.Workspace;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
+import org.codingmatters.poom.ci.apps.releaser.git.GithubRepositoryUrlProvider;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalkResult;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalker;
 import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
@@ -88,7 +89,7 @@ public class App {
                 }
 
                 try {
-                    ReleaseTaskResult result = new ReleaseTask(repository.get(), commandHelper, client, workspace).call();
+                    ReleaseTaskResult result = new ReleaseTask(repository.get(), GithubRepositoryUrlProvider.ssh(), commandHelper, client, workspace).call();
                     if (result.exitStatus().equals(ReleaseTaskResult.ExitStatus.SUCCESS)) {
                         System.out.println(result.message());
                         System.exit(0);
@@ -108,7 +109,7 @@ public class App {
                     List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                     System.out.println("Will release dependency graphs : " + descriptorList);
 
-                    GraphTaskResult result = new ReleaseGraphTask(descriptorList, commandHelper, client, workspace, notifier).call();
+                    GraphTaskResult result = new ReleaseGraphTask(descriptorList, commandHelper, client, workspace, notifier, GithubRepositoryUrlProvider.ssh()).call();
                     System.out.println("\n\n\n\n####################################################################################");
                     System.out.println("####################################################################################");
                     System.out.printf("%s, released versions are :\n", result.message());
@@ -129,7 +130,7 @@ public class App {
                     List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                     System.out.println("Will propagate develop version for dependency graph : " + descriptorList);
 
-                    GraphTaskResult result = new PropagateGraphVersionsTask(descriptorList, Optional.ofNullable(arguments.option("branch").get()), commandHelper, client, workspace, notifier).call();
+                    GraphTaskResult result = new PropagateGraphVersionsTask(descriptorList, Optional.ofNullable(arguments.option("branch").get()), commandHelper, client, workspace, notifier, GithubRepositoryUrlProvider.ssh()).call();
 
                     System.out.println("\n\n\n\n####################################################################################");
                     System.out.println("####################################################################################");

@@ -4,11 +4,13 @@ import org.codingmatters.poom.ci.apps.releaser.Release;
 import org.codingmatters.poom.ci.apps.releaser.RepositoryPipeline;
 import org.codingmatters.poom.ci.apps.releaser.Workspace;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
+import org.codingmatters.poom.ci.apps.releaser.git.GithubRepositoryUrlProvider;
 import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
 import org.codingmatters.poom.ci.apps.releaser.maven.pom.ArtifactCoordinates;
 import org.codingmatters.poom.ci.pipeline.api.types.Pipeline;
 import org.codingmatters.poom.ci.pipeline.api.types.pipeline.Status;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
+import org.codingmatters.poom.services.support.Env;
 import org.codingmatters.poom.services.support.date.UTC;
 
 import java.time.LocalDateTime;
@@ -23,12 +25,12 @@ public class ReleaseTask implements Callable<ReleaseTaskResult> {
     private final PoomCIPipelineAPIClient client;
     private final Workspace workspace;
 
-    public ReleaseTask(String repository, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
-        this(repository, new PropagationContext(), commandHelper, client, workspace);
+    public ReleaseTask(String repository, GithubRepositoryUrlProvider githubRepositoryUrlProvider, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
+        this(repository, githubRepositoryUrlProvider, new PropagationContext(), commandHelper, client, workspace);
     }
-    public ReleaseTask(String repository, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
+    public ReleaseTask(String repository, GithubRepositoryUrlProvider githubRepositoryUrlProvider, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
         this.repository = repository;
-        this.repositoryUrl = String.format("git@github.com:%s.git", repository);
+        this.repositoryUrl = githubRepositoryUrlProvider.url(repository);
         this.propagationContext = propagationContext;
         this.commandHelper = commandHelper;
         this.client = client;

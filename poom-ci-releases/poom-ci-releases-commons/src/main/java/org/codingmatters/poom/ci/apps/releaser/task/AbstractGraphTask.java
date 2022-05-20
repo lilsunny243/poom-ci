@@ -2,6 +2,7 @@ package org.codingmatters.poom.ci.apps.releaser.task;
 
 import org.codingmatters.poom.ci.apps.releaser.Workspace;
 import org.codingmatters.poom.ci.apps.releaser.command.CommandHelper;
+import org.codingmatters.poom.ci.apps.releaser.git.GithubRepositoryUrlProvider;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalkResult;
 import org.codingmatters.poom.ci.apps.releaser.graph.GraphWalker;
 import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
@@ -19,13 +20,15 @@ public class AbstractGraphTask {
     protected final PoomCIPipelineAPIClient client;
     protected final Workspace workspace;
     protected final Notifier notifier;
+    protected final GithubRepositoryUrlProvider githubRepositoryUrlProvider;
 
-    public AbstractGraphTask(List<RepositoryGraphDescriptor> descriptorList, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace, Notifier notifier) {
+    public AbstractGraphTask(List<RepositoryGraphDescriptor> descriptorList, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace, Notifier notifier, GithubRepositoryUrlProvider githubRepositoryUrlProvider) {
         this.descriptorList = descriptorList;
         this.commandHelper = commandHelper;
         this.client = client;
         this.workspace = workspace;
         this.notifier = notifier;
+        this.githubRepositoryUrlProvider = githubRepositoryUrlProvider;
     }
 
     protected String formattedRepositoryList(List<RepositoryGraphDescriptor> descriptorList) {
