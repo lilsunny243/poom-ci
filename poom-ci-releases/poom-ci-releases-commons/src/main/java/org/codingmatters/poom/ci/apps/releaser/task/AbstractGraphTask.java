@@ -10,6 +10,7 @@ import org.codingmatters.poom.ci.apps.releaser.graph.descriptors.RepositoryGraph
 import org.codingmatters.poom.ci.apps.releaser.graph.descriptors.RepositoryGraphDescriptor;
 import org.codingmatters.poom.ci.apps.releaser.notify.Notifier;
 import org.codingmatters.poom.ci.pipeline.client.PoomCIPipelineAPIClient;
+import org.codingmatters.poom.services.support.Env;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -22,13 +23,24 @@ public class AbstractGraphTask {
     protected final Notifier notifier;
     protected final GithubRepositoryUrlProvider githubRepositoryUrlProvider;
 
-    public AbstractGraphTask(List<RepositoryGraphDescriptor> descriptorList, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace, Notifier notifier, GithubRepositoryUrlProvider githubRepositoryUrlProvider) {
+    private final GraphTaskListener graphTaskListener;
+
+    public AbstractGraphTask(
+            List<RepositoryGraphDescriptor> descriptorList,
+            CommandHelper commandHelper,
+            PoomCIPipelineAPIClient client,
+            Workspace workspace,
+            Notifier notifier,
+            GithubRepositoryUrlProvider githubRepositoryUrlProvider,
+            GraphTaskListener graphTaskListener
+    ) {
         this.descriptorList = descriptorList;
         this.commandHelper = commandHelper;
         this.client = client;
         this.workspace = workspace;
         this.notifier = notifier;
         this.githubRepositoryUrlProvider = githubRepositoryUrlProvider;
+        this.graphTaskListener = graphTaskListener;
     }
 
     protected String formattedRepositoryList(List<RepositoryGraphDescriptor> descriptorList) {
@@ -62,10 +74,9 @@ public class AbstractGraphTask {
         );
         GraphWalkResult result = pool.submit(walker).get();
         if(result.exitStatus().equals(ReleaseTaskResult.ExitStatus.SUCCESS)) {
-            System.out.println(result.message());
+            this.graphTaskListener.info(result);
         } else {
-            System.err.println(result);
-            System.exit(2);
+            this.graphTaskListener.error(result);
         }
     }
 }

@@ -20,8 +20,16 @@ public class PropagateGraphVersionsTask extends AbstractGraphTask implements Cal
     static private final CategorizedLogger log = CategorizedLogger.getLogger(PropagateGraphVersionsTask.class);
     private final String branch;
 
-    public PropagateGraphVersionsTask(List<RepositoryGraphDescriptor> descriptorList, Optional<String> branch, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace, Notifier notifier, GithubRepositoryUrlProvider githubRepositoryUrlProvider) {
-        super(descriptorList, commandHelper, client, workspace, notifier, githubRepositoryUrlProvider);
+    public PropagateGraphVersionsTask(
+            List<RepositoryGraphDescriptor> descriptorList,
+            Optional<String> branch,
+            CommandHelper commandHelper,
+            PoomCIPipelineAPIClient client,
+            Workspace workspace,
+            Notifier notifier,
+            GithubRepositoryUrlProvider githubRepositoryUrlProvider,
+            GraphTaskListener graphTaskListener) {
+        super(descriptorList, commandHelper, client, workspace, notifier, githubRepositoryUrlProvider, graphTaskListener);
         this.branch = branch.orElse("develop");
     }
 

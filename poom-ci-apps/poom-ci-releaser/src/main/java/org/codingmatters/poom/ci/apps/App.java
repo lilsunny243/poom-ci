@@ -77,6 +77,19 @@ public class App {
 
         Notifier notifier = Notifier.fromArguments(httpClientWrapper, jsonFactory, commandHelper, arguments);
 
+        GraphTaskListener graphTaskListener = new GraphTaskListener() {
+            @Override
+            public void info(GraphWalkResult result) {
+                System.out.println(result.message());
+            }
+
+            @Override
+            public void error(GraphWalkResult result) {
+                System.err.println(result);
+                System.exit(2);
+            }
+        };
+
         Workspace workspace = Workspace.temporary();
         try {
             if (arguments.arguments().get(0).equals("release")) {
@@ -109,7 +122,7 @@ public class App {
                     List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                     System.out.println("Will release dependency graphs : " + descriptorList);
 
-                    GraphTaskResult result = new ReleaseGraphTask(descriptorList, commandHelper, client, workspace, notifier, GithubRepositoryUrlProvider.ssh()).call();
+                    GraphTaskResult result = new ReleaseGraphTask(descriptorList, commandHelper, client, workspace, notifier, GithubRepositoryUrlProvider.ssh(), graphTaskListener).call();
                     System.out.println("\n\n\n\n####################################################################################");
                     System.out.println("####################################################################################");
                     System.out.printf("%s, released versions are :\n", result.message());
@@ -130,7 +143,7 @@ public class App {
                     List<RepositoryGraphDescriptor> descriptorList = buildFilteredGraphDescriptorList(arguments);
                     System.out.println("Will propagate develop version for dependency graph : " + descriptorList);
 
-                    GraphTaskResult result = new PropagateGraphVersionsTask(descriptorList, Optional.ofNullable(arguments.option("branch").get()), commandHelper, client, workspace, notifier, GithubRepositoryUrlProvider.ssh()).call();
+                    GraphTaskResult result = new PropagateGraphVersionsTask(descriptorList, Optional.ofNullable(arguments.option("branch").get()), commandHelper, client, workspace, notifier, GithubRepositoryUrlProvider.ssh(), graphTaskListener).call();
 
                     System.out.println("\n\n\n\n####################################################################################");
                     System.out.println("####################################################################################");

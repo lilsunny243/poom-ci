@@ -18,8 +18,15 @@ import java.util.concurrent.Executors;
 public class ReleaseGraphTask extends AbstractGraphTask implements Callable<GraphTaskResult> {
     static private final CategorizedLogger log = CategorizedLogger.getLogger(ReleaseGraphTask.class);
 
-    public ReleaseGraphTask(List<RepositoryGraphDescriptor> descriptorList, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace, Notifier notifier, GithubRepositoryUrlProvider githubRepositoryUrlProvider) {
-        super(descriptorList, commandHelper, client, workspace, notifier, githubRepositoryUrlProvider);
+    public ReleaseGraphTask(
+            List<RepositoryGraphDescriptor> descriptorList,
+            CommandHelper commandHelper,
+            PoomCIPipelineAPIClient client,
+            Workspace workspace,
+            Notifier notifier,
+            GithubRepositoryUrlProvider githubRepositoryUrlProvider,
+            GraphTaskListener graphTaskListener) {
+        super(descriptorList, commandHelper, client, workspace, notifier, githubRepositoryUrlProvider, graphTaskListener);
     }
 
     @Override
