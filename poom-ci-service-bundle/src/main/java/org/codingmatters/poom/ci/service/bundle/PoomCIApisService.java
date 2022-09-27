@@ -93,9 +93,11 @@ public class PoomCIApisService {
                 runnerRegistryApi.handlers(),
                 clientPool
         );
+
+        ExecutorService listenerPool = Executors.newFixedThreadPool(5);
         return new PoomjobsJobRegistryAPI(
                 jobRepository,
-                new RunnerInvokerListener(runnerRegistryClient, new DefaultRunnerClientFactory(jsonFactory, client)),
+                new RunnerInvokerListener(runnerRegistryClient, new DefaultRunnerClientFactory(jsonFactory, client), listenerPool),
                 null
         );
     }

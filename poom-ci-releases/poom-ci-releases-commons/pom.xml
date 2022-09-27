@@ -5,54 +5,72 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.codingmatters.poom.ci</groupId>
-        <artifactId>poom-ci</artifactId>
+        <groupId>org.codingmatters.poom.ci.releases</groupId>
+        <artifactId>poom-ci-releases</artifactId>
         <version>2.22.0</version>
     </parent>
 
-    <artifactId>poom-ci-dependency-api</artifactId>
-    <name>${project.groupId}:${project.artifactId}</name>
+    <artifactId>poom-ci-releases-commons</artifactId>
 
 
     <dependencies>
         <dependency>
+            <groupId>org.codingmatters.poom</groupId>
+            <artifactId>poom-services-support</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.codingmatters.poom.ci</groupId>
-            <artifactId>poom-ci-dependency-api-spec</artifactId>
+            <artifactId>poom-ci-dependency-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codingmatters.poom.ci</groupId>
+            <artifactId>poom-ci-pipeline-api-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codingmatters.rest</groupId>
+            <artifactId>cdm-rest-client-okhttp</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.woodstox</groupId>
+            <artifactId>woodstox-core</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.codingmatters.value.objects</groupId>
-            <artifactId>cdm-value-objects-values</artifactId>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codingmatters.poom.ci.apps</groupId>
+            <artifactId>poom-ci-apps-utils</artifactId>
         </dependency>
     </dependencies>
 
+
     <build>
         <plugins>
-
             <plugin>
-                <groupId>org.codingmatters.rest</groupId>
-                <artifactId>cdm-rest-maven-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>${project.groupId}</groupId>
-                        <artifactId>poom-ci-dependency-api-spec</artifactId>
-                        <version>${project.version}</version>
-                    </dependency>
-                </dependencies>
+                <groupId>org.codingmatters.value.objects</groupId>
+                <artifactId>cdm-value-objects-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>api-types-gen</id>
+                        <id>stages-spec</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>generate-api-types</goal>
+                            <goal>generate</goal>
+                            <goal>json</goal>
                         </goals>
                         <configuration>
-                            <destination-package>${project.groupId}.dependency.api</destination-package>
-                            <api-spec-resource>poom-ci-dependency-api.raml</api-spec-resource>
+                            <destination-package>org.codingmatters.poom.ci.apps.releaser.graph.descriptors</destination-package>
+                            <input-spec>${project.basedir}/src/main/resources/repository-graph.yaml</input-spec>
                         </configuration>
                     </execution>
                 </executions>
@@ -77,5 +95,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

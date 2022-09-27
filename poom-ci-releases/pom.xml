@@ -6,11 +6,16 @@
 
     <parent>
         <groupId>org.codingmatters.poom.ci</groupId>
-        <artifactId>poom-pack-composer</artifactId>
+        <artifactId>poom-ci</artifactId>
         <version>2.22.0</version>
     </parent>
 
-    <artifactId>poom-pack-composer-api-spec</artifactId>
+    <groupId>org.codingmatters.poom.ci.releases</groupId>
+    <artifactId>poom-ci-releases</artifactId>
+    <packaging>pom</packaging>
 
-
+    <modules>
+        <module>poom-ci-releases-commons</module>
+    </modules>
+    
 </project>

@@ -25,6 +25,25 @@ public class RepositoryGraphDescriptor {
         this.graph = graph != null ? graph : RepositoryGraph.builder().build();
     }
 
+    public static List<RepositoryGraphDescriptor> filterFrom(String from, List<RepositoryGraphDescriptor> descriptorList) {
+        List<RepositoryGraphDescriptor> filteredDescriptorList = new LinkedList<>();
+        boolean startFound = false;
+        for (RepositoryGraphDescriptor descriptor : descriptorList) {
+            if(! startFound) {
+                if (descriptor.containsRepository(from)) {
+                    descriptor = descriptor.subgraph(from);
+                    filteredDescriptorList.add(descriptor);
+                    startFound = true;
+                } else {
+                    continue;
+                }
+            } else {
+                filteredDescriptorList.add(descriptor);
+            }
+        }
+        return filteredDescriptorList;
+    }
+
     public RepositoryGraph graph() {
         return graph;
     }

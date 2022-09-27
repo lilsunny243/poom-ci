@@ -8,6 +8,7 @@ import org.codingmatters.poom.ci.apps.releaser.command.exception.CommandFailed;
 import org.codingmatters.poom.ci.apps.releaser.flow.FlexioFlow;
 import org.codingmatters.poom.ci.apps.releaser.git.Git;
 import org.codingmatters.poom.ci.apps.releaser.git.GitRepository;
+import org.codingmatters.poom.ci.apps.releaser.git.GithubRepositoryUrlProvider;
 import org.codingmatters.poom.ci.apps.releaser.graph.PropagationContext;
 import org.codingmatters.poom.ci.apps.releaser.hb.JsPackage;
 import org.codingmatters.poom.ci.apps.releaser.maven.Pom;
@@ -34,13 +35,9 @@ public class PropagateVersionsTask implements Callable<ReleaseTaskResult> {
     private final PoomCIPipelineAPIClient client;
     private final Workspace workspace;
 
-
-    public PropagateVersionsTask(String repository, String branch, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
-        this(repository, branch, new PropagationContext(), commandHelper, client, workspace);
-    }
-    public PropagateVersionsTask(String repository, String branch, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
+    public PropagateVersionsTask(String repository, GithubRepositoryUrlProvider githubRepositoryUrlProvider, String branch, PropagationContext propagationContext, CommandHelper commandHelper, PoomCIPipelineAPIClient client, Workspace workspace) {
         this.repository = repository;
-        this.repositoryUrl = String.format("git@github.com:%s.git", repository);
+        this.repositoryUrl = githubRepositoryUrlProvider.url(repository);
         this.branch = branch;
         this.propagationContext = propagationContext;
         this.commandHelper = commandHelper;

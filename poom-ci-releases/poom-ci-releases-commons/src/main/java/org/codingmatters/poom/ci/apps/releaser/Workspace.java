@@ -1,12 +1,17 @@
 package org.codingmatters.poom.ci.apps.releaser;
 
+import org.codingmatters.poom.services.support.Env;
+
 import java.io.File;
 import java.util.UUID;
 
 public class Workspace {
+    static public final String RELEASER_WORKSPACE_PARENT_DIR = "RELEASER_WORKSPACE_PARENT_DIR";
 
     static public Workspace temporary() {
-        File directory = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
+        File directory = new File(new File(
+                Env.optional(RELEASER_WORKSPACE_PARENT_DIR).orElse(new Env.Var(System.getProperty("java.io.tmpdir"))).asString()
+        ), UUID.randomUUID().toString());
         directory.mkdir();
         return new Workspace(directory);
     }
