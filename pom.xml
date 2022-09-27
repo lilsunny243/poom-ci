@@ -248,11 +248,6 @@
                 <artifactId>poom-ci-releases-commons</artifactId>
                 <version>2.22.0</version>
             </dependency>
-            <dependency>
-                <groupId>org.codingmatters.poom.ci.releases</groupId>
-                <artifactId>poom-ci-releases-jobs</artifactId>
-                <version>2.22.0-SNAPSHOT</version>
-            </dependency>
 
             <!--// BOM-->
         </dependencies>
